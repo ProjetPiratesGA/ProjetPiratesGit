@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ProjetPirate.Controllers;
 
 namespace ProjetPirate.Boat
 {
@@ -8,6 +9,13 @@ namespace ProjetPirate.Boat
     public class BoatController : MonoBehaviour
     {
         //Move the Movements variables to the BoatMovement Script
+
+        //ATTNETION CA VA CHANGER
+        private PlayerController _joystick; // le joystick posséde le scipt "joystick" qui est actuellement "playerController"
+        public PlayerController joystick
+        {
+            get { return _joystick; }
+        }
 
         //the Movement Script
         private BoatCharacter _boatCharacter;
@@ -28,6 +36,16 @@ namespace ProjetPirate.Boat
 
         private void Start()
         {
+            _joystick = FindObjectOfType<PlayerController>();
+            if (_joystick == null)
+            {
+                Debug.LogError("_joystick est null");
+            }
+            else
+            {
+                Debug.Log("_joystick est bien instancier");
+            }
+
             _boatCharacter = this.GetComponent<BoatCharacter>();
             _cameraPivot = CameraPivot.Instance.transform;
             _cameraPosition = CameraPosition.Instance.transform;
@@ -40,16 +58,15 @@ namespace ProjetPirate.Boat
         {
             Zoom(0);
             //isMoving
+            this.PerformMovementDirection();
             if (_verticalInput != 0 || _horizontalInput != 0)
             {
-                _boatCharacter.setIsMoving(true);
+                _boatCharacter.setControllerIsMoving(true);
             }
             else
             {
-                _boatCharacter.setIsMoving(false);
+                _boatCharacter.setControllerIsMoving(false);
             }
-
-
 
             if (Input.GetKeyDown(KeyCode.Space))
                 this.GetComponent<BoatCharacter>().ShootLarboard();
@@ -72,6 +89,29 @@ namespace ProjetPirate.Boat
             //    pos *= _zoom;
             //    Camera.main.transform.localPosition = pos - _boatCharacter.transform.forward * (_boatCharacter.getSpeedForward() / _boatCharacter.getMaxSpeedForward() * 10);
             //}
+
+            if (_joystick._canReloadLeft)
+            {
+                _boatCharacter.ShootLarboard();
+            }
+            if (_joystick._canReloadRight)
+            {
+                _boatCharacter.ShootStarboard();
+            }
+        }
+
+        public void PerformMovementDirection()
+        {
+            _verticalInput = Input.GetAxis("Vertical");
+            _horizontalInput = Input.GetAxis("Horizontal");
+            Debug.Log("AXIS VERTICAL : " + Input.GetAxis("Vertical") + " AXIS HORIZONTAL : " + Input.GetAxis("Horizontal"));
+            _boatCharacter.PerformMovement(Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
+
+            //_horizontalInput = _joystick.GetJoystickInput().x;
+            //_verticalInput = _joystick.GetJoystickInput().y;
+            //Debug.Log("_verticalInput : " + Input.GetAxis("Vertical") + " _horizontalInput : " + Input.GetAxis("Horizontal"));
+            //_boatCharacter.PerformMovement(_verticalInput, _horizontalInput);
+
         }
 
         /// <summary>

@@ -119,7 +119,7 @@ namespace ProjetPirate.IA
             if (Vector3.Distance(this.transform.position, _destination) > _character.GetComponent<BoatCharacter>().StoppingDistance)
             {
                 //If the destination is too far, move forward
-                _character.GetComponent<BoatCharacter>().setIsMoving(true);
+                _character.GetComponent<BoatCharacter>().setControllerIsMoving(true);
                 _character.MoveForward();
             }
             else if (Vector3.Distance(this.transform.position, _destination) < _character.GetComponent<BoatCharacter>().StoppingDistance)
@@ -128,7 +128,7 @@ namespace ProjetPirate.IA
                 {
                     if (Vector3.Distance(this.transform.position, _destination) > _character.GetComponent<BoatCharacter>().Deceleration * Time.deltaTime)
                     {
-                        _character.GetComponent<BoatCharacter>().setIsMoving(false);
+                        _character.GetComponent<BoatCharacter>().setControllerIsMoving(false);
                         _character.MoveForward();
                     }
                     else
@@ -140,7 +140,7 @@ namespace ProjetPirate.IA
                 {
                     if (Vector3.Distance(this.transform.position, _destination) > _character.GetComponent<BoatCharacter>().getMaxSpeedForward() * Time.deltaTime)
                     {
-                        _character.GetComponent<BoatCharacter>().setIsMoving(true);
+                        _character.GetComponent<BoatCharacter>().setControllerIsMoving(true);
                         _character.MoveForward();
                     }
                     else

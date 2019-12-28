@@ -121,11 +121,6 @@ public class CannonBall : MonoBehaviour
                 _owner.Controller.GetComponent<Player>().GainXP(collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>().Damage(_damage));
                 collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Controller>().AlertFromShoot(_owner.gameObject);
             }
-            else if (collision.gameObject.GetComponent<ProjetPirate.IA.Ship_Character>() != null)
-            {
-                _owner.Controller.GetComponent<Player>().GainXP(collision.gameObject.GetComponent<ProjetPirate.IA.Ship_Character>().Damage(_damage));
-                collision.gameObject.GetComponent<ProjetPirate.IA.Ship_Controller>().AlertFromShoot(_owner.gameObject);
-            }
             Destroy(this.gameObject);
         }
     }

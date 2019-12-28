@@ -7,8 +7,8 @@ using ProjetPirate.Boat;
 namespace ProjetPirate.Controllers
 {
     public class PlayerController : MonoBehaviour
-    {      
-        [Header("MOVMENT")]
+    {
+        [Header("MOVEMENT")]
         public GameObject _joystick;
 
         [Header("SHOOT")]
@@ -16,13 +16,26 @@ namespace ProjetPirate.Controllers
         public GameObject _buttonShootLeft;
         public GameObject _buttonShootRight;
 
-
+        //[SerializeField] // pour que le test fonctionne je prend les infos 
         private GameObject _player;//On récupère le player afin que le controller possede ses info 
 
         //Variable  pour gérer le reload notement l'animation des bouttons
-        bool canReloadUp = false;
-        bool canReloadLeft = false;
-        bool canReloadRight = false;
+        private bool canReloadUp = false;
+        public bool _canReloadUp
+        {
+            get { return canReloadUp; }
+        }
+        private bool canReloadLeft = false;
+        public bool _canReloadLeft
+        {
+            get { return canReloadLeft; }
+        }
+        private bool canReloadRight = false;
+        public bool _canReloadRight
+        {
+            get { return canReloadRight; }
+        }
+
 
         //Temps de reload pour chaque canon (au cas ou il diffère selon le canon)
         float currentReloadTimeUp = 0;
@@ -36,20 +49,40 @@ namespace ProjetPirate.Controllers
         void Start()
         {
             _player = Player.Instance;
-
         }
 
         // Update is called once per frame
         void Update()
         {
-            if(_player == null)
+            if (_player == null)
             {
                 _player = Player.Instance;
             }
+
+            if (!canReloadRight)
+            {
+                reloadingTime = _player.GetComponentInChildren<BoatCharacter>().getShootCoolDown();
+                _buttonShootRight.GetComponent<Image>().fillAmount = 0;
+                canReloadRight = true;
+            }
+            if (!canReloadLeft)
+            {
+                reloadingTime = _player.GetComponentInChildren<BoatCharacter>().getShootCoolDown();
+                _buttonShootLeft.GetComponent<Image>().fillAmount = 0;
+                canReloadLeft = true;
+            }
+            if (!canReloadUp)
+            {
+                reloadingTime = _player.GetComponentInChildren<BoatCharacter>().getShootCoolDown();
+                _buttonShootUp.GetComponent<Image>().fillAmount = 0;
+                canReloadUp = true;
+            }
+
+
             ReloadTimeButton();
             GetJoystickInput();
 
-        
+
         }
 
         /// <summary>
@@ -95,11 +128,21 @@ namespace ProjetPirate.Controllers
         /// <summary>
         /// Check the joystick input and send it to the player
         /// </summary>
-        void GetJoystickInput()
+        public Vector2 GetJoystickInput()
         {
-            _player.GetComponentInChildren<BoatController>().PerformMovementDirection(
-            _joystick.GetComponent<JoystickController>().GetNormalizeJoystickPosition().y,
-            _joystick.GetComponent<JoystickController>().GetNormalizeJoystickPosition().x);
+            return _joystick.GetComponent<JoystickController>().GetNormalizeJoystickPosition();
+
+            //if (_player != null)
+            //{
+
+            //    _player.GetComponentInChildren<BoatController>().PerformMovementDirection(
+            //    _joystick.GetComponent<JoystickController>().GetNormalizeJoystickPosition().y,
+            //    _joystick.GetComponent<JoystickController>().GetNormalizeJoystickPosition().x);
+            //}
+            //else
+            //{
+            //    Debug.LogWarning("PlayerController --> '_player' est null");
+            //}
         }
 
         /// <summary>
@@ -107,13 +150,13 @@ namespace ProjetPirate.Controllers
         /// </summary>
         public void ShootRight()
         {
-            if (!canReloadRight)
-            {
-                _player.GetComponentInChildren<BoatCharacter>().ShootStarboard();
-                reloadingTime = _player.GetComponentInChildren<BoatCharacter>().getShootCoolDown();
-                _buttonShootRight.GetComponent<Image>().fillAmount = 0;
-                canReloadRight = true;
-            }
+            //if (!canReloadRight)
+            //{
+            //    _player.GetComponentInChildren<BoatCharacter>().ShootStarboard();
+            //    reloadingTime = _player.GetComponentInChildren<BoatCharacter>().getShootCoolDown();
+            //    _buttonShootRight.GetComponent<Image>().fillAmount = 0;
+            //    canReloadRight = true;
+            //}
         }
 
         /// <summary>
@@ -121,13 +164,13 @@ namespace ProjetPirate.Controllers
         /// </summary>
         public void ShootLeft()
         {
-            if (!canReloadLeft)
-            {
-                _player.GetComponentInChildren<BoatCharacter>().ShootLarboard();
-                reloadingTime = _player.GetComponentInChildren<BoatCharacter>().getShootCoolDown();
-                _buttonShootLeft.GetComponent<Image>().fillAmount = 0;
-                canReloadLeft = true;
-            }
+            //if (!canReloadLeft)
+            //{
+            //    _player.GetComponentInChildren<BoatCharacter>().ShootLarboard();
+            //    reloadingTime = _player.GetComponentInChildren<BoatCharacter>().getShootCoolDown();
+            //    _buttonShootLeft.GetComponent<Image>().fillAmount = 0;
+            //    canReloadLeft = true;
+            //}
 
         }
 
@@ -136,16 +179,12 @@ namespace ProjetPirate.Controllers
         /// </summary>
         public void ShootUp()
         {
-            if (!canReloadUp)
-            {
-                reloadingTime = _player.GetComponentInChildren<BoatCharacter>().getShootCoolDown();
-                _buttonShootUp.GetComponent<Image>().fillAmount = 0;
-                canReloadUp = true;
-            }
+            //if (!canReloadUp)
+            //{
+            //    reloadingTime = _player.GetComponentInChildren<BoatCharacter>().getShootCoolDown();
+            //    _buttonShootUp.GetComponent<Image>().fillAmount = 0;
+            //    canReloadUp = true;
+            //}
         }
-
-     
-
-       
     }
 }

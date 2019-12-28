@@ -250,13 +250,17 @@ namespace ProjetPirate.Boat
         //private float _zInputMovement; // input vertical 
         //private float _xInputMovement; // input horizontal
 
-        private bool _isMoving = false; // set depuis le controller (boatController ou IAController)
+        private bool _ControllerIsMoving = false; // set depuis le controller (boatController ou IAController)
 
         // Use this for initialization
         void Start()
         {
             //set the currentLife of the boat when it appear
-
+            _joystickController = FindObjectOfType<JoystickController>();
+            if (_joystickController == null)
+            {
+                Debug.LogError("JoystickController Not Assigned");
+            }
             if (_damageFX != null)
             {
                 _damageFX.Stop();
@@ -821,9 +825,9 @@ namespace ProjetPirate.Boat
         /// <summary>
         /// must be call in controllers
         /// </summary>
-        public void setIsMoving(bool pIsMoving)
+        public void setControllerIsMoving(bool pControllerIsMoving)
         {
-            _isMoving = pIsMoving;
+            _ControllerIsMoving = pControllerIsMoving;
         }
 
         #endregion MUTATORS
@@ -841,13 +845,13 @@ namespace ProjetPirate.Boat
             {
                 //acceleration
                 //if (_currentSpeedForward > 0 && (_zInputMovement != 0 || _xInputMovement != 0))
-                if (_currentMovingSpeed > 0 && _isMoving == true)
+                if (_currentMovingSpeed > 0 && _ControllerIsMoving == true)
                 {
                     _boatMovementState = BoatMovementState.ACCELERATE;
                 }
                 //deceleration
                 //else if (_currentSpeedForward > 0 && (_zInputMovement == 0 && _xInputMovement == 0))
-                else if (_currentMovingSpeed > 0 && _isMoving == false)
+                else if (_currentMovingSpeed > 0 && _ControllerIsMoving == false)
                 {
                     _boatMovementState = BoatMovementState.DECELERATE;
                 }
@@ -871,13 +875,13 @@ namespace ProjetPirate.Boat
         {
             //acceleration
             //if (_zInputMovement != 0 || _xInputMovement != 0)
-            if (_isMoving == true)
+            if (_ControllerIsMoving == true)
             {
                 Accelerate();
             }
             //deceleration speed
             //else if (this.gameObject.GetComponent<ProjetPirate.IA.Ship_Controller>() == null)
-            if (_isMoving == false)
+            if (_ControllerIsMoving == false)
             {
                 Decelerate();
             }
@@ -897,34 +901,31 @@ namespace ProjetPirate.Boat
 
         public void PerformMovement(float pInputVertical, float pInputHorizontal)
         {
-            //GET AXIS
-            //_xInputMovement = pInputHorizontal;
-            //_zInputMovement = pInputVertical;
 
             //define direction with the inputs
-            _normalizeTarget_MovementDirection = new Vector3(pInputHorizontal, 0, pInputVertical);
-            _targetPosition_MovementDirection = this.transform.position + _normalizeTarget_MovementDirection;
-            _direction_MovementDirection = _targetPosition_MovementDirection - this.transform.position;
-
+            if (pInputHorizontal > _joystickController._joystickDeadZone || pInputHorizontal < -_joystickController._joystickDeadZone
+                        || pInputVertical > _joystickController._joystickDeadZone || pInputVertical < -_joystickController._joystickDeadZone)
+            {
+                _normalizeTarget_MovementDirection = new Vector3(pInputHorizontal, 0, pInputVertical);
+                _targetPosition_MovementDirection = this.transform.position + _normalizeTarget_MovementDirection;
+                _direction_MovementDirection = _targetPosition_MovementDirection - this.transform.position;
+            }
             //VELOCITY
             //_currentVelocity_MovementDirection = this.transform.forward * _currentSpeedForward * Time.deltaTime;
-            //move the position by the velocity
             if (_attractObject._isFalling == false)
             {
                 MoveForward();
                 //this.transform.position += _currentVelocity_MovementDirection;
-
-                //_rigidbody.MovePosition(this.transform.position + _currentVelocity_MovementDirection);
             }
 
             //ROTATION
-
             //check the direction of the destination (with angle)
             _angleToDestination = Vector3.SignedAngle(this.transform.forward, _direction_MovementDirection, this.transform.up);
 
             //check if the forward direction of the boat is near the target direction
             if (Mathf.Abs(_angleToDestination) <= _maxAngularSpeed * Time.deltaTime)
             {
+                //_boatRotationState = BoatRotationState.FORWARD;
                 if (_joystickController != null)
                 {
                     if (pInputHorizontal > _joystickController._joystickDeadZone || pInputHorizontal < -_joystickController._joystickDeadZone
@@ -932,8 +933,6 @@ namespace ProjetPirate.Boat
                     {
                         this.transform.LookAt(this.transform.position + (_direction_MovementDirection * 10));
                         _angleToDestination = 0;
-                        _boatRotationState = BoatRotationState.FORWARD;
-                        //Debug.LogError("AAAAAAAAAAAAA : "+"this.transform.position : " + this.transform.position +  "_targetPosition_MovementDirection" + _targetPosition_MovementDirection);
                     }
                 }
             }
@@ -941,15 +940,14 @@ namespace ProjetPirate.Boat
             else if (_angleToDestination < 0 && _angleToDestination > -180)
             {
                 this.TurnLarboard();
-                _boatRotationState = BoatRotationState.BABORD;
+                //_boatRotationState = BoatRotationState.BABORD;
             }
             //turn right
             else if (_angleToDestination > 0 && _angleToDestination < 180)
             {
                 this.TurnStarboard();
-                _boatRotationState = BoatRotationState.TRIBORD;
+                //_boatRotationState = BoatRotationState.TRIBORD;
             }
-
 
         }
 
