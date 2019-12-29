@@ -94,6 +94,9 @@
      <Compile Include="Assets\Project\Scripts\Datas\HugoTest.cs" />
      <Compile Include="Assets\Project\Scripts\Datas\SaveSystem.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Boat\BoatCharacter.cs" />
+     <Compile Include="Assets\Project\Scripts\Gameplay\Boat\Cannon.cs" />
+     <Compile Include="Assets\Project\Scripts\Gameplay\Boat\CannonBall.cs" />
+     <Compile Include="Assets\Project\Scripts\Gameplay\Controller.cs" />
      <Compile Include="Assets\Project\Scripts\IA\Character.cs" />
      <Compile Include="Assets\Project\Scripts\Managers\GameManager.cs" />
      <Compile Include="Assets\Project\Scripts\Map\Sea.cs" />

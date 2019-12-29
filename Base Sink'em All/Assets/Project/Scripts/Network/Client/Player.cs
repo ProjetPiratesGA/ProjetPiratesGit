@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 using ProjetPirate.Data;
 using ProjetPirate.Boat;
 
-public class Player : NetworkBehaviour {
+public class Player : Controller {
 
     [SerializeField]
     GameObject _boatPrefab = null;

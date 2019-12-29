@@ -514,3 +514,7 @@ F:\DepotGit\Projet Pirates bak\Base Sink'em All\obj\Debug\Assembly-CSharp.csproj
 F:\DepotGit\Projet Pirates bak\Base Sink'em All\obj\Debug\Assembly-CSharp.csproj.CopyComplete
 F:\DepotGit\Projet Pirates bak\Base Sink'em All\obj\Debug\Assembly-CSharp.dll
 F:\DepotGit\Projet Pirates bak\Base Sink'em All\obj\Debug\Assembly-CSharp.pdb
+F:\DepotGit\Projet Pirates ga84\ProjetPiratesGit\Base Sink'em All\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+F:\DepotGit\Projet Pirates ga84\ProjetPiratesGit\Base Sink'em All\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache
+F:\DepotGit\Projet Pirates ga84\ProjetPiratesGit\Base Sink'em All\obj\Debug\Assembly-CSharp.dll
+F:\DepotGit\Projet Pirates ga84\ProjetPiratesGit\Base Sink'em All\obj\Debug\Assembly-CSharp.pdb

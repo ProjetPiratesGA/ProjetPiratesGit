@@ -296,6 +296,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b643dd60f50fbf5428f8101e0cafd5ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _zoom: 2
+  _minZoom: 1
+  _maxZoom: 4
 --- !u!114 &114942931105475168
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -314,3 +317,14 @@ MonoBehaviour:
   _goldDropped: 0
   _xpEarned: 0
   _directionLocator: {fileID: 0}
+  _larboardCannons: []
+  _starboardCannons: []
+  _larboardCannonPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  _starboardCannonPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  _defaultCannonNumberBySide: 0
+  _larboardCannonPrefab: {fileID: 0}
+  _starboardCannonPrefab: {fileID: 0}

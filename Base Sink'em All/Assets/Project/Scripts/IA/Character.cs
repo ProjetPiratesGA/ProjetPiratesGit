@@ -17,6 +17,14 @@ namespace ProjetPirate.IA
         [SerializeField] protected int _goldDropped;
         [SerializeField] protected int _xpEarned;
         [SerializeField] protected Transform _directionLocator;
+        protected Controller _controller;
+        public Controller Controller
+        {
+            get
+            {
+                return _controller;
+            }
+        }
 
         public int MaxLifePoint
         {
@@ -83,25 +91,57 @@ namespace ProjetPirate.IA
 
         }
 
+        public void FullLife()
+        {
+            _currentLifePoint = _maxLifePoint;
+        }
+
         public virtual void MoveForward()
         {
-           
+
         }
 
         //Turn left based on _angularSpeed
         public virtual void TurnLarboard()
         {
-            
+
         }
 
         //Turn right based on _angularSpeed
         public virtual void TurnStarboard()
         {
-            
+
         }
 
         public virtual int Damage(int _damage)
         {
+            //if (_controller.GetComponent<Ship_Controller>() != null)
+            //{
+            //    _controller.GetComponent<Ship_Controller>().ResetTime();
+            //}
+            //if (_controller.GetComponent<Shark_Controller>() != null)
+            //{
+            //    _controller.GetComponent<Shark_Controller>().ResetTime();
+            //}
+            _currentLifePoint -= _damage;
+            if (_currentLifePoint <= 0)
+            {
+                Death();
+                return _xpEarned;
+            }
+            return 0;
+        }
+
+        public virtual int Damage(int _damage, Transform pDamageLocation)
+        {
+            //if (_controller.GetComponent<Ship_Controller>() != null)
+            //{
+            //    _controller.GetComponent<Ship_Controller>().ResetTime();
+            //}
+            //if (_controller.GetComponent<Shark_Controller>() != null)
+            //{
+            //    _controller.GetComponent<Shark_Controller>().ResetTime();
+            //}
             _currentLifePoint -= _damage;
             if (_currentLifePoint <= 0)
             {
@@ -112,8 +152,8 @@ namespace ProjetPirate.IA
         }
 
         public virtual void Death()
-            {
-                Destroy(this.gameObject);
-            }
+        {
+            Destroy(this.gameObject);
+        }
     }
 }
