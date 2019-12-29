@@ -103,6 +103,8 @@
      <Compile Include="Assets\Project\Scripts\Network\Server\ServerInit.cs" />
      <Compile Include="Assets\Project\Scripts\Network\Server\ServerNetworkManager.cs" />
      <Compile Include="Assets\Project\Scripts\Network\Server\testServer.cs" />
+     <Compile Include="Assets\Project\Scripts\Singletons\CameraPivot.cs" />
+     <Compile Include="Assets\Project\Scripts\Singletons\CameraPosition.cs" />
      <Compile Include="Assets\Project\Scripts\Singletons\MonoSingletonTest.cs" />
      <Compile Include="Assets\Project\Scripts\UI\HUD\HUD_Script.cs" />
      <Compile Include="Assets\Project\Scripts\UI\HUD\InterractionJoueur.cs" />

@@ -16,6 +16,13 @@ namespace ProjetPirate.Boat
 
         private Player _player = null;
 
+        private BoatCharacter _boatCharacter = null;
+        private Transform _cameraPivot = null;
+        private Transform _cameraPosition = null;
+
+        [SerializeField] private float _zoom = 2;
+        [SerializeField] float _minZoom = 1f;
+        [SerializeField] float _maxZoom = 4f;
 
 
         public Player player
@@ -42,9 +49,12 @@ namespace ProjetPirate.Boat
             _buttonShootLeft = GameObject.Find("ButtonShootLeft");
             _buttonShootRight = GameObject.Find("ButtonShootRight");
 
-            //Camera.main.transform.position = posCam.position;
-            //Camera.main.transform.rotation = posCam.rotation;
-            Camera.main.transform.SetParent(this.transform);
+            _boatCharacter = this.GetComponent<BoatCharacter>();
+            _cameraPivot = CameraPivot.Instance.transform;
+            _cameraPosition = CameraPosition.Instance.transform;
+            Vector3 pos = _cameraPosition.localPosition;
+            pos *= _zoom;
+            Camera.main.transform.localPosition = pos;
         }
 
         // Update is called once per frame
@@ -54,18 +64,37 @@ namespace ProjetPirate.Boat
             {
                 return;
             }
+            Zoom(0);
 
-            float horizontal = Input.GetAxis("Horizontal");
-            float vertical = Input.GetAxis("Vertical");
-
-            transform.position += vertical * this.transform.forward * 10f * Time.deltaTime;
-            transform.Rotate(0, horizontal, 0);
-
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKey(KeyCode.KeypadPlus))
             {
-                CmdShoot();
+                Zoom(0.01f);
             }
+            if (Input.GetKey(KeyCode.KeypadMinus))
+            {
+                Zoom(-0.01f);
+            }
+
+            _cameraPivot.position = this.transform.position;
+
         }
+
+        public void Zoom(float pZoom)
+        {
+            _zoom += pZoom;
+            if (_zoom < _minZoom)
+            {
+                _zoom = _minZoom;
+            }
+            if (_zoom > _maxZoom)
+            {
+                _zoom = _maxZoom;
+            }
+            Vector3 pos = _cameraPosition.localPosition;
+            pos *= _zoom;
+            Camera.main.transform.localPosition = pos;
+        }
+
 
         [Command]
         private void CmdShoot()
