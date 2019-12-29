@@ -320,11 +320,13 @@ MonoBehaviour:
   _larboardCannons: []
   _starboardCannons: []
   _larboardCannonPositions:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 4505011800673034}
+  - {fileID: 4367304526848484}
   _starboardCannonPositions:
-  - {fileID: 0}
-  - {fileID: 0}
-  _defaultCannonNumberBySide: 0
-  _larboardCannonPrefab: {fileID: 0}
-  _starboardCannonPrefab: {fileID: 0}
+  - {fileID: 4951537713319920}
+  - {fileID: 4505011800673034}
+  _defaultCannonNumberBySide: 1
+  _larboardCannonPrefab: {fileID: 1886762558630412, guid: c1b3a86bd6823c745900ae7409e8856f,
+    type: 2}
+  _starboardCannonPrefab: {fileID: 1397878430249924, guid: 5f08ce98d8383754781dfffd6af6748f,
+    type: 2}

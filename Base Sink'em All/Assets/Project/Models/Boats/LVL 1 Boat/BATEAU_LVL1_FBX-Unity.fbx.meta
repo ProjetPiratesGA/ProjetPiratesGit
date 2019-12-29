@@ -19,7 +19,12 @@ ModelImporter:
     2300000: base_boat
     3300000: base_boat
     4300000: base_boat
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LVL1Boat_MAT
+    second: {fileID: 2100000, guid: 369cc469d3915b345938857bd56f4bf1, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
