@@ -129,6 +129,26 @@ namespace Project.Network
 
         }
 
+        public override void OnServerDisconnect(NetworkConnection conn)
+        {
+            Debug.LogError("Player Disconnect");
+
+            for (int i = 0; i < playerList.Count; i++) {
+                if(playerList[i].connectionToClient == conn)
+                {
+                    Debug.LogError("Connection Player Correspond to Player Disconnect");
+
+                    for (int j = 0; j < Data_server.ClientRegistered.Count; j++)
+                    {
+                        if(Data_server.ClientRegistered[j].Username == playerList[i]._username)
+                        {
+                            Data_server.ClientRegistered[j].AccountIsUsed = false;
+                        }
+                    }
+                }
+            }
+        }
+
         public byte[] formateToByte(Data_Player _dataReceive)
         {
             var binFormatter = new BinaryFormatter();
@@ -202,6 +222,8 @@ namespace Project.Network
                         stateConnectionBuffer = StateConnectionMessage.REGISTER_SUCCESSFUL;
                         sendStateLoginRegister = true;
 
+                     
+
                         //Load Data
                         dataUpdatePlayer = formateToByte(tmpDataBuffer.Player);
                         LoadDataRegisterClient(_connBuffer);
@@ -246,7 +268,14 @@ namespace Project.Network
                     Debug.Log("Password Correspond");
 
                     //tmpDataBuffer = new ClientData(objectMessage.username, objectMessage.password);
+                    for (int i = 0; i < _playerList.Count; i++)
+                    {
+                        if (_playerList[i].connectionToClient == _connBuffer)
+                        {
+                            _playerList[i]._username = _objectMessage.username;
 
+                        }
+                    }
 
                     playerCanConnectOnGame = true;
                     stateConnectionBuffer = StateConnectionMessage.LOGIN_USERNAME_PASSWORD_CORRESPOND;
@@ -292,11 +321,16 @@ namespace Project.Network
                 {
                     if (Data_server.ClientRegistered[i].Password == _password)
                     {
-                        return true;
+                        if(Data_server.ClientRegistered[i].AccountIsUsed == false)
+                        {
+                            Data_server.ClientRegistered[i].AccountIsUsed = true;
+                            return true;
+
+                        }
+
                     }
                 }
-                else
-                    return false;
+               
             }
             return false;
         }
