@@ -22,6 +22,9 @@ public class Player : Controller {
 
     public int idClientBuffer = 0;
 
+    [SyncVar]
+    public string _username;
+
     public Data_Player _data
     {
         get { return data; }

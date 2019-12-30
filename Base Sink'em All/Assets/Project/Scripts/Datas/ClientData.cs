@@ -12,11 +12,14 @@ namespace ProjetPirate.Data
         private int strPassword = 0;
         private int id = -1;
         private Data_Player data_Player = new Data_Player(-1);
-
+        private bool accountIsUsed;
 
         public string Username { get { return strUsername; } set { strUsername = value; } }
         public int Password { get { return strPassword; } set { strPassword = value; } }
         public int ID { get { return id; } set { id = value; } }
+
+        public bool AccountIsUsed { get { return accountIsUsed; } set { accountIsUsed = value; } }
+
 
         public Data_Player Player
         {
