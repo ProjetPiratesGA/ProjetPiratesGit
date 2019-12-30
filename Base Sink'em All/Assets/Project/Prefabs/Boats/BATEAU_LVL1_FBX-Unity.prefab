@@ -312,11 +312,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxLifePoint: 0
   _attackDamage: 0
-  _maxMovingSpeed: 0
-  _maxAngularSpeed: 0
+  _maxMovingSpeed: 30
+  _maxAngularSpeed: 20
   _goldDropped: 0
   _xpEarned: 0
   _directionLocator: {fileID: 0}
+  _HeightFallingDeath: -10
+  _boatMovementState: 0
+  _boatRotationState: 0
+  _accelerationSpeedForward: 1
+  _decelerationSpeedForward: 1
+  _joystickController: {fileID: 0}
   _larboardCannons: []
   _starboardCannons: []
   _larboardCannonPositions:
