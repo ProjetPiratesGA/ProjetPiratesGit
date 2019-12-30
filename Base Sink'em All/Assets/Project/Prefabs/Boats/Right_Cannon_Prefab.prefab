@@ -37,6 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4519562744929908}
   - component: {fileID: 114212392077221754}
+  - component: {fileID: 114369745547277024}
   m_Layer: 0
   m_Name: Right_Cannon_Prefab
   m_TagString: Untagged
@@ -306,3 +307,35 @@ MonoBehaviour:
   _forceCannonBall: 0
   _distShoot: 10
   _smokeFX: {fileID: 0}
+--- !u!114 &114369745547277024
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1397878430249924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 95
+    i1: 8
+    i2: 206
+    i3: 152
+    i4: 216
+    i5: 56
+    i6: 55
+    i7: 84
+    i8: 120
+    i9: 29
+    i10: 255
+    i11: 253
+    i12: 106
+    i13: 246
+    i14: 116
+    i15: 143
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1

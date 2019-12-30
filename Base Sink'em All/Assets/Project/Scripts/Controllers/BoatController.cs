@@ -50,6 +50,9 @@ namespace ProjetPirate.Boat
             _buttonShootRight = GameObject.Find("ButtonShootRight");
 
             _boatCharacter = this.GetComponent<BoatCharacter>();
+
+            this.gameObject.GetComponent<BoatCharacter>().CmdSetUpBoat(_player.gameObject);
+
             _cameraPivot = CameraPivot.Instance.transform;
             _cameraPosition = CameraPosition.Instance.transform;
             Vector3 pos = _cameraPosition.localPosition;

@@ -86,6 +86,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4905731163295624}
   - component: {fileID: 114505971589152382}
+  - component: {fileID: 114289181779003778}
   m_Layer: 0
   m_Name: Left_Cannon_Prefab
   m_TagString: Untagged
@@ -288,6 +289,38 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1732538325056464}
   m_Mesh: {fileID: 4300000, guid: cdbcc76b3fcbfdf4386ce2976c80c079, type: 3}
+--- !u!114 &114289181779003778
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1886762558630412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 193
+    i1: 179
+    i2: 168
+    i3: 107
+    i4: 214
+    i5: 130
+    i6: 60
+    i7: 116
+    i8: 89
+    i9: 0
+    i10: 174
+    i11: 116
+    i12: 9
+    i13: 232
+    i14: 133
+    i15: 111
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114505971589152382
 MonoBehaviour:
   m_ObjectHideFlags: 1

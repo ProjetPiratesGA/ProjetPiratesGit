@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 using ProjetPirate.Controllers;
 //using ProjetPirate.Physic;
 using ProjetPirate.Data;
+using UnityEngine.Networking;
+using ProjetPirate.IA;
 
 namespace ProjetPirate.Boat
 {
@@ -79,24 +81,24 @@ namespace ProjetPirate.Boat
             get { return _starboardCannonPositions; }
         }
 
-        public void SetUpBoat(Player _player)
-        {
-            this.gameObject.transform.SetParent(_player.gameObject.transform);
-            this.transform.localPosition = new Vector3(0, 0, 0);
-            for (int i = 0; i < this.DefaultCannonNumberBySide; i++)
-            {
-                this.AddLarboardCannon();
-                this.AddStarboardCannon();
-            }
-            _controller = _player;
-        }
+        //public void SetUpBoat(Player _player)
+        //{
+        //    this.gameObject.transform.SetParent(_player.gameObject.transform);
+        //    this.transform.localPosition = new Vector3(0, 0, 0);
+        //    for (int i = 0; i < this.DefaultCannonNumberBySide; i++)
+        //    {
+        //        this.AddLarboardCannon();
+        //        this.AddStarboardCannon();
+        //    }
+        //    _controller = _player;
+        //}
 
         //public void SetUpBoat(Ship_Controller pController)
         //{
         //    _controller = pController;
         //}
 
-        public void AddLarboardCannon()
+        public void AddLarboardCannon(NetworkConnection conn)
         {
             if (_larboardCannons.Count < LarboardCannonPositions.Count)
             {
@@ -105,6 +107,9 @@ namespace ProjetPirate.Boat
                 cannon.gameObject.transform.localPosition = Vector3.zero;
                 cannon.SetOwner(this);
                 _larboardCannons.Add(cannon);
+
+                NetworkServer.SpawnWithClientAuthority(cannon.gameObject, conn);
+                this.TargetSetLardboardCanon(conn, cannon.gameObject);
             }
         }
 
@@ -118,7 +123,7 @@ namespace ProjetPirate.Boat
         //    }
         //}
 
-        public void AddStarboardCannon()
+        public void AddStarboardCannon(NetworkConnection conn)
         {
             if (_starboardCannons.Count < StarboardCannonPositions.Count)
             {
@@ -127,8 +132,55 @@ namespace ProjetPirate.Boat
                 cannon.gameObject.transform.localPosition = Vector3.zero;
                 cannon.SetOwner(this);
                 _starboardCannons.Add(cannon);
+
+                NetworkServer.SpawnWithClientAuthority(cannon.gameObject, conn);
+                this.TargetSetStarboardCanon(conn, cannon.gameObject);
+
             }
         }
 
+        [Command]
+        public void CmdSetUpBoat(GameObject player)
+        {
+            this.gameObject.transform.SetParent(player.transform);
+            this.transform.localPosition = new Vector3(0, 0, 0);
+            _controller = player.GetComponent<Controller>();
+
+
+            TargetSetParent(player.GetComponent<Player>().connectionToClient, player.gameObject);
+
+            for (int i = 0; i < this.DefaultCannonNumberBySide; i++)
+            {
+                this.AddLarboardCannon(player.GetComponent<Player>().connectionToClient);
+                this.AddStarboardCannon(player.GetComponent<Player>().connectionToClient);
+            }
+        }
+
+
+        [TargetRpc]
+        public void TargetSetParent(NetworkConnection target,GameObject player)
+        {
+            this.gameObject.transform.SetParent(player.transform);
+            this.transform.localPosition = new Vector3(0, 0, 0);
+            _controller = player.GetComponent<Controller>();
+        }
+
+        [TargetRpc]
+        public void TargetSetLardboardCanon(NetworkConnection target, GameObject cannon)
+        {
+            cannon.transform.SetParent(LarboardCannonPositions[_larboardCannons.Count]);
+            cannon.transform.localPosition = Vector3.zero;
+            cannon.GetComponent<Cannon>().SetOwner(this);
+            _larboardCannons.Add(cannon.GetComponent<Cannon>());
+        }
+
+        [TargetRpc]
+        public void TargetSetStarboardCanon(NetworkConnection target, GameObject cannon)
+        {
+            cannon.transform.SetParent(StarboardCannonPositions[_starboardCannons.Count]);
+            cannon.transform.localPosition = Vector3.zero;
+            cannon.GetComponent<Cannon>().SetOwner(this);
+            _starboardCannons.Add(cannon.GetComponent<Cannon>());
+        }
     }
 }

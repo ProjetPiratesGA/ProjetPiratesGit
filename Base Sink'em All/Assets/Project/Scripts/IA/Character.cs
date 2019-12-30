@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace ProjetPirate.IA
 {
-    public class Character : MonoBehaviour
+    public class Character : NetworkBehaviour
     {
         [Header("Character Data")]
         [SerializeField] protected int _maxLifePoint;
