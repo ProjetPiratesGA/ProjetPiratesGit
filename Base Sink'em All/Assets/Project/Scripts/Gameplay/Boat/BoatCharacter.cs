@@ -125,7 +125,17 @@ namespace ProjetPirate.Boat
         [SerializeField] private GameObject _larboardCannonPrefab;
         [SerializeField] private GameObject _starboardCannonPrefab;
 
+        public List<Cannon> larboardCannons
+        {
+            get { return _larboardCannons; }
+            set { _larboardCannons = value ; }
+        }
 
+        public List<Cannon> starboardCannons
+        {
+            get { return _starboardCannons; }
+            set { _starboardCannons = value; }
+        }
         public int DefaultCannonNumberBySide
         {
             get { return _defaultCannonNumberBySide; }

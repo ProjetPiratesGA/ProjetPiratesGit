@@ -37,6 +37,7 @@ public class Cannon : NetworkBehaviour
         {
             _smokeFX.Stop();
         }
+        DontDestroyOnLoad(this);
     }
 
     // Update is called once per frame

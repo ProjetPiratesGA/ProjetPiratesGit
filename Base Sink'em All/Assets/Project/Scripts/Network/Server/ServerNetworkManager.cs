@@ -131,6 +131,9 @@ namespace Project.Network
 
             for (int i = 0; i < _boatList.Count; i++)
             {
+                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetParent(conn, _boatList[i].player.gameObject);
+                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetLardboardCanon(conn, _boatList[i].gameObject.GetComponent<BoatCharacter>().larboardCannons[0].gameObject);
+                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetStarboardCanon(conn, _boatList[i].gameObject.GetComponent<BoatCharacter>().starboardCannons[0].gameObject);
                 //_boatList[i].GetComponent<BarLife>().TargetRefreshLifeBar(conn);
             }
 
