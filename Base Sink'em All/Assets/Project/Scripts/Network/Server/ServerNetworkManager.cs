@@ -105,14 +105,16 @@ namespace Project.Network
         public override void OnStartServer()
         {
             data = SaveSystem.LoadServer();
-        
+            for (int j = 0; j < data.ClientRegistered.Count; j++)
+            {
+                data.ClientRegistered[j].AccountIsUsed = false;
+            }
         }
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
         {
             Player playerInstance = Instantiate(playerPrefab.GetComponent<Player>());
             _playerList.Add(playerInstance);
 
-            _playerList[_playerList.Count - 1].idClientBuffer = _playerList.Count - 1;
             _playerList[_playerList.Count - 1].InitPlayer();
 
             _connBuffer = conn;
@@ -154,13 +156,8 @@ namespace Project.Network
             }
         }
 
-        public override void OnStopServer()
-        {
-            for (int j = 0; j < data.ClientRegistered.Count; j++)
-            {             
-                 data.ClientRegistered[j].AccountIsUsed = false;               
-            }
-        }
+
+
 
         public byte[] formateToByte(Data_Player _dataReceive)
         {
