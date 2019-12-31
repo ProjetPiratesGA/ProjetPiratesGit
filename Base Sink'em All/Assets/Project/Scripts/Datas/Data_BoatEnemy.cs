@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ProjetPirate.Data
 {
     [System.Serializable]
-    public class Data_BoatEnemy
+    public class Data_BoatEnemy : Data_Enemies
     {
         Data_Boat boat;
         private int id = -1;

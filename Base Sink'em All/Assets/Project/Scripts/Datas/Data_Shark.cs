@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ProjetPirate.Data
 {
     [System.Serializable]
-    public class Data_Shark
+    public class Data_Shark : Data_Enemies
     {
         Data_Transform transform = new Data_Transform();
         Data_StatsCharacters stats = new Data_StatsCharacters();
