@@ -141,6 +141,11 @@ namespace ProjetPirate.Boat
             get { return _starboardCannonPositions; }
         }
 
+        public float getShootCoolDown()
+        {
+            return _shootCooldown;
+        }
+
         void Update()
         {
             _isMovingForward = false;
