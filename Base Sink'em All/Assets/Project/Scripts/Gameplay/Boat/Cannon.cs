@@ -12,7 +12,7 @@ public class Cannon : MonoBehaviour
     [SerializeField]
     private ProjetPirate.Boat.BoatCharacter _owner;
 
-    private List<GameObject> _listCannonBall;
+    private List<GameObject> _listCannonBall = new List<GameObject>();
 
     [SerializeField]
     private float _forceCannonBall;

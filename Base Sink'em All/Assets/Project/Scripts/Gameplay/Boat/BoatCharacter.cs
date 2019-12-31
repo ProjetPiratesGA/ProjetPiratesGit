@@ -110,10 +110,17 @@ namespace ProjetPirate.Boat
         [SerializeField] private List<Cannon> _larboardCannons;
         [SerializeField] private List<Cannon> _starboardCannons;
 
+        [SerializeField] private float _shootCooldown;
+
 
         [SerializeField] private List<Transform> _larboardCannonPositions;
         [SerializeField] private List<Transform> _starboardCannonPositions;
         [SerializeField] private int _defaultCannonNumberBySide;
+
+        private bool _larboardCannonInCooldown = false;
+        private bool _starboardCannonInCooldown = false;
+        private float _currentLarboardShootCooldownTime = 0;
+        private float _currentStarboardShootCooldownTime = 0;
 
         [SerializeField] private GameObject _larboardCannonPrefab;
         [SerializeField] private GameObject _starboardCannonPrefab;
@@ -136,7 +143,6 @@ namespace ProjetPirate.Boat
 
         void Update()
         {
-
             _isMovingForward = false;
 
             //GoldFxAnimation();
@@ -155,18 +161,18 @@ namespace ProjetPirate.Boat
             //{
             //    _structureState = StructureState.Endangered;
             //}
-            //_currentLarboardShootCooldownTime += Time.deltaTime;
-            //_currentStarboardShootCooldownTime += Time.deltaTime;
-            //if (_currentLarboardShootCooldownTime > _shootCooldown)
-            //{
-            //    _larboardCannonInCooldown = false;
-            //    _currentLarboardShootCooldownTime = 0;
-            //}
-            //if (_currentStarboardShootCooldownTime > _shootCooldown)
-            //{
-            //    _starboardCannonInCooldown = false;
-            //    _currentStarboardShootCooldownTime = 0;
-            //}
+            _currentLarboardShootCooldownTime += Time.deltaTime;
+            _currentStarboardShootCooldownTime += Time.deltaTime;
+            if (_currentLarboardShootCooldownTime > _shootCooldown)
+            {
+                _larboardCannonInCooldown = false;
+                _currentLarboardShootCooldownTime = 0;
+            }
+            if (_currentStarboardShootCooldownTime > _shootCooldown)
+            {
+                _starboardCannonInCooldown = false;
+                _currentStarboardShootCooldownTime = 0;
+            }
 
             //if (Input.GetKeyDown(KeyCode.Keypad0))
             //{
@@ -188,8 +194,8 @@ namespace ProjetPirate.Boat
             //else
             //{
 
-                //BOAT STATES
-                Debug.Log("update boatCharacter");
+            //BOAT STATES
+            Debug.Log("update boatCharacter");
                 this.ManageBoatMovementState();
                 //UPDATE SPEED
                 this.UpdateSpeedForwardForDirection();
@@ -359,6 +365,41 @@ namespace ProjetPirate.Boat
 
 
             #endregion MANAGE BOAT MOVEMENT STATE
+        }
+
+        //Shoot at Larboard (Babord)
+        public void ShootLarboard()
+        {
+            if (!_larboardCannonInCooldown /*& !Safe*/)
+            {
+                //if (this.GetComponent<Ship_Controller>() != null)
+                //{
+                //    this.GetComponent<Ship_Controller>().ResetTime();
+                //}
+                for (int i = 0; i < _larboardCannons.Count; i++)
+                {
+                    _larboardCannons[i]._FireCannon();
+                }
+                _larboardCannonInCooldown = true;
+            }
+        }
+
+
+        //Shoot at Starboard (Tribord)
+        public void ShootStarboard()
+        {
+            if (!_starboardCannonInCooldown /*& !Safe*/)
+            {
+                //if (this.GetComponent<Ship_Controller>() != null)
+                //{
+                //    this.GetComponent<Ship_Controller>().ResetTime();
+                //}
+                for (int i = 0; i < _starboardCannons.Count; i++)
+                {
+                    _starboardCannons[i]._FireCannon();
+                }
+                _starboardCannonInCooldown = true;
+            }
         }
 
         // Move forward based on _movingSpeed
