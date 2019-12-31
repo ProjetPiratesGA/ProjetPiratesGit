@@ -383,7 +383,7 @@ namespace ProjetPirate.Boat
                 //}
                 for (int i = 0; i < _larboardCannons.Count; i++)
                 {
-                    _larboardCannons[i]._FireCannon();
+                    _larboardCannons[i].CmdFireCannon();
                 }
                 _larboardCannonInCooldown = true;
             }
@@ -401,7 +401,7 @@ namespace ProjetPirate.Boat
                 //}
                 for (int i = 0; i < _starboardCannons.Count; i++)
                 {
-                    _starboardCannons[i]._FireCannon();
+                    _starboardCannons[i].CmdFireCannon();
                 }
                 _starboardCannonInCooldown = true;
             }

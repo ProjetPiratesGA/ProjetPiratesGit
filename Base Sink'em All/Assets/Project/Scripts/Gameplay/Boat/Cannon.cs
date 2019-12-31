@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using ProjetPirate.Boat;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Cannon : MonoBehaviour
+public class Cannon : NetworkBehaviour
 {
 
     [SerializeField]
@@ -74,4 +76,46 @@ public class Cannon : MonoBehaviour
 
         }
     }
+
+    [Command]
+    public void CmdFireCannon()
+    {
+        if (_prefabCannonBall != null)
+        {
+            //instatiate & setup the cannon ball
+            GameObject newCannonBall = Instantiate(_prefabCannonBall, _spawnCannon.position, _spawnCannon.rotation);
+
+            newCannonBall.GetComponent<CannonBall>().setForceCannonBall(_forceCannonBall);
+            newCannonBall.GetComponent<CannonBall>().setTargetPosition(_spawnCannon.position + _spawnCannon.forward * _distShoot);
+            newCannonBall.GetComponent<CannonBall>()._owner = _owner;
+            _listCannonBall.Add(newCannonBall);
+            if (_smokeFX != null)
+            {
+                _smokeFX.Play();
+            }
+            NetworkServer.SpawnWithClientAuthority(newCannonBall, _owner.gameObject.GetComponent<BoatController>().player.connectionToClient);
+            this.RpcFireCannon(newCannonBall);
+            //Debug.Log("_listCannonBall.Count : " + _listCannonBall.Count);
+        }
+        else
+        {
+            //Debug.LogError("_cannonBall est null");
+
+        }
+    }
+
+    [ClientRpc]
+    public void RpcFireCannon(GameObject cannonBall)
+    {
+        cannonBall.GetComponent<CannonBall>().setForceCannonBall(_forceCannonBall);
+        cannonBall.GetComponent<CannonBall>().setTargetPosition(_spawnCannon.position + _spawnCannon.forward * _distShoot);
+        cannonBall.GetComponent<CannonBall>()._owner = _owner;
+        _listCannonBall.Add(cannonBall);
+        if (_smokeFX != null)
+        {
+            _smokeFX.Play();
+        }
+    }
+
+
 }
