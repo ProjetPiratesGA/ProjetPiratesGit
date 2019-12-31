@@ -7,12 +7,13 @@ namespace ProjetPirate.IA
 {
     public class Character : NetworkBehaviour
     {
+        protected ProjetPirate.Data.Data_StatsCharacters _data = new Data.Data_StatsCharacters();
         [Header("Character Data")]
         [SerializeField] protected int _maxLifePoint;
-        protected int _currentLifePoint;
+        //protected int _data.Life;
         [SerializeField] protected int _attackDamage;
         [SerializeField] protected float _maxMovingSpeed;
-        protected float _currentMovingSpeed;
+        //protected float _currentMovingSpeed;
         [SerializeField] protected float _maxAngularSpeed;
         protected float _currentAngularSpeed;
         [SerializeField] protected int _goldDropped;
@@ -32,10 +33,10 @@ namespace ProjetPirate.IA
             get { return _maxLifePoint; }
         }
 
-        public int CurrentLifePoint
-        {
-            get { return _currentLifePoint; }
-        }
+        //public int CurrentLifePoint
+        //{
+        //    get { return _data.Life; }
+        //}
 
         public int AttackDamage
         {
@@ -47,10 +48,10 @@ namespace ProjetPirate.IA
             get { return _maxMovingSpeed; }
         }
 
-        public float CurrentMovingSpeed
-        {
-            get { return _currentMovingSpeed; }
-        }
+        //public float CurrentMovingSpeed
+        //{
+        //    get { return _currentMovingSpeed; }
+        //}
 
         public float MaxAngularSpeed
         {
@@ -80,7 +81,7 @@ namespace ProjetPirate.IA
         // Use this for initialization
         void Start()
         {
-            _currentLifePoint = _maxLifePoint;
+            _data.Life = _maxLifePoint;
             _directionLocator = Instantiate(new GameObject()).transform;
             _directionLocator.SetParent(this.transform);
             _directionLocator.localPosition = Vector3.zero;
@@ -94,7 +95,7 @@ namespace ProjetPirate.IA
 
         public void FullLife()
         {
-            _currentLifePoint = _maxLifePoint;
+            _data.Life = _maxLifePoint;
         }
 
         public virtual void MoveForward()
@@ -124,8 +125,8 @@ namespace ProjetPirate.IA
             //{
             //    _controller.GetComponent<Shark_Controller>().ResetTime();
             //}
-            _currentLifePoint -= _damage;
-            if (_currentLifePoint <= 0)
+            _data.Life -= _damage;
+            if (_data.Life <= 0)
             {
                 Death();
                 return _xpEarned;
@@ -143,8 +144,8 @@ namespace ProjetPirate.IA
             //{
             //    _controller.GetComponent<Shark_Controller>().ResetTime();
             //}
-            _currentLifePoint -= _damage;
-            if (_currentLifePoint <= 0)
+            _data.Life -= _damage;
+            if (_data.Life <= 0)
             {
                 Death();
                 return _xpEarned;

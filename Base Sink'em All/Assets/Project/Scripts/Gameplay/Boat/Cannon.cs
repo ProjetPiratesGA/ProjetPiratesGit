@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 
 public class Cannon : NetworkBehaviour
 {
-
+    private ProjetPirate.Data.Data_Canon _data = new ProjetPirate.Data.Data_Canon();
     [SerializeField]
     private Transform _spawnCannon;
     [SerializeField]
@@ -23,6 +23,11 @@ public class Cannon : NetworkBehaviour
     private float _distShoot = 10f;
 
     [SerializeField] private ParticleSystem _smokeFX;
+
+    public ProjetPirate.Data.Data_Canon Data
+    {
+        get { return _data; }
+    }
 
     // Use this for initialization
     void Start()
