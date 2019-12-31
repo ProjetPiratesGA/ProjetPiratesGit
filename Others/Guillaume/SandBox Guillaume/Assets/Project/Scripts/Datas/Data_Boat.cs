@@ -69,6 +69,8 @@ namespace ProjetPirate.Data
         public void ReloadTransform(GameObject boat)
         {
             boat.transform.position = new Vector3(transform.Position.x, transform.Position.y, transform.Position.z);
+
+            boat.transform.rotation = Quaternion.Euler(new Vector3(transform.Rotation.x, transform.Rotation.y, transform.Rotation.z));
         }
 
         public void ReverseReloadTransform(GameObject boat)

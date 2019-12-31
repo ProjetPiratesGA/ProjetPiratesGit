@@ -349,6 +349,7 @@ namespace ProjetPirate.Boat
                 ParticleSystem.MainModule main = _waterTrails[i].main;
                 main.startLifetime = _currentMovingSpeed / _maxMovingSpeed;
             }
+
             _data_Boat.ReverseReloadTransform(this.gameObject);
         }
 

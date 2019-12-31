@@ -10,7 +10,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace>
     </RootNamespace>
-    <ProjectGuid>{D2B5EB3F-E2BC-324A-2E3C-07CD96ADE123}</ProjectGuid>
+    <ProjectGuid>{B0712C91-2EC1-4C1F-DF08-9061D8B964D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -191,40 +191,40 @@
     <None Include="Assets\Project\Models\Enemies\README.txt" />
     <None Include="Assets\Project\Prefabs\Enemies\README.txt" />
     <Reference Include="Unity.RenderPipelines.Core.Editor">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Lightweight.Runtime">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Runtime.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Lightweight.Editor">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Editor.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Postprocessing.Editor">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ShaderGraph.Editor">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.IncludePaths">
-      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Projet Local/Projet Local 29-12-2019 01h00/Library/ScriptAssemblies/Unity.RenderPipelines.Core.IncludePaths.dll</HintPath>
+      <HintPath>D:/PERSO/GAME ACADEMY/ANNÉE 2/PROJET DÉCEMBRE/GIT TEMP SINK/ProjetPiratesGit/Others/Guillaume/SandBox Guillaume/Library/ScriptAssemblies/Unity.RenderPipelines.Core.IncludePaths.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>D:/Unity/2018.2.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>

@@ -2344,10 +2344,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: Player
-  _boat: {fileID: 0}
+  _boat: {fileID: 114264617273441870, guid: 2ed5e5c3680474d468dcd907dcafae6f, type: 2}
   _shipLevel: 1
   _structuresPerLevel:
-  - {fileID: 1582943902513544, guid: 38cf2ccbebeba0b4697109b5cf613487, type: 2}
+  - {fileID: 1117760661390600, guid: 2ed5e5c3680474d468dcd907dcafae6f, type: 2}
   - {fileID: 1772418883677810, guid: ec6d1f55f49d0194c8d8040b54b0d9d6, type: 2}
   - {fileID: 1086025184158432, guid: fbff5937212e9e84f8e21bd79d7a34e8, type: 2}
   _maxXp: 10000

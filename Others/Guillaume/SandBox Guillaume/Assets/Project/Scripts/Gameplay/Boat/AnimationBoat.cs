@@ -8,10 +8,13 @@ namespace ProjetPirate.Boat
 
     public class AnimationBoat : MonoBehaviour
     {
+
+
         /// <summary>
         /// envoyer le game Object ou est le script boatMovement
         /// </summary>
         private BoatCharacter _boatCharacter;
+
         [SerializeField]
         private Transform _transformParent; // must be set with the parent object
         private Transform _transformMesh;
@@ -116,6 +119,8 @@ namespace ProjetPirate.Boat
         // Use this for initialization
         void Start()
         {
+            //inti Data Transform
+
             //SET VARIABLES
             _canDoAnimation = true;
 
@@ -252,6 +257,7 @@ namespace ProjetPirate.Boat
                     _transformMesh.eulerAngles.x,
                     _transformParent.eulerAngles.y,
                     _transformMesh.eulerAngles.z);
+
                 _transformMesh.eulerAngles = _rotationeulerToApply;
             }
         }
@@ -578,7 +584,11 @@ namespace ProjetPirate.Boat
         private void AnimationRollIdleMovement()
         {
             this.RollZ(_RollIdleMovement_SpeedRotation_Z, _RollIdleMovement_AngleMaxInclinaison_Z, _RollIdleMovement_TargetInclinaison_Z);
-            //this.RollX();
+
+            if(Input.GetKey(KeyCode.F))
+            {
+                this.transform.Rotate(10, 0, 0);
+            }
         }
 
         private void AnimationRollForwardMovement()
@@ -739,7 +749,9 @@ namespace ProjetPirate.Boat
         private void RotateLarboardZ(float pSpeedRotate)
         {
             Vector3 rotationIncrementation = new Vector3(0, 0, +pSpeedRotate);
+
             this.transform.Rotate(rotationIncrementation);
+
             //Debug.Log("AnimationBoat --> RotateLarboardZ : " + _currentAngleRotation);
         }
 
