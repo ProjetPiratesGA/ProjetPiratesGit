@@ -20,8 +20,6 @@ public class Player : Controller {
 
     private bool _asBoatSpawned = false;
 
-    public int idClientBuffer = 0;
-
     [SyncVar]
     public string _username;
 
@@ -38,7 +36,7 @@ public class Player : Controller {
             Debug.Log("Init Player");
         }
         
-        data = new Data_Player(idClientBuffer);
+        data = new Data_Player();
         DontDestroyOnLoad(this);
     }
 

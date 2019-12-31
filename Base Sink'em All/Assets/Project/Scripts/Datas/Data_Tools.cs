@@ -16,6 +16,13 @@ namespace ProjetPirate.Data
             y = _y;
             z = _z;
         }
+
+        public myVector3(Color _color)
+        {
+            x = _color.r;
+            y = _color.g;
+            z = _color.b;
+        }
         public float x { get; set; }
         public float y { get; set; }
         public float z { get; set; }

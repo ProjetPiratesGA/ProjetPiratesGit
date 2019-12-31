@@ -15,14 +15,12 @@ namespace ProjetPirate.Data
             set { boat_ID = value; }
         }
 
-        public Data_Boat(int _clientID)
+        public Data_Boat(int _clientID = -1)
         {
             boat_ID = _clientID;
-        }
-
-        public void SetBoatID(ClientData _client)
-        {
-            boat_ID = _client.ID;
+            this.canon = new List<Data_Canon>();
+            this.colorBoat = new myVector3(Color.red);
+            Debug.Log("Boat constructor : " + this.canon.Count);
         }
 
         Data_Transform transform = new Data_Transform();
@@ -40,13 +38,7 @@ namespace ProjetPirate.Data
         public myVector3 dColorBoat { get { return colorBoat; } set { colorBoat = value; } }
 
         private myVector3 _initPositionVector = new myVector3(0, 0, 0);
-        
 
-
-        public Data_Boat()
-        {
-
-        }
 
         public Data_Boat(GameObject boat)
         {

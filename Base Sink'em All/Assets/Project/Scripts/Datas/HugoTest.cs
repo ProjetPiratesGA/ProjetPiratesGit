@@ -8,24 +8,24 @@ public class HugoTest : MonoBehaviour
     ClientData fakeClient = null;
     public string username;
     public int password;
-    public int  ID;
 
     // Use this for initialization
     void Start()
     {
-        fakeClient = new ClientData(username, password);
-        Data_server.InitData_server();
+        //ClientData clientToCopy = new ClientData(username, password);
+
+       // fakeClient = new ClientData(clientToCopy);
+       // Data_server.InitData_server();
     }
 
     // Update is called once per frame
     void Update()
     {
-        fakeClient.ID = ID;
         fakeClient.Username = username;
         fakeClient.Password = password;
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SaveSystem.RegisterPlayer(fakeClient, Data_server.ClientRegistered);
+           // SaveSystem.RegisterPlayer(fakeClient);
         }
 
     }

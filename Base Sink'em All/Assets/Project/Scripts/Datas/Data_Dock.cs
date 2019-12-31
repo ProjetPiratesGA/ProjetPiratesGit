@@ -14,6 +14,7 @@ namespace ProjetPirate.Data
 
 
         public Data_Transform Transform { get { return transform; } set { transform = value; } }
+        public Data_Pnj Pnj { get { return pnj; } set { pnj = value; } }
         public bool IsEmpty { get { return isEmpty; } set { isEmpty = value; } }
         public string PnjName { get { return pnjName; } set { pnjName = value; } }
 

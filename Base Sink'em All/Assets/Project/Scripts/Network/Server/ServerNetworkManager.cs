@@ -27,7 +27,7 @@ namespace Project.Network
             set { _playerList = value; }
         }
 
-        //Data_server data = new Data_server();
+        Data_server data = new Data_server();
 
         ///////////////////////////////////////////////////////////////
         ///Error can appears if two players try to connect on the same time. 
@@ -93,6 +93,7 @@ namespace Project.Network
 
         void Start()
         {
+            data = SaveSystem.LoadServer();
             RegisterHandlers();
         }
 
@@ -101,13 +102,19 @@ namespace Project.Network
             SendErrorLoginRegister();
 
         }
-
+        public override void OnStartServer()
+        {
+            data = SaveSystem.LoadServer();
+            for (int j = 0; j < data.ClientRegistered.Count; j++)
+            {
+                data.ClientRegistered[j].AccountIsUsed = false;
+            }
+        }
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
         {
             Player playerInstance = Instantiate(playerPrefab.GetComponent<Player>());
             _playerList.Add(playerInstance);
 
-            _playerList[_playerList.Count - 1].idClientBuffer = _playerList.Count - 1;
             _playerList[_playerList.Count - 1].InitPlayer();
 
             _connBuffer = conn;
@@ -138,16 +145,19 @@ namespace Project.Network
                 {
                     Debug.LogError("Connection Player Correspond to Player Disconnect");
 
-                    for (int j = 0; j < Data_server.ClientRegistered.Count; j++)
+                    for (int j = 0; j < data.ClientRegistered.Count; j++)
                     {
-                        if(Data_server.ClientRegistered[j].Username == playerList[i]._username)
+                        if (data.ClientRegistered[j].Username == playerList[i]._username)
                         {
-                            Data_server.ClientRegistered[j].AccountIsUsed = false;
+                            data.ClientRegistered[j].AccountIsUsed = false;
                         }
                     }
                 }
             }
         }
+
+
+
 
         public byte[] formateToByte(Data_Player _dataReceive)
         {
@@ -209,13 +219,13 @@ namespace Project.Network
                 {
                     Debug.Log("Username Exist");
 
-                    tmpDataBuffer = new ClientData(_objectMessage.username, _objectMessage.password);
+                    tmpDataBuffer = new ClientData(_objectMessage.username, _objectMessage.password, data.CountIDUnique);
 
                     playerCanCreateAccount = true;
                     stateConnectionBuffer = StateConnectionMessage.REGISTER_SUCCESSFUL;
                     sendStateLoginRegister = true;
 
-                    if (SaveSystem.RegisterPlayer(tmpDataBuffer, Data_server.ClientRegistered) == true)
+                    if (SaveSystem.RegisterPlayer(tmpDataBuffer, data) == true)
                     {
                         Debug.Log("Password Is Set : " + _objectMessage.password);
                         playerCanCreateAccount = true;
@@ -315,15 +325,15 @@ namespace Project.Network
         {
             //Check On the List who contains username and password. Use Data Structure in the future
 
-            for (int i = 0; i < Data_server.ClientRegistered.Count; i++)
+            for (int i = 0; i < data.ClientRegistered.Count; i++)
             {
-                if (Data_server.ClientRegistered[i].Username == _username)
+                if (data.ClientRegistered[i].Username == _username)
                 {
-                    if (Data_server.ClientRegistered[i].Password == _password)
+                    if (data.ClientRegistered[i].Password == _password)
                     {
-                        if(Data_server.ClientRegistered[i].AccountIsUsed == false)
+                        if(data.ClientRegistered[i].AccountIsUsed == false)
                         {
-                            Data_server.ClientRegistered[i].AccountIsUsed = true;
+                            data.ClientRegistered[i].AccountIsUsed = true;
                             return true;
 
                         }
@@ -337,11 +347,24 @@ namespace Project.Network
 
         private bool CheckUsernameExist(string _username)
         {
-
-            for (int i = 0; i < Data_server.ClientRegistered.Count; i++)
+            if (data != null)
             {
-                if (Data_server.ClientRegistered[i].Username == _username)
-                    return true;
+                if (data.ClientRegistered != null)
+                {
+                    for (int i = 0; i < data.ClientRegistered.Count; i++)
+                    {
+                        if (data.ClientRegistered[i].Username == _username)
+                            return true;
+                    }
+                }
+                else
+                {
+                    Debug.LogError("data Registered NULL");
+                }
+            }
+            else
+            {
+                Debug.LogError("Data NULL");
             }
             return false;
         }
@@ -363,11 +386,11 @@ namespace Project.Network
         private bool SetPassword(string _username, int _password)
         {
 
-            for (int i = 0; i < Data_server.ClientRegistered.Count; i++)
+            for (int i = 0; i < data.ClientRegistered.Count; i++)
             {
-                if (Data_server.ClientRegistered[i].Username == _username)
+                if (data.ClientRegistered[i].Username == _username)
                 {
-                    Data_server.ClientRegistered[i].Password = _password;
+                    data.ClientRegistered[i].Password = _password;
                     return true;
                 }
             }
