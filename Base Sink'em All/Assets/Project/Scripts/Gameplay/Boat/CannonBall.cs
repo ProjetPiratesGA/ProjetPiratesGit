@@ -20,7 +20,7 @@ public class CannonBall : MonoBehaviour
 
     [SerializeField]
     private float _TimeToDelete = 2f;
-    private float _timerforDelete;
+    private float _timerforDelete = 0;
     public ProjetPirate.Boat.BoatCharacter _owner;
 
     void Start()

@@ -40,6 +40,11 @@ public class Player : Controller {
         DontDestroyOnLoad(this);
     }
 
+    public void SetDataBoat(BoatCharacter pBoat)
+    {
+        _data.Boat = pBoat.Data;
+    }
+
     public override void OnStartClient()
     {
         if(isServer)

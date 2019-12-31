@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 114144284493737328}
   - component: {fileID: 54063934139998710}
   - component: {fileID: 135471547013797170}
+  - component: {fileID: 114013915400318816}
   m_Layer: 0
   m_Name: CannonBall
   m_TagString: Untagged
@@ -149,6 +150,38 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114013915400318816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1903713359931088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 108
+    i1: 80
+    i2: 85
+    i3: 2
+    i4: 149
+    i5: 244
+    i6: 66
+    i7: 68
+    i8: 187
+    i9: 100
+    i10: 74
+    i11: 176
+    i12: 177
+    i13: 122
+    i14: 111
+    i15: 113
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114144284493737328
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -67,6 +67,7 @@ namespace ProjetPirate.Boat
                 Debug.LogError(this.name + " --> InitLocalBoat / _boatCharacter est null");
             }
 
+            _playerController.SetBoatCharacterReference(_boatCharacter);
 
             _buttonShootUp = GameObject.Find("ButtonShootUp");
             _buttonShootLeft = GameObject.Find("ButtonShootLeft");
