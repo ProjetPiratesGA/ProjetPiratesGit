@@ -51,8 +51,13 @@ namespace ProjetPirate.Boat
     [RequireComponent(typeof(AttractObject))]
     public class BoatCharacter : ProjetPirate.IA.Character
     {
-
+        //a mettre en prive apres
         private Data_Boat _data_Boat = new Data_Boat();
+        public Data_Boat Data_Boat
+        {
+            get { return _data_Boat; }
+            set { _data_Boat = value; }
+        }
         private Rigidbody _rigidbody;
         private AttractObject _attractObject;
 
@@ -211,9 +216,19 @@ namespace ProjetPirate.Boat
 
         [Header("ROTATION")]
         [SerializeField]
-        private JoystickController _joystickController;
-        //[SerializeField]
+        private float _accelerationSpeedRotation = 1;
+        [SerializeField]
+        private float _decelerationSpeedRotation = 1;
+        [SerializeField]
+        private JoystickController _joystickController; // je l'utilise pour obtenir la dead zone du joystick
+        [SerializeField]
         private float _angleToDestination;
+        [SerializeField]
+        private bool _isRotatingLarboard = false;
+        [SerializeField]
+        private bool _isRotatingStarboard = false;
+        [SerializeField]
+        private bool _isRotating = false;
 
         #endregion PERFORM MOVEMENT DIRECTION
 
@@ -279,7 +294,6 @@ namespace ProjetPirate.Boat
         void Update()
         {
 
-            _isMovingForward = false;
             GoldFxAnimation();
             //verify death falling character
             //FallDeath();
@@ -331,9 +345,11 @@ namespace ProjetPirate.Boat
 
                 //BOAT STATES
                 this.ManageBoatMovementState();
+                this.ManageBoatRotationState();
 
                 //UPDATE SPEED
-                this.UpdateSpeedForwardForDirection();
+                this.UpdateSpeedForward();
+                this.UpdateSpeedRotation();
 
                 if (!_isDocking)
                 {
@@ -775,6 +791,33 @@ namespace ProjetPirate.Boat
             #endregion MANAGE BOAT MOVEMENT STATE
         }
 
+        private void ManageBoatRotationState()
+        {
+            #region MANAGE BOAT ROTATION STATE 
+
+            //use the input to define the state of the boat
+            if (_isRotating)
+            {
+                if (_isRotatingLarboard)
+                {
+                    _boatRotationState = BoatRotationState.BABORD;
+                }
+                if (_isRotatingStarboard)
+                {
+                    _boatRotationState = BoatRotationState.TRIBORD;
+                }
+            }
+            else
+            {
+                _boatRotationState = BoatRotationState.FORWARD;
+            }
+
+
+
+            #endregion MANAGE BOAT ROTATION STATE 
+        }
+
+
         // Move forward based on _movingSpeed
         public override void MoveForward()
         {
@@ -782,7 +825,6 @@ namespace ProjetPirate.Boat
             pos += this.transform.forward * _currentMovingSpeed * Time.deltaTime;
             pos.y = 0;
             this.transform.position = pos;
-            _isMovingForward = true;
         }
 
         public void Accelerate()
@@ -808,7 +850,7 @@ namespace ProjetPirate.Boat
         /// <summary>
         /// a ranger pour apres
         /// </summary>
-        private void UpdateSpeedForwardForDirection()
+        private void UpdateSpeedForward()
         {
             //acceleration
             //if (_zInputMovement != 0 || _xInputMovement != 0)
@@ -834,6 +876,69 @@ namespace ProjetPirate.Boat
             }
         }
 
+        /// <summary>
+        /// Update the CurrentAngularSpeed
+        /// - verify where the boat is rotating
+        /// /// </summary>
+        private void UpdateSpeedRotation()
+        {
+            //acceleration
+            if (_ControllerIsMoving == true)
+            {
+                AccelerateRotation();
+            }
+            //deceleration speed
+            //else if (this.gameObject.GetComponent<ProjetPirate.IA.Ship_Controller>() == null)
+            if (_ControllerIsMoving == false)
+            {
+                DecelerateRotation();
+            }
+
+            //Booleans rotation
+            if ((_angleToDestination < 0 && _angleToDestination > -180)
+                && _currentAngularSpeed > 0)
+            {
+                _isRotatingLarboard = true;
+            }
+            else
+                _isRotatingLarboard = false;
+            if ((_angleToDestination > 0 && _angleToDestination < 180)
+                 && _currentAngularSpeed > 0)
+            {
+                _isRotatingStarboard = true;
+            }
+            else
+                _isRotatingStarboard = false;
+
+            if (_isRotatingStarboard || _isRotatingLarboard)
+                _isRotating = true;
+            else
+                _isRotating = false;
+
+
+        }
+
+        private void AccelerateRotation()
+        {
+            _currentAngularSpeed += _accelerationSpeedRotation * Time.deltaTime;
+            Debug.Log("AccelerateRotation : _currentAngularSpeed  " + _currentAngularSpeed + " _accelerationSpeedRotation : " + _accelerationSpeedRotation);
+            if (_currentAngularSpeed > _maxAngularSpeed)
+            {
+                _currentAngularSpeed = _maxAngularSpeed;
+            }
+            //_stoppingDistance = ((_currentAngularSpeed / 10) * (_currentAngularSpeed / 10)) * 50 / _decelerationAngularSpeed;
+        }
+
+        private void DecelerateRotation()
+        {
+            _currentAngularSpeed -= _decelerationSpeedRotation * Time.deltaTime;
+            if (_currentAngularSpeed < 0)
+            {
+                _currentAngularSpeed = 0;
+            }
+            //_stoppingDistance = ((_currentAngularSpeed / 10) * (_currentAngularSpeed / 10)) * 50 / _decelerationSpeedRotation;
+        }
+
         #region MOVEMENTS
 
         public void PerformMovement(float pInputVertical, float pInputHorizontal)
@@ -843,6 +948,7 @@ namespace ProjetPirate.Boat
             if (pInputHorizontal > _joystickController._joystickDeadZone || pInputHorizontal < -_joystickController._joystickDeadZone
                         || pInputVertical > _joystickController._joystickDeadZone || pInputVertical < -_joystickController._joystickDeadZone)
             {
+                //LA DIRECTION EST MAINTENANT SEULEMENT UTILISER POUR LA ROTATION CAR LE MOUVEMENT DU BATEAU SE FAIT TOUJOURS VERS L'AVANT
                 _normalizeTarget_MovementDirection = new Vector3(pInputHorizontal, 0, pInputVertical);
                 _targetPosition_MovementDirection = this.transform.position + _normalizeTarget_MovementDirection;
                 _direction_MovementDirection = _targetPosition_MovementDirection - this.transform.position;
@@ -862,7 +968,6 @@ namespace ProjetPirate.Boat
             //check if the forward direction of the boat is near the target direction
             if (Mathf.Abs(_angleToDestination) <= _maxAngularSpeed * Time.deltaTime)
             {
-                _boatRotationState = BoatRotationState.FORWARD;
                 if (_joystickController != null)
                 {
                     if (pInputHorizontal > _joystickController._joystickDeadZone || pInputHorizontal < -_joystickController._joystickDeadZone
@@ -877,13 +982,11 @@ namespace ProjetPirate.Boat
             else if (_angleToDestination < 0 && _angleToDestination > -180)
             {
                 this.TurnLarboard();
-                _boatRotationState = BoatRotationState.BABORD;
             }
             //turn right
             else if (_angleToDestination > 0 && _angleToDestination < 180)
             {
                 this.TurnStarboard();
-                _boatRotationState = BoatRotationState.TRIBORD;
             }
 
         }
@@ -895,6 +998,7 @@ namespace ProjetPirate.Boat
         {
             if (_isMovingForward)
             {
+                Debug.Log("TurnLarboard : _isMovingForward --> " + _isMovingForward);
                 this.transform.Rotate(0, -_maxAngularSpeed * Time.deltaTime, 0);
             }
         }
@@ -906,6 +1010,7 @@ namespace ProjetPirate.Boat
         {
             if (_isMovingForward)
             {
+                Debug.Log("TurnLarboard : _isMovingForward --> " + _isMovingForward);
                 this.transform.Rotate(0, +_maxAngularSpeed * Time.deltaTime, 0);
             }
         }

@@ -26,6 +26,7 @@ namespace ProjetPirate.Data
         }
 
         Data_Transform transform = new Data_Transform();
+        Data_Transform childTransform = new Data_Transform();
         Data_StatsCharacters stats = new Data_StatsCharacters();
         Data_Sail sail = new Data_Sail();
         List<Data_Canon> canon = new List<Data_Canon>();
@@ -33,6 +34,7 @@ namespace ProjetPirate.Data
         private myVector3 colorBoat = new myVector3();
 
         public Data_Transform dTransform { get { return transform; } set { transform = value; } }
+        public Data_Transform ChildTransform { get { return childTransform; } set { childTransform = value; } }
         public Data_StatsCharacters dStats { get { return stats; } set { stats = value; } }
         public Data_Sail Sail { get { return sail; } set { sail = value; } }
         public List<Data_Canon> dCanon { get { return canon; } set { canon = value; } }

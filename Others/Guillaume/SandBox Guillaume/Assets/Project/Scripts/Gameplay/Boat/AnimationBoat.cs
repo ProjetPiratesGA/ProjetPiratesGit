@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ProjetPirate.Tools;
+using ProjetPirate.Data;
 
 namespace ProjetPirate.Boat
 {
 
     public class AnimationBoat : MonoBehaviour
-    {
-
+    {        
 
         /// <summary>
         /// envoyer le game Object ou est le script boatMovement
@@ -22,8 +22,9 @@ namespace ProjetPirate.Boat
 
         //animation Idle
         [Header("(JUST TO SEE)")]
-        [SerializeField] private Vector3 _currentAngleRotation;
-        [SerializeField] private BoatRotationState _tempBoatRotationState_ForRollZ; // a utiliser seulement pour sauvegarder le boat RotationState pour la fonction de roll
+        [SerializeField] private Vector3 _currentAngleRotation; //utiliser pour vérifier les valeurs de this.transform.rotation.eulerAngles
+        [SerializeField] private BoatRotationState _tempBoatRotationState_ForRoll_Z; // a utiliser seulement pour sauvegarder le boat RotationState pour la fonction de rollZ
+        [SerializeField] private BoatRotationState _tempBoatRotationState_ForRoll_X; // a utiliser seulement pour sauvegarder le boat RotationState pour la fonction de rollX
 
         [Header("CURRENT_TARGET_Z(JUST TO SEE)")]
         [SerializeField] private float _currentTargetInclinaison_Z;
@@ -86,17 +87,34 @@ namespace ProjetPirate.Boat
         private float _RollIdleMovement_TargetInclinaison_X = 0; // doit être set a 0 au démarrage car c'est la target de l'idle
         private bool _RollIdleMovement_IsRotatingForward_X; // true quand rotation vers l'avant
         private bool _RollIdleMovement_IsRotatingBackward_X; // true quand rotation vers l'arrière
+
+        [Header("ROLL_FORWARD_MOVEMENT_X")]
+        [SerializeField] private float _RollForwardMovement_AngleMaxInclinaison_X; // angle d'inclinaison pour le roll autour de la cible target
+        [SerializeField] private float _RollForwardMovement_SpeedRotation_X; // speed de rotation 
+        private float _RollForwardMovement_TargetInclinaison_X; // // correspond dans l'animation au centre de la target
+        private bool _RollForwardMovement_IsRotatingForward_X; // true quand rotation vers l'avant
+        private bool _RollForwardMovement_IsRotatingBackward_X; // true quand rotation vers l'arrière
+
+        [Header("ROLL_LARBOARD_MOVEMENT_X")]
+        [SerializeField] private float _RollLarboardMovement_AngleMaxInclinaison_X; // angle d'inclinaison pour le roll autour de la cible target
+        [SerializeField] private float _RollLarboardMovement_SpeedRotation_X; // speed de rotation 
+        private float _RollLarboardMovement_TargetInclinaison_X; // // correspond dans l'animation au centre de la target
+        private bool _RollLarboardMovement_IsRotatingForward_X; // true quand rotation vers l'avant
+        private bool _RollLarboardMovement_IsRotatingBackward_X; // true quand rotation vers l'arrière
+
+        [Header("ROLL_STARBOARD_MOVEMENT_X")]
+        [SerializeField] private float _RollStarboardMovement_AngleMaxInclinaison_X; // angle d'inclinaison pour le roll autour de la cible target
+        [SerializeField] private float _RollStarboardMovement_SpeedRotation_X; // speed de rotation 
+        private float _RollStarboardMovement_TargetInclinaison_X; // // correspond dans l'animation au centre de la target
+        private bool _RollStarboardMovement_IsRotatingForward_X; // true quand rotation vers l'avant
+        private bool _RollStarboardMovement_IsRotatingBackward_X; // true quand rotation vers l'arrière
+
         #endregion ROLL MOVEMENT
 
+        #region TARGET
 
-        //voir pour en faire une fonction globale de roll (utiliser quand en Idle ou quand une target est atteinte
-        //[Header("ROLL_TARGET")]
-        //[SerializeField] private float _Target_AngleMaxInclinaison_Z;
-        //[SerializeField] private float _Target_SpeedRotation_Z;
-        //[SerializeField] private bool _Target_IsRotatingLarboard_Z;
-        //[SerializeField] private bool _Target_IsRotatingStarboard_Z;
+        //Z
 
-        //LES VARIABLES POUR DEFINIR LA TARGET BABORD , TRIBORD & FORWARD
         [Header("TARGET_FORWARD_Z")]
         [SerializeField] private float _Forward_SpeedRotationToTarget_Z; // vitesse a laquelle la rotation du bateau s'effectue pour revenir au centre
         [SerializeField] private bool _Forward_ReachAngleInclinaisonTarget_Z; // true quand le bateau a atteint l'angle d'inclinaison // doit repssaer a false quand je ne suis pas en BoatRotationState Forward
@@ -114,26 +132,46 @@ namespace ProjetPirate.Boat
         [Range(360, 340)]
         [SerializeField] private float _Starboard_TargetInclinaison_Z; // centre d'orientation du bateau en position starboard
 
-        //[SerializeField] private float _Accelerate_
+        //X
+
+        [Header("TARGET_FORWARD_X")]
+        [SerializeField] private float _Forward_SpeedRotationToTarget_X; // vitesse a laquelle la rotation du bateau s'effectue pour revenir au centre
+        [SerializeField] private bool _Forward_ReachAngleInclinaisonTarget_X; // true quand le bateau a atteint l'angle d'inclinaison // doit repssaer a false quand je ne suis pas en BoatRotationState Forward
+        private float _Forward_TargetInclinaison_X = 0; // doit être set a 0 au début
+
+        [Header("TARGET_LARBOARD_X")]
+        [SerializeField] private float _Larboard_SpeedRotationToTarget_X; // vitesse a laquelle la rotation du bateau s'effectue pour aller a la target larboard
+        [SerializeField] private bool _Larboard_ReachAngleInclinaisonTarget_X; // true quand le bateau a atteint l'angle d'inclinaison // doit repaaser a false quand je ne suis pas en BoatRotationState Babord
+        [Range(0, 20)]
+        [SerializeField] private float _Larboard_TargetInclinaison_X; // centre d'orientation du bateau en position Larboard
+
+        [Header("TARGET_STARBOARD_Z")]
+        [SerializeField] private float _Starboard_SpeedRotationToTarget_X; // vitesse a laquelle la rotation du bateau s'effectue pour aller a la target starboard
+        [SerializeField] private bool _Starboard_ReachAngleInclinaisonTarget_X; // true quand le bateau a atteint l'angle d'inclinaison // doit repssaer a false quand je ne suis pas en BoatRotationState Tribord
+        [Range(360, 340)]
+        [SerializeField] private float _Starboard_TargetInclinaison_X; // centre d'orientation du bateau en position starboard
+
+        #endregion TARGET
 
         // Use this for initialization
         void Start()
         {
-            //inti Data Transform
 
             //SET VARIABLES
             _canDoAnimation = true;
 
-            //Z
-            _RollIdleMovement_TargetInclinaison_Z = 0; // doit être égale a 0
-            _RollForwardMovement_TargetInclinaison_Z = 0; // doit être égal a 0
-            _Forward_TargetInclinaison_Z = 0; // doit être égale a 0
+            //REFERENCES (PARENT)
+            //if (this.GetComponent<BoatCharacter>() != null)
+            //{
+            //    _boatCharacter = this.GetComponent<BoatCharacter>();
+            //}
+            //else
+            //{
+            //    Debug.LogError("AnimationBoat --> Start / there is no BoatCharacter");
+            //    _canDoAnimation = false;
+            //}
 
-            //X
-            _RollIdleMovement_TargetInclinaison_X = 0;
-
-
-            //REFERENCES
+            //REFERENCES (ENFANT)
             if (this.GetComponentInParent<BoatCharacter>() != null)
             {
                 _boatCharacter = this.GetComponentInParent<BoatCharacter>();
@@ -143,7 +181,6 @@ namespace ProjetPirate.Boat
                 Debug.LogError("AnimationBoat --> Start / there is no BoatCharacter in parent");
                 _canDoAnimation = false;
             }
-
             if (_transformParent == null)
             {
                 Debug.LogError("AnimationBoat --> Start / transformParent est null");
@@ -168,33 +205,14 @@ namespace ProjetPirate.Boat
                 if (_currentAngleRotation.z < 0)
                 {
                     _currentAngleRotation.z = MathTools.invert(_currentAngleRotation.z);
-                    Debug.Log("AnimationBoat --> Update / convert into positive : " + _currentAngleRotation.z);
+                    //Debug.Log("AnimationBoat --> Update / convert into positive : " + _currentAngleRotation.z);
                 }
                 if (_currentAngleRotation.x < 0)
                 {
                     _currentAngleRotation.x = MathTools.invert(_currentAngleRotation.x);
-                    Debug.Log("AnimationBoat --> Update / convert into positive : " + _currentAngleRotation.x);
+                    //Debug.Log("AnimationBoat --> Update / convert into positive : " + _currentAngleRotation.x);
                 }
-
-
-                ///DECOMMENTEZ APRES LE TEST
-                //Debug.Log("_currentAngleRotation : " + _currentAngleRotation);
-                //switch (_boatCharacter.getBoatMovementState())
-                //{
-                //    case BoatMovementState.IDLE:
-                //        break;
-                //    case BoatMovementState.ACCELERATE:
-                //        this.AnimationRollForward();
-                //        break;
-                //    case BoatMovementState.DECELERATE:
-                //        this.AnimationRollForward();
-                //        break;
-                //    case BoatMovementState.CRUISE_SPEED:
-                //        this.AnimationRollForward();
-                //        break;
-                //    default:
-                //        break;
-                //}
+                Debug.Log(this.name + " this.transform.rotation.eulerAngles : " + this.transform.rotation.eulerAngles + " _currentAngleRotation : " + _currentAngleRotation);
 
                 ///En priorité je cale la rotation du bateau sur la target et aprés je fais le roll
                 switch (_boatCharacter.getBoatRotationState())
@@ -239,33 +257,186 @@ namespace ProjetPirate.Boat
                         break;
                 }
 
-                //RESET VARIABLES
+                //RESET BOOLEANS
                 if (_boatCharacter.getBoatRotationState() != BoatRotationState.FORWARD)
                 {
                     _Forward_ReachAngleInclinaisonTarget_Z = false;
+                    _Forward_ReachAngleInclinaisonTarget_X = false;
                 }
                 if (_boatCharacter.getBoatRotationState() != BoatRotationState.BABORD)
                 {
                     _Larboard_ReachAngleInclinaisonTarget_Z = false;
+                    _Larboard_ReachAngleInclinaisonTarget_X = false;
                 }
                 if (_boatCharacter.getBoatRotationState() != BoatRotationState.TRIBORD)
                 {
                     _Starboard_ReachAngleInclinaisonTarget_Z = false;
+                    _Starboard_ReachAngleInclinaisonTarget_X = false;
                 }
 
+                //A COMMENTEZ EN PARENT
                 Vector3 _rotationeulerToApply = new Vector3(
                     _transformMesh.eulerAngles.x,
                     _transformParent.eulerAngles.y,
                     _transformMesh.eulerAngles.z);
 
                 _transformMesh.eulerAngles = _rotationeulerToApply;
+
+                _boatCharacter.Data_Boat.ChildTransform.Rotation = new myVector3(_rotationeulerToApply.x, _rotationeulerToApply.y, _rotationeulerToApply.z);
             }
         }
 
+
         #region ANIMATION ROLL
 
+        private void AnimationRollIdleMovement()
+        {
+            //_RollIdleMovement_TargetInclinaison_Z = _Idle_TargetInclinaison_Z // mettre un _Idle_TargetInclinaison_Z
+            this.RollZ(_RollIdleMovement_SpeedRotation_Z, _RollIdleMovement_AngleMaxInclinaison_Z, _RollIdleMovement_TargetInclinaison_Z);
+            this.RollX(_RollIdleMovement_SpeedRotation_X, _RollIdleMovement_AngleMaxInclinaison_X, _RollForwardMovement_TargetInclinaison_X);
+        }
+
+        private void AnimationRollForwardMovement()
+        {
+            //_RollForwardMovement_TargetInclinaison_Z = _Forward_TargetInclinaison_Z // mettre un _Forward_TargetInclinaison_Z
+            this.RollZ(_RollForwardMovement_SpeedRotation_Z, _RollForwardMovement_AngleMaxInclinaison_Z, _RollForwardMovement_TargetInclinaison_Z);
+            this.RollX(_RollForwardMovement_SpeedRotation_X, _RollForwardMovement_AngleMaxInclinaison_X, _RollForwardMovement_TargetInclinaison_X);
+        }
+
+        private void AnimationRollLarboardMovement()
+        {
+            _RollLarboardMovement_TargetInclinaison_Z = _Larboard_TargetInclinaison_Z;
+            _RollLarboardMovement_TargetInclinaison_X = _Larboard_TargetInclinaison_X;
+            this.RollZ(_RollLarboardMovement_SpeedRotation_Z, _RollLarboardMovement_AngleMaxInclinaison_Z, _RollLarboardMovement_TargetInclinaison_Z);
+            this.RollX(_RollLarboardMovement_SpeedRotation_X, _RollLarboardMovement_AngleMaxInclinaison_X, _RollLarboardMovement_TargetInclinaison_X);
+        }
+
+        private void AnimationRollStarboardMovement()
+        {
+            _RollStarboardMovement_TargetInclinaison_Z = _Starboard_TargetInclinaison_Z;
+            _RollStarboardMovement_TargetInclinaison_X = _Starboard_TargetInclinaison_X;
+            this.RollZ(_RollStarboardMovement_SpeedRotation_Z, _RollStarboardMovement_AngleMaxInclinaison_Z, _RollStarboardMovement_TargetInclinaison_Z);
+            this.RollX(_RollStarboardMovement_SpeedRotation_X, _RollStarboardMovement_AngleMaxInclinaison_X, _RollStarboardMovement_TargetInclinaison_X);
+
+        }
+
+        #endregion ANIMATION IDLE
+
+        #region ANIMATION TARGET
+
+        private void AnimationTargetLarboard()
+        {
+            //TARGET_LARBOARD_Z
+            #region TARGET_LARBOARD_Z
+            //si je n'ai pas atteint la cible
+            if (_Larboard_ReachAngleInclinaisonTarget_Z == false)
+            {
+                //je rotate
+                this.RotateToTargetZ(_Larboard_TargetInclinaison_Z, _Larboard_SpeedRotationToTarget_Z);
+            }
+            //vérification Target
+            if (_currentAngleRotation.z < _Larboard_TargetInclinaison_Z + _Larboard_SpeedRotationToTarget_Z
+                && _currentAngleRotation.z > _Larboard_TargetInclinaison_Z - _Larboard_SpeedRotationToTarget_Z)
+            {
+                _Larboard_ReachAngleInclinaisonTarget_Z = true;
+            }
+            #endregion TARGET_LARBOARD_Z
+
+            //TARGET_LARBOARD_X
+            #region TARGET_LARBOARD_X
+            //si je n'ai pas atteint la cible
+            if (_Larboard_ReachAngleInclinaisonTarget_X == false)
+            {
+                //je rotate
+                this.RotateToTargetX(_Larboard_TargetInclinaison_X, _Larboard_SpeedRotationToTarget_X);
+            }
+            //vérification Target
+            if (_currentAngleRotation.x < _Larboard_TargetInclinaison_X + _Larboard_SpeedRotationToTarget_X
+                && _currentAngleRotation.x > _Larboard_TargetInclinaison_X - _Larboard_SpeedRotationToTarget_X)
+            {
+                _Larboard_ReachAngleInclinaisonTarget_X = true;
+            }
+            #endregion TARGET_LARBOARD_X
+        }
+
+        private void AnimationTargetStarboard()
+        {
+            //TARGET_STARBOARD_Z
+            #region TARGET_STARBOARD_Z
+            //si je n'ai pas atteint la cible
+            if (_Starboard_ReachAngleInclinaisonTarget_Z == false)
+            {
+                //je rotate
+                this.RotateToTargetZ(_Starboard_TargetInclinaison_Z, _Starboard_SpeedRotationToTarget_Z);
+            }
+            //vérification Target
+            if (_currentAngleRotation.z < _Starboard_TargetInclinaison_Z + _Starboard_SpeedRotationToTarget_Z
+                && _currentAngleRotation.z > _Starboard_TargetInclinaison_Z - _Starboard_SpeedRotationToTarget_Z)
+            {
+                _Starboard_ReachAngleInclinaisonTarget_Z = true;
+            }
+            #endregion TARGET_STARBOARD_Z
+
+            //TARGET_STARBOARD_X
+            #region TARGET_STARBOARD_X
+            //si je n'ai pas atteint la cible
+            if (_Starboard_ReachAngleInclinaisonTarget_X == false)
+            {
+                //je rotate
+                this.RotateToTargetX(_Starboard_TargetInclinaison_X, _Starboard_SpeedRotationToTarget_X);
+            }
+            //vérification Target
+            if (_currentAngleRotation.x < _Starboard_TargetInclinaison_X + _Starboard_SpeedRotationToTarget_X
+                && _currentAngleRotation.x > _Starboard_TargetInclinaison_X - _Starboard_SpeedRotationToTarget_X)
+            {
+                _Starboard_ReachAngleInclinaisonTarget_X = true;
+            }
+            #endregion TARGET_STARBOARD_X
+        }
+
+        private void AnimationTargetForward()
+        {
+            //TARGET_FORWARD_Z
+            #region TARGET_FORWARD_Z
+            //si je n'ai pas atteint la cible
+            if (_Forward_ReachAngleInclinaisonTarget_Z == false)
+            {
+                //je rotate
+                this.RotateToTargetZ(_Forward_TargetInclinaison_Z, _Forward_SpeedRotationToTarget_Z);
+            }
+            //vérification Target
+            if (_currentAngleRotation.z < _Forward_TargetInclinaison_Z + _Forward_SpeedRotationToTarget_Z
+                && _currentAngleRotation.z > _Forward_TargetInclinaison_Z - _Forward_SpeedRotationToTarget_Z)
+            {
+                _Forward_ReachAngleInclinaisonTarget_Z = true;
+            }
+
+            #endregion TARGET_FORWARD_Z
+
+            //TARGET_FORWARD_X
+            #region TARGET_FORWARD_X
+            //si je n'ai pas atteint la cible
+            if (_Forward_ReachAngleInclinaisonTarget_X == false)
+            {
+                //je rotate
+                this.RotateToTargetX(_Forward_TargetInclinaison_X, _Forward_SpeedRotationToTarget_X);
+            }
+            //vérification Target
+            if (_currentAngleRotation.x < _Forward_TargetInclinaison_X + _Forward_SpeedRotationToTarget_X
+                && _currentAngleRotation.x > _Forward_TargetInclinaison_X - _Forward_SpeedRotationToTarget_X)
+            {
+                _Forward_ReachAngleInclinaisonTarget_X = true;
+            }
+
+            #endregion TARGET_FORWARD_X
+        }
+
+        #endregion ANIMATION TARGET
+
+        #region ROLL
+
         /// <summary>
-        /// - "pCenterOfRotation" correspond au centre de rotation pour l'animation de roll (c'est la target inclinaison)
+        /// - "pCenterOfRotation" correspond au centre de rotation pour l'animation de roll (c'est le target inclinaison)
         /// </summary>
         /// <param name="pSpeedRotating"></param>
         /// <param name="pAngleMaxInclinaison"></param>
@@ -277,10 +448,12 @@ namespace ProjetPirate.Boat
             _currentAngleMaxInclinaison_Z = pAngleMaxInclinaison;
             _currentTargetInclinaison_Z = pCenterOfRotation;
 
+            #region VERIFICATION_Z
+
             //CAN VERIFY REACH
             if (_currentCanVerifyReachTargetInclinaison_Z == false)
             {
-                if (_boatCharacter.getBoatRotationState() != _tempBoatRotationState_ForRollZ)
+                if (_boatCharacter.getBoatRotationState() != _tempBoatRotationState_ForRoll_Z)
                 {
                     _currentCanVerifyReachTargetInclinaison_Z = true;
                 }
@@ -296,7 +469,7 @@ namespace ProjetPirate.Boat
 
                     //CAN VERIFY
                     _currentCanVerifyReachTargetInclinaison_Z = false;
-                    _tempBoatRotationState_ForRollZ = _boatCharacter.getBoatRotationState();
+                    _tempBoatRotationState_ForRoll_Z = _boatCharacter.getBoatRotationState();
                 }
                 else
                 {
@@ -305,6 +478,10 @@ namespace ProjetPirate.Boat
                     this.RotateToTargetZ(_currentTargetInclinaison_Z, _currentRollSpeed_Z);
                 }
             }
+
+            #endregion VERIFICATION_Z
+
+            #region DO_THE_ROLL_Z
 
             //DO THE ROLL
             if (_currentReachTargetInclinaison_Z == true)
@@ -332,7 +509,7 @@ namespace ProjetPirate.Boat
                 {
                     _tempTargetAngleForRoll_Z = MathTools.invert(_tempTargetAngleForRoll_Z);
                     _tempTargetAngleForRoll_Z = 360 - _tempTargetAngleForRoll_Z;
-                    Debug.Log("DEFINE TEMP INVERT --> _tempTargetAngleForRoll_Z : " + _tempTargetAngleForRoll_Z + " _currentAngleRotation.z" + _currentAngleRotation.z);
+                    //Debug.Log("DEFINE TEMP INVERT --> _tempTargetAngleForRoll_Z : " + _tempTargetAngleForRoll_Z + " _currentAngleRotation.z" + _currentAngleRotation.z);
 
                 }
 
@@ -369,10 +546,10 @@ namespace ProjetPirate.Boat
                         tempConvertForMoins = 360 - tempConvertForMoins;
                         //Debug.Log("RotateToTargetZ --> invert & convert to 360 --> pAngleTarget " + pAngleTarget + " _currentAngleRotation.z" + _currentAngleRotation.z);
                     }
-                    Debug.Log("LE PUTAIN DE TEST : _currentAngleRotation.z : " + _currentAngleRotation.z
-                        + " _tempTargetAngleForRoll_Z + _currentRollSpeed_Z : " + tempConvertForPlus
-                        + " _tempTargetAngleForRoll_Z - _currentRollSpeed_Z : " + tempConvertForMoins
-                        );
+                    //Debug.Log("LE PUTAIN DE TEST : _currentAngleRotation.z : " + _currentAngleRotation.z
+                    //    + " _tempTargetAngleForRoll_Z + _currentRollSpeed_Z : " + tempConvertForPlus
+                    //    + " _tempTargetAngleForRoll_Z - _currentRollSpeed_Z : " + tempConvertForMoins
+                    //    );
                     //POUQUOIIIIIIIIIIIIIII::::::
 
                     //EN LARBOARD
@@ -381,14 +558,14 @@ namespace ProjetPirate.Boat
                         //je rotate
                         if (_currentAngleRotation.z < _tempTargetAngleForRoll_Z)
                         {
-                            Debug.Log("ROTATE LABOARD");
+                            //Debug.Log("ROTATE LABOARD");
                             //je rotate vers la gauche
                             this.RotateLarboardZ(_currentRollSpeed_Z);
                         }
                         //si j'ai atteint la target
                         else if (_currentAngleRotation.z >= _tempTargetAngleForRoll_Z)
                         {
-                            Debug.Log("ATTEINT TARGET LARBOARD");
+                            //Debug.Log("ATTEINT TARGET LARBOARD");
                             _currentIsRotating_Larboard = false;
                             _currentIsRotating_Starboard = true;
                         }
@@ -399,277 +576,176 @@ namespace ProjetPirate.Boat
                         //je rotate
                         if (_currentAngleRotation.z > _tempTargetAngleForRoll_Z)
                         {
-                            Debug.Log("ROTATE STARBOARD");
+                            //Debug.Log("ROTATE STARBOARD");
                             //je rotate vers la droite
                             this.RotateStarboardZ(_currentRollSpeed_Z);
                         }
                         //si j'ai atteint la target
                         else if (_currentAngleRotation.z <= _tempTargetAngleForRoll_Z)
                         {
-                            Debug.Log("ATTEINT TARGET STARBOARD");
+                            //Debug.Log("ATTEINT TARGET STARBOARD");
                             _currentIsRotating_Larboard = true;
                             _currentIsRotating_Starboard = false;
                         }
                     }
                 }
             }
+            #endregion DO_THE_ROLL_Z
         }
 
-        //IL FAUT FAIRE CETTE FONCTION AVEC LES CURRENTS
-        //private void RollX()
-        //{
-        //    //define in which way start the idle animation
-        //    if (_Idle_IsRotatingForward_X == false && _Idle_IsRotatingBackward_X == false)
-        //    {
-        //        _Idle_IsRotatingForward_X = true;
-        //        _Idle_IsRotatingBackward_X = false;
-        //    }
-
-        //        //ANGLE A GAUCHE
-        //        if (MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == true)
-        //        {
-        //            //ROTATE FORWARD
-        //            if (_Idle_IsRotatingForward_X == true)
-        //            {
-        //                this.RotateForwardX(_Idle_SpeedRotation_X);
-
-        //                if (_currentAngleRotation.x >= 0 + _Idle_AngleMaxInclinaison_X)
-        //                {
-        //                    _Idle_IsRotatingForward_X = false;
-        //                    _Idle_IsRotatingBackward_X = true;
-        //                }
-        //            }
-        //            //ROTATE BACKWARD
-        //            else if (_Idle_IsRotatingBackward_X == true)
-        //            {
-        //                this.RotateBackwardX(_Idle_SpeedRotation_X);
-
-        //            }
-        //        }
-        //        //ANGLE A DROITE
-        //        else if (MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == false)
-        //        {
-
-        //            //ROTATE LARBOARD
-        //            if (_Idle_IsRotatingForward_X == true)
-        //            {
-        //                this.RotateForwardX(_Idle_SpeedRotation_X);
-        //            }
-        //            //ROTATE STARBOARD
-        //            else if (_Idle_IsRotatingBackward_X == true)
-        //            {
-        //                this.RotateBackwardX(_Idle_SpeedRotation_X);
-
-        //                if (_currentAngleRotation.x <= 360 - _Idle_AngleMaxInclinaison_X)
-        //                {
-        //                    _Idle_IsRotatingBackward_X= false;
-        //                    _Idle_IsRotatingForward_X = true;
-        //                }
-        //            }
-        //        }
-
-
-        //}
-
-        ///en attendant
-
-        //private void RollZ()
-        //{
-        //    //define in which way start the idle animation
-        //    if (_Idle_IsRotatingLarboard_Z == false && _Idle_IsRotatingStarboard_Z == false)
-        //    {
-        //        _Idle_IsRotatingLarboard_Z = true;
-        //        _Idle_IsRotatingStarboard_Z = false;
-        //    }
-        //    //ANGLE A GAUCHE
-        //    if (MathTools.AngleIsLeftOrRight0(_currentAngleRotation.z) == true)
-        //    {
-        //        //ROTATE LARBOARD
-        //        if (_Idle_IsRotatingLarboard_Z == true)
-        //        {
-        //            this.RotateLarboardZ(_Idle_SpeedRotation_Z);
-
-        //            if (_currentAngleRotation.z >= 0 + _Idle_AngleMaxInclinaison_Z)
-        //            {
-        //                _Idle_IsRotatingLarboard_Z = false;
-        //                _Idle_IsRotatingStarboard_Z = true;
-        //            }
-        //        }
-        //        //ROTATE STARBOARD
-        //        else if (_Idle_IsRotatingStarboard_Z == true)
-        //        {
-        //            this.RotateStarboardZ(_Idle_SpeedRotation_Z);
-
-        //        }
-        //    }
-        //    //ANGLE A DROITE
-        //    else if (MathTools.AngleIsLeftOrRight0(_currentAngleRotation.z) == false)
-        //    {
-
-        //        //ROTATE LARBOARD
-        //        if (_Idle_IsRotatingLarboard_Z == true)
-        //        {
-        //            this.RotateLarboardZ(_Idle_SpeedRotation_Z);
-        //        }
-        //        //ROTATE STARBOARD
-        //        else if (_Idle_IsRotatingStarboard_Z == true)
-        //        {
-        //            this.RotateStarboardZ(_Idle_SpeedRotation_Z);
-
-        //            if (_currentAngleRotation.z <= 360 - _Idle_AngleMaxInclinaison_Z)
-        //            {
-        //                _Idle_IsRotatingStarboard_Z = false;
-        //                _Idle_IsRotatingLarboard_Z = true;
-        //            }
-        //        }
-        //    }
-
-        //}
-
-        //private void RollX()
-        //{
-        //    //define in which way start the idle animation
-        //    if (_Idle_IsRotatingForward_X == false && _Idle_IsRotatingBackward_X == false)
-        //    {
-        //        _Idle_IsRotatingForward_X = true;
-        //        _Idle_IsRotatingBackward_X = false;
-        //    }
-
-        //    //ANGLE A GAUCHE
-        //    if (MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == true)
-        //    {
-        //        //ROTATE FORWARD
-        //        if (_Idle_IsRotatingForward_X == true)
-        //        {
-        //            this.RotateForwardX(_Idle_SpeedRotation_X);
-
-        //            if (_currentAngleRotation.x >= 0 + _Idle_AngleMaxInclinaison_X)
-        //            {
-        //                _Idle_IsRotatingForward_X = false;
-        //                _Idle_IsRotatingBackward_X = true;
-        //            }
-        //        }
-        //        //ROTATE BACKWARD
-        //        else if (_Idle_IsRotatingBackward_X == true)
-        //        {
-        //            this.RotateBackwardX(_Idle_SpeedRotation_X);
-
-        //        }
-        //    }
-        //    //ANGLE A DROITE
-        //    else if (MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == false)
-        //    {
-
-        //        //ROTATE LARBOARD
-        //        if (_Idle_IsRotatingForward_X == true)
-        //        {
-        //            this.RotateForwardX(_Idle_SpeedRotation_X);
-        //        }
-        //        //ROTATE STARBOARD
-        //        else if (_Idle_IsRotatingBackward_X == true)
-        //        {
-        //            this.RotateBackwardX(_Idle_SpeedRotation_X);
-
-        //            if (_currentAngleRotation.x <= 360 - _Idle_AngleMaxInclinaison_X)
-        //            {
-        //                _Idle_IsRotatingBackward_X = false;
-        //                _Idle_IsRotatingForward_X = true;
-        //            }
-        //        }
-        //    }
-
-
-        //}
-
-        private void AnimationRollIdleMovement()
+        /// <summary>
+        /// - "pCenterOfRotation" correspond au centre de rotation pour l'animation de roll (c'est le target inclinaison)
+        /// </summary>
+        /// <param name="pSpeedRotating"></param>
+        /// <param name="pAngleMaxInclinaison"></param>
+        /// <param name="pCenterOfRotation"></param>
+        private void RollX(float pSpeedRotating, float pAngleMaxInclinaison, float pCenterOfRotation)
         {
-            this.RollZ(_RollIdleMovement_SpeedRotation_Z, _RollIdleMovement_AngleMaxInclinaison_Z, _RollIdleMovement_TargetInclinaison_Z);
+            //get parameters
+            _currentRollSpeed_X = pSpeedRotating;
+            _currentAngleMaxInclinaison_X = pAngleMaxInclinaison;
+            _currentTargetInclinaison_X = pCenterOfRotation;
 
-            if(Input.GetKey(KeyCode.F))
+            #region VERIFICATION_X
+
+            //CAN VERIFY REACH
+            if (_currentCanVerifyReachTargetInclinaison_X == false)
             {
-                this.transform.Rotate(10, 0, 0);
+                if (_boatCharacter.getBoatRotationState() != _tempBoatRotationState_ForRoll_X)
+                {
+                    _currentCanVerifyReachTargetInclinaison_X = true;
+                }
             }
+
+            //verify if the current target is reach
+            if (_currentCanVerifyReachTargetInclinaison_X == true)
+            {
+                //if the current target is achieve
+                if (((_currentAngleRotation.x < _currentTargetInclinaison_X + _currentRollSpeed_X) && (_currentAngleRotation.x > _currentTargetInclinaison_X - _currentRollSpeed_X)))
+                {
+                    _currentReachTargetInclinaison_X = true;
+
+                    //CAN VERIFY
+                    _currentCanVerifyReachTargetInclinaison_X = false;
+                    _tempBoatRotationState_ForRoll_X = _boatCharacter.getBoatRotationState();
+                }
+                else
+                {
+                    _currentReachTargetInclinaison_X = false;
+                    //je rotate
+                    this.RotateToTargetX(_currentTargetInclinaison_X, _currentRollSpeed_X);
+                }
+            }
+
+            #endregion VERIFICATION_X
+
+            #region DO_THE_ROLL_X
+
+            //DO THE ROLL
+            if (_currentReachTargetInclinaison_X == true)
+            {
+                //LE SOUCIS EST QUE JE REPASSE PAS EN LARBOARD
+
+                //define in which way start the  animation
+                if (_currentIsRotating_Forward == false && _currentIsRotating_Backward == false)
+                {
+                    _currentIsRotating_Forward = true;
+                    _currentIsRotating_Backward = false;
+                }
+                //set the the tempTargetAngle
+                if (_currentIsRotating_Forward == true)
+                {
+                    _tempTargetAngleForRoll_X = _currentTargetInclinaison_X + _currentAngleMaxInclinaison_X;
+                    //Debug.Log("DEFINE TEMP FORWARD --> _tempTargetAngleForRoll_X : " + _tempTargetAngleForRoll_X + " _currentAngleRotation.x" + _currentAngleRotation.x);
+                }
+                else if (_currentIsRotating_Backward == true)
+                {
+                    _tempTargetAngleForRoll_X = _currentTargetInclinaison_X - _currentAngleMaxInclinaison_X;
+                    //Debug.Log("DEFINE TEMP BACKWARD --> _tempTargetAngleForRoll_X : " + _tempTargetAngleForRoll_X + " _currentAngleRotation.x" + _currentAngleRotation.x);
+                }
+                if (_tempTargetAngleForRoll_X < 0)
+                {
+                    _tempTargetAngleForRoll_X = MathTools.invert(_tempTargetAngleForRoll_X);
+                    _tempTargetAngleForRoll_X = 360 - _tempTargetAngleForRoll_X;
+                    //Debug.Log("DEFINE TEMP INVERT --> _tempTargetAngleForRoll_X : " + _tempTargetAngleForRoll_X + " _currentAngleRotation.x" + _currentAngleRotation.x);
+
+                }
+
+
+                //si l'angle target est a gauche et que mon angle est a droite
+                if (MathTools.AngleIsLeftOrRight0(_tempTargetAngleForRoll_X) == true && MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == false)
+                {
+                    //je met mon angle a gauche
+                    this.RotateForwardX(_currentRollSpeed_X);
+                }
+                //si l'angle target est a droite et que mon agnle est a gauche
+                else if (MathTools.AngleIsLeftOrRight0(_tempTargetAngleForRoll_X) == false && MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == true)
+                {
+                    //je met mon angle a droite
+                    this.RotateBackwardX(_currentRollSpeed_X);
+                }
+                //si l'angle target est mon angle sont du même coté
+                else if ((MathTools.AngleIsLeftOrRight0(_tempTargetAngleForRoll_X) == true && MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == true)
+                || (MathTools.AngleIsLeftOrRight0(_tempTargetAngleForRoll_X) == false && MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == false))
+                {
+                    float tempConvertForPlus = _tempTargetAngleForRoll_X + _currentRollSpeed_X;
+                    float tempConvertForMoins = _tempTargetAngleForRoll_X - _currentRollSpeed_X;
+                    //JE VEUT QUE DU POSITIF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    if (tempConvertForPlus < 0)
+                    {
+                        tempConvertForPlus = MathTools.invert(tempConvertForPlus);
+                        tempConvertForPlus = 360 - tempConvertForPlus;
+                        //Debug.Log("RotateToTargetX --> invert & convert to 360 --> pAngleTarget " + pAngleTarget + " _currentAngleRotation.x" + _currentAngleRotation.x);
+                    }
+                    if (tempConvertForMoins < 0)
+                    {
+                        tempConvertForMoins = MathTools.invert(tempConvertForMoins);
+                        tempConvertForMoins = 360 - tempConvertForMoins;
+                        //Debug.Log("RotateToTargetX --> invert & convert to 360 --> pAngleTarget " + pAngleTarget + " _currentAngleRotation.x" + _currentAngleRotation.x);
+                    }
+
+                    //EN LARBOARD
+                    if (_currentIsRotating_Forward)
+                    {
+                        //je rotate
+                        if (_currentAngleRotation.x < _tempTargetAngleForRoll_X)
+                        {
+                            //Debug.Log("ROTATE FORWARD");
+                            //je rotate vers l'avant
+                            this.RotateForwardX(_currentRollSpeed_X);
+                        }
+                        //si j'ai atteint la target
+                        else if (_currentAngleRotation.x >= _tempTargetAngleForRoll_X)
+                        {
+                            //Debug.Log("ATTEINT TARGET FORWARD");
+                            _currentIsRotating_Forward= false;
+                            _currentIsRotating_Backward= true;
+                        }
+                    }
+                    //EN STARBOARD
+                    else if (_currentIsRotating_Backward == true)
+                    {
+                        //je rotate
+                        if (_currentAngleRotation.x > _tempTargetAngleForRoll_X)
+                        {
+                            //Debug.Log("ROTATE BACKWARD");
+                            //je rotate vers la droite
+                            this.RotateBackwardX(_currentRollSpeed_X);
+                        }
+                        //si j'ai atteint la target
+                        else if (_currentAngleRotation.x <= _tempTargetAngleForRoll_X)
+                        {
+                            //Debug.Log("ATTEINT TARGET BACKWARD");
+                            _currentIsRotating_Forward = true;
+                            _currentIsRotating_Backward = false;
+                        }
+                    }
+                }
+            }
+            #endregion DO_THE_ROLL_X
         }
 
-        private void AnimationRollForwardMovement()
-        {
-            this.RollZ(_RollForwardMovement_SpeedRotation_Z, _RollForwardMovement_AngleMaxInclinaison_Z, _RollForwardMovement_TargetInclinaison_Z);
-        }
-
-        private void AnimationRollLarboardMovement()
-        {
-            _RollLarboardMovement_TargetInclinaison_Z = _Larboard_TargetInclinaison_Z;
-            this.RollZ(_RollLarboardMovement_SpeedRotation_Z, _RollLarboardMovement_AngleMaxInclinaison_Z, _RollLarboardMovement_TargetInclinaison_Z);
-        }
-
-        private void AnimationRollStarboardMovement()
-        {
-            _RollStarboardMovement_TargetInclinaison_Z = _Starboard_TargetInclinaison_Z;
-            this.RollZ(_RollStarboardMovement_SpeedRotation_Z, _RollStarboardMovement_AngleMaxInclinaison_Z, _RollStarboardMovement_TargetInclinaison_Z);
-        }
-
-        #endregion ANIMATION IDLE
-
-        #region ANIMATION TARGET
-
-        private void AnimationTargetLarboard()
-        {
-            //si je n'ai pas atteint la cible
-            if (_Larboard_ReachAngleInclinaisonTarget_Z == false)
-            {
-                //je rotate
-                this.RotateToTargetZ(_Larboard_TargetInclinaison_Z, _Larboard_SpeedRotationToTarget_Z);
-            }
-
-
-            //vérification Target
-            if (_currentAngleRotation.z < _Larboard_TargetInclinaison_Z + _Larboard_SpeedRotationToTarget_Z
-                && _currentAngleRotation.z > _Larboard_TargetInclinaison_Z - _Larboard_SpeedRotationToTarget_Z)
-            {
-                _Larboard_ReachAngleInclinaisonTarget_Z = true;
-            }
-        }
-
-        private void AnimationTargetStarboard()
-        {
-            //si je n'ai pas atteint la cible
-            if (_Starboard_ReachAngleInclinaisonTarget_Z == false)
-            {
-                //je rotate
-                this.RotateToTargetZ(_Starboard_TargetInclinaison_Z, _Starboard_SpeedRotationToTarget_Z);
-            }
-            else if (_Starboard_ReachAngleInclinaisonTarget_Z == true)
-            {
-                Debug.Log("HaveReachTheTargetStarboard");
-            }
-
-            //vérification Target
-            if (_currentAngleRotation.z < _Starboard_TargetInclinaison_Z + _Starboard_SpeedRotationToTarget_Z
-                && _currentAngleRotation.z > _Starboard_TargetInclinaison_Z - _Starboard_SpeedRotationToTarget_Z)
-            {
-                _Starboard_ReachAngleInclinaisonTarget_Z = true;
-            }
-        }
-
-        private void AnimationTargetForward()
-        {
-            //si je n'ai pas atteint la cible
-            if (_Forward_ReachAngleInclinaisonTarget_Z == false)
-            {
-                //je rotate
-                this.RotateToTargetZ(_Forward_TargetInclinaison_Z, _Forward_SpeedRotationToTarget_Z);
-            }
-
-
-            //vérification Target
-            if (_currentAngleRotation.z < _Forward_TargetInclinaison_Z + _Forward_SpeedRotationToTarget_Z
-                && _currentAngleRotation.z > _Forward_TargetInclinaison_Z - _Forward_SpeedRotationToTarget_Z)
-            {
-                _Forward_ReachAngleInclinaisonTarget_Z = true;
-            }
-        }
-
-        #endregion ANIMATION TARGET
+        #endregion ROLL
 
         #region ROTATES
 
@@ -748,10 +824,10 @@ namespace ProjetPirate.Boat
         /// <param name="pSpeedRotate"></param>
         private void RotateLarboardZ(float pSpeedRotate)
         {
+            //Note perso le prblème est que la rotation ne s'effectue pas seulement en z
+
             Vector3 rotationIncrementation = new Vector3(0, 0, +pSpeedRotate);
-
             this.transform.Rotate(rotationIncrementation);
-
             //Debug.Log("AnimationBoat --> RotateLarboardZ : " + _currentAngleRotation);
         }
 
@@ -764,6 +840,67 @@ namespace ProjetPirate.Boat
             Vector3 rotationIncrementation = new Vector3(0, 0, -pSpeedRotate);
             this.transform.Rotate(rotationIncrementation);
             //Debug.Log("AnimationBoat --> RotateStarboardZ : " + _currentAngleRotation);
+        }
+
+        /// <summary>
+        /// Rotate to the target
+        /// - the "pAngleTargetX" can only be between 0 & 360 (a negative variable be transform into a poitive variable & convert into : 360 - the variable in positive)
+        /// 
+        /// </summary>
+        /// <param name="pAngleTargetX"></param>
+        /// <returns></returns>
+        private void RotateToTargetX(float pAngleTarget, float pSpeedRotation)
+        {
+            //Je définie dans quelle partie est la target
+            //et en fonction je fais mes calculs
+            if (pAngleTarget < 0)
+            {
+                pAngleTarget = MathTools.invert(pAngleTarget);
+                pAngleTarget = 360 - pAngleTarget;
+            }
+
+            //Target a gauche et current a gauche
+            if (MathTools.AngleIsLeftOrRight0(pAngleTarget) == true && MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == true)
+            {
+                //incrémente si inférieur
+                if (_currentAngleRotation.x < pAngleTarget)
+                {
+                    this.RotateForwardX(pSpeedRotation);
+                }
+                //Décrémente si supérieur
+                if (_currentAngleRotation.x > pAngleTarget)
+                {
+                    this.RotateBackwardX(pSpeedRotation);
+                }
+            }
+            //Target a droite et current a droite
+            else if (MathTools.AngleIsLeftOrRight0(pAngleTarget) == false && MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == false)
+            {
+                //Debug.Log("RotateToTargetZ --> Target a droite et current a droite");
+                //incrémente si inférieur
+                if (_currentAngleRotation.x < pAngleTarget)
+                {
+                    this.RotateForwardX(pSpeedRotation);
+                }
+                //Décrémente si supérieur
+                if (_currentAngleRotation.x > pAngleTarget)
+                {
+                    this.RotateBackwardX(pSpeedRotation);
+                }
+            }
+            //Target a gauche et current a droite
+            else if (MathTools.AngleIsLeftOrRight0(pAngleTarget) == true && MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == false)
+            {
+                //increase 
+                this.RotateForwardX(pSpeedRotation);
+            }
+            //Target a droite et current a gauche
+            else if (MathTools.AngleIsLeftOrRight0(pAngleTarget) == false && MathTools.AngleIsLeftOrRight0(_currentAngleRotation.x) == true)
+            {
+                //decrease
+                this.RotateBackwardX(pSpeedRotation);
+            }
+
         }
 
         /// <summary>
@@ -790,17 +927,23 @@ namespace ProjetPirate.Boat
 
         #endregion ROTATES
 
-        private void OnDrawGizmos()
-        {
-            //draw sphere at the target position
+        //private void OnDrawGizmos()
+        //{
+        //    //draw sphere at the target position
 
-            //forward point
-            Gizmos.color = Color.yellow;
+        //    //forward point
+        //    Gizmos.color = Color.yellow;
 
-            //Gizmos.DrawSphere(this.transform.position + _direction_MovementDirection * 10, 2f);
-            //    Debug.DrawLine(this.transform.position, this.transform.position + _direction_MovementDirection * 10);
+        //    //calculate the direction by the wanted angle target
+        //    Vector3 _PointTargetGizmo = this.transform.forward * _currentTargetInclinaison_Z * 10; 
+            
+        //    Gizmos.DrawSphere(this.transform.position + _PointTargetGizmo, 2f);
+        //    //Debug.DrawLine(this.transform.position, this.transform.position + _direction_MovementDirection * 10);
 
 
-        }
+        //}
+
+
+        
     }
 }
