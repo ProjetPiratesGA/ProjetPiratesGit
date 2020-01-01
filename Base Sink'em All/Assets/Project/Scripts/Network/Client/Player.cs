@@ -20,8 +20,13 @@ public class Player : Controller {
 
     private bool _asBoatSpawned = false;
 
-    [SyncVar]
     public string _username;
+
+    [SyncVar]
+    public bool _isEnteringGame;
+
+    [SyncVar]
+    public bool _isConnected;
 
     public Data_Player _data
     {
@@ -67,7 +72,20 @@ public class Player : Controller {
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.A))
+        if (_isConnected == true && isLocalPlayer)
+        {
+            _isConnected = false;
+            CmdLoadDataLogin();
+
+        }
+        if (_isEnteringGame == true && isLocalPlayer)
+        {
+
+            _isEnteringGame = false;
+            CmdLoadDataEnterOnGame();
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
         {
             //Debug.Log("Client | Identifiant : " + _data._identifiant + "  Password : " + _data._password);
         }
@@ -103,6 +121,20 @@ public class Player : Controller {
         mStream.Position = 0;
 
         var myObject = binFormatter.Deserialize(mStream) as Data_Player;
+
+        return myObject;
+    }
+
+    public string unformateByteString(byte[] _byte)
+    {
+        var mStream = new MemoryStream();
+        var binFormatter = new BinaryFormatter();
+
+        // Where 'objectBytes' is your byte array.
+        mStream.Write(_byte, 0, _byte.Length);
+        mStream.Position = 0;
+
+        var myObject = binFormatter.Deserialize(mStream) as string;
 
         return myObject;
     }
@@ -149,32 +181,43 @@ public class Player : Controller {
         obj.GetComponent<BoatController>().player = playerReference.GetComponent<Player>();
     }
 
-    public void CallCmdLoadData()
-    {
-        CmdLoadData();
-    }
+
 
     [Command]
-    public void CmdLoadData()
+    public void CmdLoadDataLogin()
     {
-        if (NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().tmpDataBuffer.Player != null)
-        {
-            Debug.Log("On Server Command Load Data");
+        byte[] dataUsernameBuffer = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>()._usernameBuffer;
 
-        }
-        Debug.Log("On Server Command Load Data");
+        string _userBuffer = unformateByteString(dataUsernameBuffer);
+        _username = unformateByteString(dataUsernameBuffer);
 
-        TargetLoadData(this.connectionToClient, NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().dataUpdatePlayer);
+        Debug.Log("On Server Command Load Data for Login; try to set username | Data Username : " + _userBuffer);
+        TargetLoadDataLogin(this.connectionToClient, dataUsernameBuffer);
+
     }
 
     [TargetRpc]
-    public void TargetLoadData(NetworkConnection _conn, byte[] _playerData)
+    public void TargetLoadDataLogin(NetworkConnection target, byte[] _usernameData)
     {
-        Data_Player dataBuffer = unformateByte(_playerData);
+
+        Debug.Log("Set Username Data");
+
+        _username = unformateByteString(_usernameData);
+
+        Debug.Log("FINAL USERNAME SET : " + _username + " | Buffer : " + unformateByteString(_usernameData));
+
+    }
+
+    [Command]
+    public void CmdLoadDataEnterOnGame()
+    {
+        Debug.Log("On Server Command Load Data for Enter the Game; try to set Data Resources");
+        Data_Player dataBuffer = unformateByte(NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEnterOnGame);
+
         if (dataBuffer != null)
         {
             //Load Data
-            Debug.Log("Set data");
+            Debug.Log("Set data Entering on Game");
 
             data = dataBuffer;
 
@@ -182,9 +225,29 @@ public class Player : Controller {
         else
         {
 
-            Debug.Log("TMPData is null");
+            Debug.Log("Data Entering on Game is NULL");
         }
-        
 
+        TargetLoadDataEnterOnGame(this.connectionToClient, NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEnterOnGame);
+    }
+
+    [TargetRpc]
+    public void TargetLoadDataEnterOnGame(NetworkConnection target, byte[] _playerData)
+    {
+
+        Data_Player dataBuffer = unformateByte(_playerData);
+        if (dataBuffer != null)
+        {
+            //Load Data
+            Debug.Log("Set data Entering on Game");
+
+            data = dataBuffer;
+
+        }
+        else
+        {
+
+            Debug.Log("Data Entering on Game is NULL");
+        }
     }
 }

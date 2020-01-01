@@ -88,8 +88,12 @@ namespace Project.Network
 
         //A opti
         [System.NonSerialized]
-        public ClientData tmpDataBuffer;
-        public byte[] dataUpdatePlayer;
+        public ClientData tmpDataBufferPlayerRegister;
+
+        public byte[] _usernameBuffer;
+
+        public Data_Player tmpDataBufferPlayerEnterOnGame;
+        public byte[] byteDataUpdatePlayerEnterOnGame;
 
         void Start()
         {
@@ -143,8 +147,9 @@ namespace Project.Network
         {
             Debug.LogError("Player Disconnect");
 
-            for (int i = 0; i < playerList.Count; i++) {
-                if(playerList[i].connectionToClient == conn)
+            for (int i = 0; i < playerList.Count; i++)
+            {
+                if (playerList[i].connectionToClient == conn)
                 {
                     Debug.LogError("Connection Player Correspond to Player Disconnect");
 
@@ -172,6 +177,25 @@ namespace Project.Network
             return mStream.ToArray();
         }
 
+        public byte[] formateToByte(string _dataReceive)
+        {
+            var binFormatter = new BinaryFormatter();
+            var mStream = new MemoryStream();
+            binFormatter.Serialize(mStream, _dataReceive);
+
+            //This gives you the byte array.
+            return mStream.ToArray();
+        }
+
+        public byte[] formateToByte(ClientData _dataReceive)
+        {
+            var binFormatter = new BinaryFormatter();
+            var mStream = new MemoryStream();
+            binFormatter.Serialize(mStream, _dataReceive);
+
+            //This gives you the byte array.
+            return mStream.ToArray();
+        }
         ///////////////////////////////////////////////////////////
 
         public void SendErrorLoginRegister()
@@ -222,26 +246,19 @@ namespace Project.Network
                 {
                     Debug.Log("Username Exist");
 
-                    tmpDataBuffer = new ClientData(_objectMessage.username, _objectMessage.password, data.CountIDUnique);
+                    tmpDataBufferPlayerRegister = new ClientData(_objectMessage.username, _objectMessage.password, data.CountIDUnique);
 
                     playerCanCreateAccount = true;
                     stateConnectionBuffer = StateConnectionMessage.REGISTER_SUCCESSFUL;
                     sendStateLoginRegister = true;
 
-                    if (SaveSystem.RegisterPlayer(tmpDataBuffer, data) == true)
+                    if (SaveSystem.RegisterPlayer(tmpDataBufferPlayerRegister, data) == true)
                     {
                         Debug.Log("Password Is Set : " + _objectMessage.password);
                         playerCanCreateAccount = true;
                         stateConnectionBuffer = StateConnectionMessage.REGISTER_SUCCESSFUL;
                         sendStateLoginRegister = true;
 
-                     
-
-                        //Load Data
-                        dataUpdatePlayer = formateToByte(tmpDataBuffer.Player);
-                        LoadDataRegisterClient(_connBuffer);
-
-                        //LoadData(_msg.conn);
                     }
                     else
                     {
@@ -280,7 +297,6 @@ namespace Project.Network
 
                     Debug.Log("Password Correspond");
 
-                    //tmpDataBuffer = new ClientData(objectMessage.username, objectMessage.password);
                     for (int i = 0; i < _playerList.Count; i++)
                     {
                         if (_playerList[i].connectionToClient == _connBuffer)
@@ -293,16 +309,11 @@ namespace Project.Network
                     playerCanConnectOnGame = true;
                     stateConnectionBuffer = StateConnectionMessage.LOGIN_USERNAME_PASSWORD_CORRESPOND;
                     sendStateLoginRegister = true;
-                    if (tmpDataBuffer != null)
-                    {
-                        Debug.Log("1 - Try to Load Data (TargetRPC)");
+                    Debug.Log("Username Before Set Data" + _objectMessage.username);
+                    _usernameBuffer = formateToByte(_objectMessage.username);
 
-                    }
-                    else
-                    {
-                        Debug.Log("NUll tmpData");
-                    }
-
+                    //Load Data Login
+                    LoadDataLoginClient(_connBuffer);
 
                 }
                 else
@@ -334,7 +345,7 @@ namespace Project.Network
                 {
                     if (data.ClientRegistered[i].Password == _password)
                     {
-                        if(data.ClientRegistered[i].AccountIsUsed == false)
+                        if (data.ClientRegistered[i].AccountIsUsed == false)
                         {
                             data.ClientRegistered[i].AccountIsUsed = true;
                             return true;
@@ -343,7 +354,7 @@ namespace Project.Network
 
                     }
                 }
-               
+
             }
             return false;
         }
@@ -383,6 +394,10 @@ namespace Project.Network
                 Debug.Log("Message : " + msgStateConnectionToGame.connectToGameClientMsg);
 
                 NetworkServer.SendToClient(_msg.conn.connectionId, StateConnectionToGameClientMsgId, msgStateConnectionToGame);
+
+                //Set Data
+                LoadDataEnterGameClient(_msg.conn);
+
             }
         }
 
@@ -411,28 +426,38 @@ namespace Project.Network
 
         }
 
-        private void LoadDataRegisterClient(NetworkConnection _conn)
+        private void LoadDataLoginClient(NetworkConnection _conn)
         {
-            for (int i = 0; i < playerList.Count; i++)
+            for (int i = 0; i < _playerList.Count; i++)
             {
-                if (playerList[i].connectionToClient == _conn)
+                if (_playerList[i].connectionToClient == _connBuffer)
                 {
-
-                    playerList[i].CallCmdLoadData();
+                    Debug.Log("Load Data Login -> Set isConnected");
+                    _playerList[i]._isConnected = true;
 
                 }
             }
-
         }
 
-        private void LoadDataLoginClient(NetworkConnection _conn)
+        public void LoadDataEnterGameClient(NetworkConnection _conn)
         {
-            for (int i = 0; i < playerList.Count; i++)
+            for (int i = 0; i < _playerList.Count; i++)
             {
-                if (playerList[i].connectionToClient == _conn)
+                Debug.Log("USERNAME : " + _playerList[i]._isConnected);
+                if (_playerList[i].connectionToClient == _conn)
                 {
+                    for (int j = 0; j < data.ClientRegistered.Count; j++)
+                    {
+                        if (data.ClientRegistered[j].Username == _playerList[i]._username)
+                        {
+                            byteDataUpdatePlayerEnterOnGame = formateToByte(data.ClientRegistered[j].Player);
 
-                    //playerList[i].CallCmdLoadData();
+                            Debug.Log("Load Data Enter On Game -> Set isEnteringGame");
+
+                            _playerList[i]._isEnteringGame = true;
+
+                        }
+                    }
 
                 }
             }
