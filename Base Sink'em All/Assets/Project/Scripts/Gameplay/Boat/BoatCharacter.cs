@@ -354,6 +354,23 @@ namespace ProjetPirate.Boat
             _starboardCannons.Add(cannon.GetComponent<Cannon>());
         }
 
+
+        [TargetRpc]
+        public void TargetSetLardboardCanon1(NetworkConnection target, GameObject cannon)
+        {
+            cannon.transform.SetParent(LarboardCannonPositions[_larboardCannons.Count]);
+            cannon.transform.localPosition = Vector3.zero;
+            cannon.GetComponent<Cannon>().SetOwner(this);
+        }
+
+        [TargetRpc]
+        public void TargetSetStarboardCanon1(NetworkConnection target, GameObject cannon)
+        {
+            cannon.transform.SetParent(StarboardCannonPositions[_starboardCannons.Count]);
+            cannon.transform.localPosition = Vector3.zero;
+            cannon.GetComponent<Cannon>().SetOwner(this);
+        }
+
         #region MUTATORS
 
         /// <summary>
