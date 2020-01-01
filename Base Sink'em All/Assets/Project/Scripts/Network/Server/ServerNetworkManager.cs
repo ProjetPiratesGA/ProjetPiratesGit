@@ -133,9 +133,12 @@ namespace Project.Network
 
             NetworkServer.AddPlayerForConnection(conn, _playerList[_playerList.Count - 1].gameObject, playerControllerId);
 
+            //Rafraichissement des liens de parenté ainsi que des paramétres des clients déja spawn pour le nouveau client
             for (int i = 0; i < _boatList.Count; i++)
             {
                 _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetParent(conn, _boatList[i].player.gameObject);
+
+                //test de reset les liens de parenté du premier canon de chaque coté (boucler sur la liste par la suite) 
                 _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetLardboardCanon(conn, _boatList[i].gameObject.GetComponent<BoatCharacter>().larboardCannons[0].gameObject);
                 _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetStarboardCanon(conn, _boatList[i].gameObject.GetComponent<BoatCharacter>().starboardCannons[0].gameObject);
                 //_boatList[i].GetComponent<BarLife>().TargetRefreshLifeBar(conn);
