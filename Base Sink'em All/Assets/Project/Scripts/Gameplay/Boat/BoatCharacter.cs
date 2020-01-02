@@ -110,6 +110,17 @@ namespace ProjetPirate.Boat
         [SerializeField] private List<Cannon> _larboardCannons;
         [SerializeField] private List<Cannon> _starboardCannons;
 
+        /// <summary>
+        /// TEST SEB
+        /// </summary>
+        int _maxCannonsPerSide = 2;
+        int _startCannonsNumberLeft = 1;
+        int _startCannonsNumberRight = 1;
+        int _currentCannnonsNumberLeft = 1;
+        int _currentCannnonsNumberRight = 1;
+        // END TEST SEB //
+
+
         [SerializeField] private float _shootCooldown;
 
         [SerializeField] private int _defaultCannonNumberBySide;
@@ -238,8 +249,37 @@ namespace ProjetPirate.Boat
             //this.transform.localPosition = new Vector3(0, 0, 0);
             _controller = player.GetComponent<Controller>();
 
-
             TargetSetParent(player.GetComponent<Player>().connectionToClient, player.gameObject);
+
+            /// <summary>
+            /// TEST SEB
+            /// </summary>
+            for (int i =0;i< _larboardCannons.Count;i++)
+            {
+                if(i<_currentCannnonsNumberLeft)
+                {
+                    _larboardCannons[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    _larboardCannons[i].gameObject.SetActive(false);
+                }
+            }
+
+            for (int i = 0; i < _starboardCannons.Count; i++)
+            {
+                if (i < _currentCannnonsNumberRight)
+                {
+                    _starboardCannons[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    _starboardCannons[i].gameObject.SetActive(false);
+                }
+            }
+
+            this.RpcSetActiveCannons();
+            // END TEST SEB //
         }
 
         [TargetRpc]
@@ -249,6 +289,39 @@ namespace ProjetPirate.Boat
             //this.transform.localPosition = new Vector3(0, 0, 0);
             _controller = player.GetComponent<Controller>();
         }
+
+        /// <summary>
+        /// TEST SEB
+        /// </summary>
+        
+        [ClientRpc]
+        public void RpcSetActiveCannons()
+        {
+            for (int i = 0; i < _larboardCannons.Count; i++)
+            {
+                if (i < _currentCannnonsNumberLeft)
+                {
+                    _larboardCannons[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    _larboardCannons[i].gameObject.SetActive(false);
+                }
+            }
+
+            for (int i = 0; i < _starboardCannons.Count; i++)
+            {
+                if (i < _currentCannnonsNumberRight)
+                {
+                    _starboardCannons[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    _starboardCannons[i].gameObject.SetActive(false);
+                }
+            }
+        }
+        // END TEST SEB //
 
         #region MUTATORS
 
@@ -320,7 +393,11 @@ namespace ProjetPirate.Boat
         {
             for (int i = 0; i < _larboardCannons.Count; i++)
             {
-                _larboardCannons[i].FireCannon();
+                //TEST SEB (Condition if seulement)
+                if (_larboardCannons[i].gameObject.activeSelf)
+                {
+                    _larboardCannons[i].FireCannon();
+                }
             }
         }
 
@@ -345,9 +422,14 @@ namespace ProjetPirate.Boat
         [ClientRpc]
         private void RpcFireRight()
         {
+
             for (int i = 0; i < _starboardCannons.Count; i++)
             {
-                _starboardCannons[i].FireCannon();
+                //TEST SEB (Condition if seulement)
+                if (_starboardCannons[i].gameObject.activeSelf)
+                {
+                    _starboardCannons[i].FireCannon();
+                }
             }
         }
 
