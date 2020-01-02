@@ -235,7 +235,7 @@ namespace ProjetPirate.Boat
         public void CmdSetUpBoat(GameObject player)
         {
             this.gameObject.transform.SetParent(player.transform);
-            this.transform.localPosition = new Vector3(0, 0, 0);
+            //this.transform.localPosition = new Vector3(0, 0, 0);
             _controller = player.GetComponent<Controller>();
 
 
@@ -246,7 +246,7 @@ namespace ProjetPirate.Boat
         public void TargetSetParent(NetworkConnection target,GameObject player)
         {
             this.gameObject.transform.SetParent(player.transform);
-            this.transform.localPosition = new Vector3(0, 0, 0);
+            //this.transform.localPosition = new Vector3(0, 0, 0);
             _controller = player.GetComponent<Controller>();
         }
 
