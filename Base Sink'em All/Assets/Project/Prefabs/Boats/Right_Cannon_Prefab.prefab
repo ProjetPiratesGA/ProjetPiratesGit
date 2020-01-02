@@ -54,7 +54,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4519562744929908}
   - component: {fileID: 114212392077221754}
-  - component: {fileID: 114369745547277024}
   m_Layer: 0
   m_Name: Right_Cannon_Prefab
   m_TagString: Untagged
@@ -209,7 +208,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: cdbcc76b3fcbfdf4386ce2976c80c079, type: 3}
+  - {fileID: 2100000, guid: 31cb6711a0f9d31498177679f40c7e9d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -244,7 +243,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: cdbcc76b3fcbfdf4386ce2976c80c079, type: 3}
+  - {fileID: 2100000, guid: 31cb6711a0f9d31498177679f40c7e9d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -279,7 +278,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: cdbcc76b3fcbfdf4386ce2976c80c079, type: 3}
+  - {fileID: 2100000, guid: 31cb6711a0f9d31498177679f40c7e9d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -338,38 +337,6 @@ MonoBehaviour:
   _forceCannonBall: 50
   _distShoot: 50
   _smokeFX: {fileID: 198630439628570938}
---- !u!114 &114369745547277024
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1397878430249924}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 95
-    i1: 8
-    i2: 206
-    i3: 152
-    i4: 216
-    i5: 56
-    i6: 55
-    i7: 84
-    i8: 120
-    i9: 29
-    i10: 255
-    i11: 253
-    i12: 106
-    i13: 246
-    i14: 116
-    i15: 143
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 1
 --- !u!198 &198630439628570938
 ParticleSystem:
   m_ObjectHideFlags: 1

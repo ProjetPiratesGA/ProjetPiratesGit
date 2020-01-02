@@ -144,8 +144,8 @@ namespace Project.Network
                 }
 
                 //test de reset les liens de parenté du premier canon de chaque coté (boucler sur la liste par la suite) 
-                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetLardboardCanon1(conn, _boatList[i].gameObject.GetComponent<BoatCharacter>().larboardCannons[0].gameObject);
-                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetStarboardCanon1(conn, _boatList[i].gameObject.GetComponent<BoatCharacter>().starboardCannons[0].gameObject);
+               // _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetLardboardCanon1(conn, _boatList[i].gameObject.GetComponent<BoatCharacter>().larboardCannons[0].gameObject);
+               // _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetStarboardCanon1(conn, _boatList[i].gameObject.GetComponent<BoatCharacter>().starboardCannons[0].gameObject);
                 //_boatList[i].GetComponent<BarLife>().TargetRefreshLifeBar(conn);
             }
 

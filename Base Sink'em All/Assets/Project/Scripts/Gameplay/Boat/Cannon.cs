@@ -2,9 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
-public class Cannon : NetworkBehaviour
+public class Cannon : MonoBehaviour
 {
     private ProjetPirate.Data.Data_Canon _data = new ProjetPirate.Data.Data_Canon();
     [SerializeField]
@@ -83,8 +82,7 @@ public class Cannon : NetworkBehaviour
         }
     }
 
-    [Command]
-    public void CmdFireCannon()
+    public void FireCannon()
     {
         if (_prefabCannonBall != null)
         {
@@ -95,12 +93,13 @@ public class Cannon : NetworkBehaviour
             newCannonBall.GetComponent<CannonBall>().setTargetPosition(_spawnCannon.position + _spawnCannon.forward * _distShoot);
             newCannonBall.GetComponent<CannonBall>()._owner = _owner;
             _listCannonBall.Add(newCannonBall);
+
             if (_smokeFX != null)
             {
                 _smokeFX.Play();
             }
-            NetworkServer.SpawnWithClientAuthority(newCannonBall, _owner.gameObject.GetComponent<BoatController>().player.connectionToClient);
-            this.RpcFireCannon(newCannonBall);
+            //NetworkServer.SpawnWithClientAuthority(newCannonBall, _owner.gameObject.GetComponent<BoatController>().player.connectionToClient);
+            this.FireCannon(newCannonBall);
             //Debug.Log("_listCannonBall.Count : " + _listCannonBall.Count);
         }
         else
@@ -110,8 +109,7 @@ public class Cannon : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
-    public void RpcFireCannon(GameObject cannonBall)
+    public void FireCannon(GameObject cannonBall)
     {
         cannonBall.GetComponent<CannonBall>().setForceCannonBall(_forceCannonBall);
         cannonBall.GetComponent<CannonBall>().setTargetPosition(_spawnCannon.position + _spawnCannon.forward * _distShoot);

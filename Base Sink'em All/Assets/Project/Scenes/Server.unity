@@ -849,9 +849,7 @@ MonoBehaviour:
   m_OfflineScene: 
   m_OnlineScene: 
   m_SpawnPrefabs:
-  - {fileID: 1821539251315636, guid: ec4c044de85fa2842bfc25c8bd70d710, type: 2}
-  - {fileID: 1886762558630412, guid: c1b3a86bd6823c745900ae7409e8856f, type: 2}
-  - {fileID: 1397878430249924, guid: 5f08ce98d8383754781dfffd6af6748f, type: 2}
+  - {fileID: 1780387581725610, guid: ec4c044de85fa2842bfc25c8bd70d710, type: 2}
   - {fileID: 1903713359931088, guid: 6c50550295f44244bb644ab0b17a6f71, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
@@ -908,7 +906,8 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
-  dataUpdatePlayer: 
+  _usernameBuffer: 
+  byteDataUpdatePlayerEnterOnGame: 
 --- !u!4 &108050925
 Transform:
   m_ObjectHideFlags: 0

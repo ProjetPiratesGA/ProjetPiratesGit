@@ -23,6 +23,11 @@ ModelImporter:
     4300004: canon2:canon
   externalObjects:
   - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: canon2_blinncanon
+    second: {fileID: 2100000, guid: 31cb6711a0f9d31498177679f40c7e9d, type: 2}
+  - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: uv canon

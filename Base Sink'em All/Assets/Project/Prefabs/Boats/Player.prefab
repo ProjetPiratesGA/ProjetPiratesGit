@@ -52,9 +52,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb1e818ba314ef7429b4476afeb8d8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _boatPrefab: {fileID: 1821539251315636, guid: ec4c044de85fa2842bfc25c8bd70d710,
+  _boatPrefab: {fileID: 1780387581725610, guid: ec4c044de85fa2842bfc25c8bd70d710,
     type: 2}
-  idClientBuffer: 0
+  _username: 
+  _isEnteringGame: 0
+  _isConnected: 0
 --- !u!114 &114444875729410768
 MonoBehaviour:
   m_ObjectHideFlags: 1
