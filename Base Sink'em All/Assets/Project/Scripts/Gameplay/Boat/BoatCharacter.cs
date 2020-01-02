@@ -239,12 +239,23 @@ namespace ProjetPirate.Boat
             //    main.startLifetime = _data_Boat.dStats.Speed / _maxMovingSpeed;
             //}
             _data_Boat.ReverseReloadTransform(this.gameObject);
+
+            if(this.hasAuthority)
+            {
+                if(Input.GetKeyDown(KeyCode.F5))
+                {
+                    _currentCannnonsNumberLeft = 2;
+                    _currentCannnonsNumberRight = 2;
+                    CmdUpdateActiveCanons();
+                }
+            }
         }
 
 
         [Command]
         public void CmdSetUpBoat(GameObject player)
         {
+
             this.gameObject.transform.SetParent(player.transform);
             //this.transform.localPosition = new Vector3(0, 0, 0);
             _controller = player.GetComponent<Controller>();
@@ -278,7 +289,7 @@ namespace ProjetPirate.Boat
                 }
             }
 
-            this.RpcSetActiveCannons();
+            this.RpcUpdateActiveCannons();
             // END TEST SEB //
         }
 
@@ -293,10 +304,76 @@ namespace ProjetPirate.Boat
         /// <summary>
         /// TEST SEB
         /// </summary>
-        
+        [Command]
+        public void CmdUpdateActiveCanons()
+        {
+            _currentCannnonsNumberLeft = 2;
+            _currentCannnonsNumberRight = 2;
+
+            for (int i = 0; i < _larboardCannons.Count; i++)
+            {
+                if (i < _currentCannnonsNumberLeft)
+                {
+                    _larboardCannons[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    _larboardCannons[i].gameObject.SetActive(false);
+                }
+            }
+
+            for (int i = 0; i < _starboardCannons.Count; i++)
+            {
+                if (i < _currentCannnonsNumberRight)
+                {
+                    _starboardCannons[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    _starboardCannons[i].gameObject.SetActive(false);
+                }
+            }
+
+            this.RpcSetActiveCannons();
+        }
+
+
         [ClientRpc]
         public void RpcSetActiveCannons()
         {
+            _currentCannnonsNumberLeft = 2;
+            _currentCannnonsNumberRight = 2;
+
+            for (int i = 0; i < _larboardCannons.Count; i++)
+            {
+                if (i < _currentCannnonsNumberLeft)
+                {
+                    _larboardCannons[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    _larboardCannons[i].gameObject.SetActive(false);
+                }
+            }
+
+            for (int i = 0; i < _starboardCannons.Count; i++)
+            {
+                if (i < _currentCannnonsNumberRight)
+                {
+                    _starboardCannons[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    _starboardCannons[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
+        [ClientRpc]
+        public void RpcUpdateActiveCannons()
+        {
+
+
             for (int i = 0; i < _larboardCannons.Count; i++)
             {
                 if (i < _currentCannnonsNumberLeft)
