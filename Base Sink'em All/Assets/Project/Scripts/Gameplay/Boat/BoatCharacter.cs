@@ -67,7 +67,38 @@ namespace ProjetPirate.Boat
         [Range(-100, -10)]
         private float _HeightFallingDeath = -10;
 
-        
+        private bool _deathAnimationIsPlaying = false;
+        private float _deathAnimationCurrentRotationTime = 0;
+        private float _deathAnimationRotationDelay = 0;
+        private float _deathAnimationCurrentMovementTime = 0;
+        private float _deathAnimationMovementDelay = 2;
+        private float _deathAnimationRotationTime = 4;
+        private float _deathAnimationMovementTime = 2;
+        private Vector3 _deathAnimationStartRotation;
+        private Vector3 _deathAnimationEndRotation;
+        private Vector3 _deathAnimationStartPosition;
+        private Vector3 _deathAnimationEndPosition;
+        private Vector3 _deathAnimationPositionOffset = new Vector3(0, -10, 0);
+        private Vector3 _deathAnimationRotationOffset = new Vector3(-80, 0, 0);
+
+        private bool _fallAnimationIsPlaying = false;
+        private float _fallAnimationCurrentRotationTime = 0;
+        private float _fallAnimationRotationDelay = 0;
+        private float _fallAnimationCurrentMovementTime = 0;
+        private float _fallAnimationMovementDelay = 0;
+        private float _fallAnimationRotationTime = 2;
+        private float _fallAnimationMovementTime = 2;
+        private Vector3 _fallAnimationStartRotation;
+        private Vector3 _fallAnimationEndRotation;
+        private Vector3 _fallAnimationStartPosition;
+        private Vector3 _fallAnimationEndPosition;
+        private Vector3 _fallAnimationPositionOffset = new Vector3(0, -150, -100);
+        private float _fallAnimationRotationOffset = 100;
+
+        private bool _respawninfAnimationIsPlaying = false;
+        private float _respawnAnimationCurrentTime = 0;
+        private float _respawnAnimationTime = 1.5f;
+
         [Header("BOAT STATES (DON'T TOUCH)")]
         [SerializeField]
         private BoatMovementState _boatMovementState;
@@ -160,9 +191,24 @@ namespace ProjetPirate.Boat
             return _shootCooldown;
         }
 
+        public int getMaxLife()
+        {
+            return _maxLifePoint;
+        }
+
+        public float getCurrentLife()
+        {
+            return _data.Life;
+        }
+
         void Start()
         {
             _data_Boat.dStats = _data;
+
+            _data.Life = _maxLifePoint;
+
+            _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
+            _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
 
         }
 
@@ -173,6 +219,27 @@ namespace ProjetPirate.Boat
 
 
             _isMovingForward = false;
+
+            if (Input.GetKeyDown(KeyCode.Keypad0))
+            {
+                Death();
+            }
+
+            if (_deathAnimationIsPlaying)
+            {
+                DeathAnimation();
+            }
+            else if (_respawninfAnimationIsPlaying)
+            {
+                RespawnAnimation();
+            }
+            else
+            {
+                //BOAT STATES
+                this.ManageBoatMovementState();
+                //UPDATE SPEED
+                this.UpdateSpeedForwardForDirection();
+            }
 
             //GoldFxAnimation();
             //verify death falling character
@@ -201,42 +268,16 @@ namespace ProjetPirate.Boat
             {
                 _starboardCannonInCooldown = false;
                 _currentStarboardShootCooldownTime = 0;
-            }
+            }           
 
-            //if (Input.GetKeyDown(KeyCode.Keypad0))
+            //if (!_isDocking)
             //{
-            //    Death();
+            //    if (!CheckLeftInvisibleWall())
+            //    {
+            //        CheckRightInvisibleWall();
+            //    }
             //}
-
-            //if (_deathAnimationIsPlaying)
-            //{
-            //    DeathAnimation();
-            //}
-            //else if (_respawninfAnimationIsPlaying)
-            //{
-            //    RespawnAnimation();
-            //}
-            //else if (_fallAnimationIsPlaying)
-            //{
-            //    FallAnimation();
-            //}
-            //else
-            //{
-
-            //BOAT STATES
-            Debug.Log("update boatCharacter");
-                this.ManageBoatMovementState();
-                //UPDATE SPEED
-                this.UpdateSpeedForwardForDirection();
-
-                //if (!_isDocking)
-                //{
-                //    if (!CheckLeftInvisibleWall())
-                //    {
-                //        CheckRightInvisibleWall();
-                //    }
-                //}
-            //}
+            
 
             //for (int i = 0; i < _waterTrails.Count; i++)
             //{
@@ -247,9 +288,9 @@ namespace ProjetPirate.Boat
 
 
             //TEST DEBUG ADD CANNON
-            if(this.hasAuthority)
+            if (this.hasAuthority)
             {
-                if(Input.GetKeyDown(KeyCode.F5))
+                if (Input.GetKeyDown(KeyCode.F5))
                 {
                     this.CmdAddCannons(true, false);
                     this.CmdUpdateActiveCanons();
@@ -263,7 +304,72 @@ namespace ProjetPirate.Boat
             // END TEST
         }
 
+        public override void Death()
+        {
+            _data.Life = _maxLifePoint;
+            this.GetComponent<BoxCollider>().enabled = false;
+            _controller.Death();
+            /*ProjetPirate.IA.Ship_Controller[] enemies = FindObjectsOfType<ProjetPirate.IA.Ship_Controller>();
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if (enemies[i].Target == this.gameObject)
+                {
+                    enemies[i].RemoveAlert();
+                }
+            }*/
 
+            _deathAnimationStartPosition = this.transform.position;
+            _deathAnimationStartRotation = this.transform.eulerAngles;
+            _deathAnimationEndPosition = _deathAnimationStartPosition + (_deathAnimationPositionOffset.x * this.transform.right) + (_deathAnimationPositionOffset.y * this.transform.up) + (_deathAnimationPositionOffset.z * this.transform.forward);
+            _deathAnimationEndRotation = _deathAnimationStartRotation + _deathAnimationRotationOffset;
+            _deathAnimationIsPlaying = true;
+        }
+
+        public void DeathAnimation()
+        {
+            _deathAnimationCurrentRotationTime += Time.deltaTime / _deathAnimationRotationTime;
+            _deathAnimationCurrentMovementTime += Time.deltaTime / _deathAnimationMovementTime;
+
+            if (_deathAnimationCurrentRotationTime > 0 & _deathAnimationCurrentRotationTime < 1)
+            {
+                this.transform.eulerAngles = Vector3.Lerp(_deathAnimationStartRotation, _deathAnimationEndRotation, _deathAnimationCurrentRotationTime);
+            }
+            if (_deathAnimationCurrentMovementTime > 0 & _deathAnimationCurrentMovementTime < 1)
+            {
+                this.transform.position = Vector3.Lerp(_deathAnimationStartPosition, _deathAnimationEndPosition, _deathAnimationCurrentMovementTime);
+            }
+            else if (_deathAnimationCurrentMovementTime < 0)
+            {
+                this.transform.position = _deathAnimationStartPosition;
+            }
+            else
+            {
+                this.transform.position = _deathAnimationEndPosition;
+
+            }
+
+            if (_deathAnimationCurrentRotationTime >= 1 & _deathAnimationCurrentMovementTime >= 1)
+            {
+                _deathAnimationIsPlaying = false;
+                _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
+                _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
+                _controller.Disappear();
+                this.GetComponent<BoxCollider>().enabled = true;
+                _currentMovingSpeed = _maxMovingSpeed;
+                _respawninfAnimationIsPlaying = true;
+            }
+        }
+
+        public void RespawnAnimation()
+        {
+            _respawnAnimationCurrentTime += Time.deltaTime;
+            MoveForward();
+            if (_respawnAnimationCurrentTime >= _respawnAnimationTime)
+            {
+                _respawninfAnimationIsPlaying = false;
+                _respawnAnimationCurrentTime = 0;
+            }
+        }
 
         [Command]
         public void CmdSetUpBoat(GameObject player)
@@ -499,7 +605,7 @@ namespace ProjetPirate.Boat
         {
             Vector3 pos = this.transform.position;
             pos += this.transform.forward * _data_Boat.dStats.Speed * Time.deltaTime;
-            pos.y = 0;
+            //pos.y = 0;
             this.transform.position = pos;
             _isMovingForward = true;
         }
@@ -512,8 +618,8 @@ namespace ProjetPirate.Boat
             {
                 _data_Boat.dStats.Speed = _maxMovingSpeed;
             }
-            Debug.Log(this.name + " --> Acclerate / _data_Boat.dStats.Speed : " + _data_Boat.dStats.Speed + " _accelerationSpeedForward : " + _accelerationSpeedForward
-                + " Time.deltaTime : " + Time.deltaTime);
+            //Debug.Log(this.name + " --> Acclerate / _data_Boat.dStats.Speed : " + _data_Boat.dStats.Speed + " _accelerationSpeedForward : " + _accelerationSpeedForward
+                //+ " Time.deltaTime : " + Time.deltaTime);
             _stoppingDistance = ((_data_Boat.dStats.Speed / 10) * (_data_Boat.dStats.Speed / 10)) * 50 / _decelerationSpeedForward;
         }
 
@@ -561,7 +667,7 @@ namespace ProjetPirate.Boat
 
         public void PerformMovement(float pInputVertical, float pInputHorizontal)
         {
-            Debug.Log(this.name + " --> performMovement / _data_Boat.dStats.Speed : " + _data_Boat.dStats.Speed + " _currentAngularSpeed : " + _currentAngularSpeed + " this.transform.position : " + this.transform.position);
+            //Debug.Log(this.name + " --> performMovement / _data_Boat.dStats.Speed : " + _data_Boat.dStats.Speed + " _currentAngularSpeed : " + _currentAngularSpeed + " this.transform.position : " + this.transform.position);
             _joystickController = FindObjectOfType<JoystickController>();
             if (_joystickController == null)
             {
@@ -707,15 +813,7 @@ namespace ProjetPirate.Boat
         //}
 
 
-        public int getMaxLife()
-        {
-            return _maxLifePoint;
-        }
 
-        public float getCurrentLife()
-        {
-            return _data_Boat.dStats.Life;
-        }
 
 
         //public int getCurrentXp()
