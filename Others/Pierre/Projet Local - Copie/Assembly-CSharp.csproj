@@ -108,6 +108,10 @@
      <Compile Include="Assets\Project\Scripts\IA\IA_Character.cs" />
      <Compile Include="Assets\Project\Scripts\IA\IA_Controller.cs" />
      <Compile Include="Assets\Project\Scripts\IA\IA_Patrol.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Kraken_Character.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Kraken_Controller.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Kraken_Head.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Kraken_Tentacle.cs" />
      <Compile Include="Assets\Project\Scripts\IA\Patrol_Checkpoint.cs" />
      <Compile Include="Assets\Project\Scripts\IA\Patrol_Static.cs" />
      <Compile Include="Assets\Project\Scripts\IA\Patrol_Wander.cs" />

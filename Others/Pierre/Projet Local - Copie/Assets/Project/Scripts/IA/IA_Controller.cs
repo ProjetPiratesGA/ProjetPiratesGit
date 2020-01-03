@@ -207,7 +207,6 @@ namespace ProjetPirate.IA
                             }
                             break;
                         case AggroRequiredType.None:
-                            Debug.Log(i);
                             _behaviour = _onDetectionRangeCategories[i].AssociatedBehaviour;
                             return true;
                         case AggroRequiredType.Life_More:

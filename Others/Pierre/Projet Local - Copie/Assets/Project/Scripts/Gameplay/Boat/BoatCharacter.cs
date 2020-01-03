@@ -101,7 +101,7 @@ namespace ProjetPirate.Boat
         private Vector3 _deathAnimationEndRotation;
         private Vector3 _deathAnimationStartPosition;
         private Vector3 _deathAnimationEndPosition;
-        private Vector3 _deathAnimationPositionOffset = new Vector3(0, -10, 0);
+        private Vector3 _deathAnimationPositionOffset = new Vector3(0, -100, 0);
         private Vector3 _deathAnimationRotationOffset = new Vector3(-80, 0, 0);
 
         private bool _fallAnimationIsPlaying = false;
@@ -448,7 +448,7 @@ namespace ProjetPirate.Boat
         {
             Vector3 pos = this.transform.position;
             pos += this.transform.forward * _currentMovingSpeed * Time.deltaTime;
-            pos.y = 0;
+            //pos.y = 0;
             this.transform.position = pos;
             _isMovingForward = true;
         }
@@ -456,10 +456,27 @@ namespace ProjetPirate.Boat
         public void Accelerate()
         {
             _currentMovingSpeed += _accelerationSpeedForward * Time.deltaTime;
-            if (_currentMovingSpeed > _maxMovingSpeed)
+            switch (_structureState)
             {
-                _currentMovingSpeed = _maxMovingSpeed;
+                case StructureState.Normal:
+                    if (_currentMovingSpeed > _maxMovingSpeed)
+                    {
+                        _currentMovingSpeed = _maxMovingSpeed;
+                    }
+                    break;
+                case StructureState.Weakened:
+                    if (_currentMovingSpeed > _maxMovingSpeed / 2)
+                    {
+                        _currentMovingSpeed = _maxMovingSpeed / 2;
+                    }
+                    break;
+                case StructureState.Endangered:
+                        _currentMovingSpeed = 0;
+                    break;
+                default:
+                    break;
             }
+            
             _stoppingDistance = ((_currentMovingSpeed / 10) * (_currentMovingSpeed / 10)) * 50 / _decelerationSpeedForward;
         }
 
