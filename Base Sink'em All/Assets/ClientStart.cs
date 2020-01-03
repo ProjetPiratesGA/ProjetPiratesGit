@@ -25,8 +25,9 @@ namespace ProjetPirate.Network
             LOGIN_USERNAME_DOES_NOT_EXIST = 0,
             LOGIN_USERNAME_PASSWORD_DOES_NOT_CORRESPOND = 1,
             REGISTER_SUCCESSFUL = 2,
-            LOGIN_USERNAME_PASSWORD_CORRESPOND = 3,
+            LOGIN_USERNAME_PASSWORD_CORRESPOND_AND_IS_NOT_CONNECTED = 3,
             TRY_TO_CONNECT_GAME = 4,
+            ACCOUNT_ALREADY_CONNECT = 5,
 
         }
 
@@ -62,56 +63,75 @@ namespace ProjetPirate.Network
         public bool tryToRegister;
 
         private ClientData data;
-        
+
         [SerializeField]
         ProjetPirate.UI.Menu.MenuManager _menuManager;
+
+        float timeSinceLastAttemptReconnection;
+        float timeLastAttemptReconnection;
+
+        bool isConnectedToServer;
 
         void Start()
         {
             StartClient();
             RegisterHandlers();
         }
+        
+        public override void OnClientConnect(NetworkConnection conn)
+        {
+            isConnectedToServer = true;
+            base.OnClientConnect(conn);
+        }
+        public override void OnClientDisconnect(NetworkConnection conn)
+        {
+            isConnectedToServer = false;
+            base.OnClientDisconnect(conn);
+        }
 
         public void RegisterHost(StateConnectionMode _stateConnectionMode)
         {
-            //Register a new Message who can be sent to the server 
-            RegisterClientLogin msg = new RegisterClientLogin();
-            Debug.Log("test");
-            msg.stateConnectionMode = _stateConnectionMode;
-            if (_stateConnectionMode == StateConnectionMode.LOGIN)
+            if (_menuManager != null)
             {
-                msg.username = _menuManager._userName.text;
-                //Encryption of the password
-                string passwordBuffer = _menuManager._password.text;
-                msg.password = passwordBuffer.GetHashCode();
-            }
-            else if (_stateConnectionMode == StateConnectionMode.REGISTER)
-            {
-                msg.username = _menuManager._userNameInscrire.text;
-                //Encryption of the password
-                string passwordBuffer = _menuManager._passwordInscrire.text;
-                msg.password = passwordBuffer.GetHashCode();
-            }
-            else
-            {
-                msg.username = _menuManager._userName.text;
-                //Encryption of the password
-                string passwordBuffer = _menuManager._password.text;
-                msg.password = passwordBuffer.GetHashCode();
-            }
-            //if (CheckIsCorrectFormat(msg.username, _menuManager._password.text, 4, 12, 7, 16) == true)
-            //{
-                //Send Login of Client (Username and Password) to the Server.
-                if (client.Send(RegisterClientLoginMsgId, msg) == true)
+                //Register a new Message who can be sent to the server 
+                RegisterClientLogin msg = new RegisterClientLogin();
+                Debug.Log("test");
+                msg.stateConnectionMode = _stateConnectionMode;
+                string passwordBuffer;
+                if (_stateConnectionMode == StateConnectionMode.LOGIN)
                 {
-                    Debug.Log("Message is Send");
-            
+                    msg.username = _menuManager._userName.text;
+                    passwordBuffer = _menuManager._password.text;
+                }
+                else if (_stateConnectionMode == StateConnectionMode.REGISTER)
+                {
+                    msg.username = _menuManager._userNameInscrire.text;
+                    passwordBuffer = _menuManager._passwordInscrire.text;
                 }
                 else
                 {
-                    Debug.LogWarning("Message isn't Send");
+
+                    msg.username = _menuManager._userName.text;
+                    passwordBuffer = _menuManager._password.text;
                 }
-            //}
+                //Check if the username and the password are on a good format
+                //if (CheckIsCorrectFormat(msg.username, passwordBuffer, 4, 12, 7, 16) == true)
+                {
+                    //Encryption of the password
+                    msg.password = passwordBuffer.GetHashCode();
+
+                    //Send Login of Client (Username and Password) to the Server.
+                    if (client.Send(RegisterClientLoginMsgId, msg) == true)
+                    {
+                        Debug.Log("Message is Send");
+
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Message isn't Send");
+                    }
+                }
+            }
         }
 
         public void ReceiveMessageServer(NetworkMessage _msg)
@@ -125,49 +145,53 @@ namespace ProjetPirate.Network
         //Check Connection State
         void CheckRegisterLoginServer(string _stateMessage)
         {
-            Debug.Log(_stateMessage);
-            if (_stateMessage == StateConnectionMessage.REGISTER_USERNAME_NON_AVAILABLE.ToString())
+            if (_menuManager != null)
             {
-                _menuManager.launchScreenStateMessage = UI.Menu.MenuManager.LaunchStateMessage.LAUNCH_USERNAME_NON_AVAILABLE;
+                Debug.Log(_stateMessage);
+                if (_stateMessage == StateConnectionMessage.REGISTER_USERNAME_NON_AVAILABLE.ToString())
+                {
+                    _menuManager.launchScreenStateMessage = UI.Menu.MenuManager.LaunchStateMessage.LAUNCH_USERNAME_NON_AVAILABLE;
 
+                }
+                else if (_stateMessage == StateConnectionMessage.LOGIN_USERNAME_DOES_NOT_EXIST.ToString())
+                {
+                    _menuManager.launchScreenStateMessage = UI.Menu.MenuManager.LaunchStateMessage.LAUNCH_USERNAME_DOES_NOT_EXIST;
+
+                }
+                else if (_stateMessage == StateConnectionMessage.LOGIN_USERNAME_PASSWORD_DOES_NOT_CORRESPOND.ToString())
+                {
+                    _menuManager.launchScreenStateMessage = UI.Menu.MenuManager.LaunchStateMessage.LAUNCH_PASSWORD_DOES_NOT_CORRESPOND;
+
+                }
+                else if (_stateMessage == StateConnectionMessage.REGISTER_SUCCESSFUL.ToString())
+                {
+                    Debug.Log("Register Succesful");
+                    _menuManager.launchScreenStateMessage = UI.Menu.MenuManager.LaunchStateMessage.LAUNCH_REGISTER_SUCCESFUL;
+
+                    _menuManager._LogIn.SetActive(true);
+                    _menuManager._sInscrire.SetActive(false);
+
+                }
+                else if (_stateMessage == StateConnectionMessage.LOGIN_USERNAME_PASSWORD_CORRESPOND_AND_IS_NOT_CONNECTED.ToString())
+                {
+                    _menuManager.launchScreenStateMessage = UI.Menu.MenuManager.LaunchStateMessage.LAUNCH_NOTHING;
+
+                    _menuManager._mainMenu.SetActive(true);
+                    _menuManager._LogIn.SetActive(false);
+                    _menuManager._sInscrire.SetActive(false);
+                }
+
+                _menuManager.SetScreenRegisterLoginServer();
             }
-            else if (_stateMessage == StateConnectionMessage.LOGIN_USERNAME_DOES_NOT_EXIST.ToString())
-            {
-                _menuManager.launchScreenStateMessage = UI.Menu.MenuManager.LaunchStateMessage.LAUNCH_USERNAME_DOES_NOT_EXIST;
-
-            }
-            else if (_stateMessage == StateConnectionMessage.LOGIN_USERNAME_PASSWORD_DOES_NOT_CORRESPOND.ToString())
-            {
-                _menuManager.launchScreenStateMessage = UI.Menu.MenuManager.LaunchStateMessage.LAUNCH_PASSWORD_DOES_NOT_CORRESPOND;
-
-            }
-            else if (_stateMessage == StateConnectionMessage.REGISTER_SUCCESSFUL.ToString())
-            {
-                Debug.Log("Register Succesful");
-                _menuManager.launchScreenStateMessage = UI.Menu.MenuManager.LaunchStateMessage.LAUNCH_REGISTER_SUCCESFUL;
-
-                _menuManager._LogIn.SetActive(true);
-                _menuManager._sInscrire.SetActive(false);
-
-            }
-            else if(_stateMessage == StateConnectionMessage.LOGIN_USERNAME_PASSWORD_CORRESPOND.ToString())
-            {
-                _menuManager.launchScreenStateMessage = UI.Menu.MenuManager.LaunchStateMessage.LAUNCH_NOTHING;
-
-                _menuManager._mainMenu.SetActive(true);
-                _menuManager._LogIn.SetActive(false);
-                _menuManager._sInscrire.SetActive(false);
-            }   
-
-            _menuManager.SetScreenRegisterLoginServer();
-
         }
 
         void Update()
         {
-
+            //Debug.Log(isConnectedToServer);
             SendUserInfoToServer();
             SendMsgConnectOnGameToServer();
+            ReconnectToServer(2);
+
         }
 
         public void SendUserInfoToServer()
@@ -222,7 +246,7 @@ namespace ProjetPirate.Network
         {
             ConnectToGameClient _ReceiveMessageConnectToGame = _msgConnectToGame.ReadMessage<ConnectToGameClient>();
             Debug.Log("Message is received" + _ReceiveMessageConnectToGame.connectToGameClientMsg);
-            if(_ReceiveMessageConnectToGame.connectToGameClientMsg == constConnectToGameClientMsg)
+            if (_ReceiveMessageConnectToGame.connectToGameClientMsg == constConnectToGameClientMsg)
             {
                 SceneManager.LoadScene("Game");
             }
@@ -230,21 +254,71 @@ namespace ProjetPirate.Network
 
         private bool CheckIsCorrectFormat(string _username, string _password, int minCharacterUsername, int maxCharacterUsername, int minCharacterPassword, int maxCharacterPassword)
         {
+            Debug.Log("Username Lenght : " + _username.Length + " | " + "Password Lenght : " + _password.Length);
 
+            //Check if username and password are similar
+            if(_username.Length < _password.Length)
+            {
+                if (!CheckSimilarLetter(_password, _username))
+                    return false;
+            }
+            else
+            {
+                if (!CheckSimilarLetter(_username, _password))
+                    return false;
+
+            }
+
+            //Check Correct Size
             if (_username.Length >= minCharacterUsername
                 && _username.Length <= maxCharacterUsername
                 && _password.Length >= minCharacterPassword
                 && _password.Length <= maxCharacterPassword)
             {
-                return true;
+                //Check Correct Type Character
+                for (int i = 0; i < _username.Length; i++)
+                {
+                    if (!char.IsLetterOrDigit(_username, i))
+                    {
+                        return false;
+                    }
+                }
+                for (int i = 0; i < _password.Length; i++)
+                {
+                    if (!char.IsLetterOrDigit(_password, i))
+                    {
+                        return false;
+                    }
+                }
 
+                return true;
             }
             else
             {
                 return false;
             }
 
+        }
 
+        private bool CheckSimilarLetter(string _biggestWord, string _lowestWord)
+        {
+            int _countSimilarLetter = 0;
+            for (int i = 0; i < _lowestWord.Length; i++)
+            {
+                if (_lowestWord[i] != _biggestWord[i])
+                {
+
+                    _countSimilarLetter++;
+                }
+            }
+            if (_countSimilarLetter > 2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void RegisterHandlers()
@@ -255,5 +329,21 @@ namespace ProjetPirate.Network
 
         }
 
+        public void ReconnectToServer(float _timeBetweenAttemptReconnection)
+        {
+            if (!isConnectedToServer)
+            {
+                timeSinceLastAttemptReconnection = Time.time - timeLastAttemptReconnection;
+                if (timeSinceLastAttemptReconnection >= _timeBetweenAttemptReconnection)
+                {
+                    client.Disconnect();
+                    client.Shutdown();
+                    client = null;
+                    timeLastAttemptReconnection = Time.time;
+                    Debug.Log("Attempt to Reconnect to SERVER");
+                    StartClient();
+                }
+            }
+        }
     }
 }
