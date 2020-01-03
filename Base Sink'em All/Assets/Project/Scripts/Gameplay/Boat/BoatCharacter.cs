@@ -244,10 +244,40 @@ namespace ProjetPirate.Boat
             {
                 if(Input.GetKeyDown(KeyCode.F5))
                 {
-                    _currentCannnonsNumberLeft = 2;
-                    _currentCannnonsNumberRight = 2;
-                    CmdUpdateActiveCanons();
+                    this.CmdAddCannons(true, false);
+                    this.CmdUpdateActiveCanons();
                 }
+                if (Input.GetKeyDown(KeyCode.F6))
+                {
+                    this.CmdAddCannons(false, true);
+                    this.CmdUpdateActiveCanons();
+                }
+            }
+        }
+        [Command]
+        public void CmdAddCannons(bool left,bool right)
+        {
+            if((_currentCannnonsNumberLeft < _maxCannonsPerSide) && left == true)
+            {
+                _currentCannnonsNumberLeft++;
+            }
+            if ((_currentCannnonsNumberRight < _maxCannonsPerSide) && right == true)
+            {
+                _currentCannnonsNumberRight++;
+            }
+            this.RpcAddCannons( left, right);
+        }
+
+        [ClientRpc]
+        public void RpcAddCannons( bool left , bool right)
+        {
+            if ((_currentCannnonsNumberLeft < _maxCannonsPerSide) && left == true)
+            {
+                _currentCannnonsNumberLeft++;
+            }
+            if ((_currentCannnonsNumberRight < _maxCannonsPerSide) && right == true)
+            {
+                _currentCannnonsNumberRight++;
             }
         }
 
@@ -307,8 +337,6 @@ namespace ProjetPirate.Boat
         [Command]
         public void CmdUpdateActiveCanons()
         {
-            _currentCannnonsNumberLeft = 2;
-            _currentCannnonsNumberRight = 2;
 
             for (int i = 0; i < _larboardCannons.Count; i++)
             {
@@ -333,41 +361,10 @@ namespace ProjetPirate.Boat
                     _starboardCannons[i].gameObject.SetActive(false);
                 }
             }
-
-            this.RpcSetActiveCannons();
+            RpcUpdateActiveCannons();
         }
 
 
-        [ClientRpc]
-        public void RpcSetActiveCannons()
-        {
-            _currentCannnonsNumberLeft = 2;
-            _currentCannnonsNumberRight = 2;
-
-            for (int i = 0; i < _larboardCannons.Count; i++)
-            {
-                if (i < _currentCannnonsNumberLeft)
-                {
-                    _larboardCannons[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    _larboardCannons[i].gameObject.SetActive(false);
-                }
-            }
-
-            for (int i = 0; i < _starboardCannons.Count; i++)
-            {
-                if (i < _currentCannnonsNumberRight)
-                {
-                    _starboardCannons[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    _starboardCannons[i].gameObject.SetActive(false);
-                }
-            }
-        }
 
         [ClientRpc]
         public void RpcUpdateActiveCannons()
@@ -398,6 +395,39 @@ namespace ProjetPirate.Boat
                 }
             }
         }
+
+
+
+        [TargetRpc]
+        public void TargetUpdateActiveCannons(NetworkConnection target)
+        {
+
+
+            for (int i = 0; i < _larboardCannons.Count; i++)
+            {
+                if (i < _currentCannnonsNumberLeft)
+                {
+                    _larboardCannons[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    _larboardCannons[i].gameObject.SetActive(false);
+                }
+            }
+
+            for (int i = 0; i < _starboardCannons.Count; i++)
+            {
+                if (i < _currentCannnonsNumberRight)
+                {
+                    _starboardCannons[i].gameObject.SetActive(true);
+                }
+                else
+                {
+                    _starboardCannons[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
         // END TEST SEB //
 
         #region MUTATORS

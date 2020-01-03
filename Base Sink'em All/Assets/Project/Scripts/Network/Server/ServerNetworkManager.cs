@@ -146,7 +146,7 @@ namespace Project.Network
                 /// <summary>
                 /// TEST SEB
                 /// </summary>
-                _boatList[i].gameObject.GetComponent<BoatCharacter>().RpcUpdateActiveCannons();
+                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetUpdateActiveCannons(conn);
                 // END TEST SEB //
 
 
