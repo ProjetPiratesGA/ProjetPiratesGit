@@ -425,7 +425,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1873241026614862}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 150.30971, y: 4.2711816, z: -254.80139}
+  m_LocalPosition: {x: 132.70708, y: 118.9587, z: -357.9533}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4934925503223284}
@@ -717,6 +717,7 @@ MonoBehaviour:
   _defaultCannonNumberBySide: 1
   _HeightFallingDeath: -10
   Safe: 0
+  isInSafeZone: 0
   _isDocking: 0
   _isPushedByIsland: 0
   _leftPoints:

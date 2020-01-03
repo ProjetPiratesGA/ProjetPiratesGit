@@ -2359,6 +2359,8 @@ MonoBehaviour:
   _xpLostByDeath: 10
   _goldRatiolostByDeath: 0.1
   _respawnPoint: {fileID: 1802281075}
+  _RepairCooldown: 4
+  _RepairInCooldown: 0
 --- !u!4 &1596874149
 Transform:
   m_ObjectHideFlags: 0
