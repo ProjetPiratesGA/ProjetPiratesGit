@@ -203,7 +203,7 @@ namespace ProjetPirate.Boat
 
         void Start()
         {
-            _data_Boat.dStats = _data;
+            _data_Boat.Stats = _data;
 
             _data.Life = _maxLifePoint;
 
@@ -284,7 +284,7 @@ namespace ProjetPirate.Boat
             //    ParticleSystem.MainModule main = _waterTrails[i].main;
             //    main.startLifetime = _data_Boat.dStats.Speed / _maxMovingSpeed;
             //}
-            _data_Boat.ReverseReloadTransform(this.gameObject);
+            _data_Boat.UpdateTransform(this.gameObject);
 
 
             //TEST DEBUG ADD CANNON
@@ -506,7 +506,7 @@ namespace ProjetPirate.Boat
             #region MANAGE BOAT MOVEMENT STATE
 
             //use the input to define the state of the boat
-            if (_data_Boat.dStats.Speed == 0)
+            if (_data_Boat.Stats.Speed == 0)
             {
                 _boatMovementState = BoatMovementState.IDLE;
             }
@@ -514,18 +514,18 @@ namespace ProjetPirate.Boat
             {
                 //acceleration
                 //if (_currentSpeedForward > 0 && (_zInputMovement != 0 || _xInputMovement != 0))
-                if (_data_Boat.dStats.Speed > 0 && _ControllerIsMoving == true)
+                if (_data_Boat.Stats.Speed > 0 && _ControllerIsMoving == true)
                 {
                     _boatMovementState = BoatMovementState.ACCELERATE;
                 }
                 //deceleration
                 //else if (_currentSpeedForward > 0 && (_zInputMovement == 0 && _xInputMovement == 0))
-                else if (_data_Boat.dStats.Speed > 0 && _ControllerIsMoving == false)
+                else if (_data_Boat.Stats.Speed > 0 && _ControllerIsMoving == false)
                 {
                     _boatMovementState = BoatMovementState.DECELERATE;
                 }
                 //cruise_speed
-                if (_data_Boat.dStats.Speed >= _maxMovingSpeed)
+                if (_data_Boat.Stats.Speed >= _maxMovingSpeed)
                 {
                     _boatMovementState = BoatMovementState.CRUISE_SPEED;
                 }
@@ -604,7 +604,7 @@ namespace ProjetPirate.Boat
         public override void MoveForward()
         {
             Vector3 pos = this.transform.position;
-            pos += this.transform.forward * _data_Boat.dStats.Speed * Time.deltaTime;
+            pos += this.transform.forward * _data_Boat.Stats.Speed * Time.deltaTime;
             //pos.y = 0;
             this.transform.position = pos;
             _isMovingForward = true;
@@ -613,24 +613,24 @@ namespace ProjetPirate.Boat
         public void Accelerate()
         {
             Debug.Log(this.name + "je suis dans le accelerate");
-            _data_Boat.dStats.Speed += _accelerationSpeedForward * Time.deltaTime;
-            if (_data_Boat.dStats.Speed > _maxMovingSpeed)
+            _data_Boat.Stats.Speed += _accelerationSpeedForward * Time.deltaTime;
+            if (_data_Boat.Stats.Speed > _maxMovingSpeed)
             {
-                _data_Boat.dStats.Speed = _maxMovingSpeed;
+                _data_Boat.Stats.Speed = _maxMovingSpeed;
             }
             //Debug.Log(this.name + " --> Acclerate / _data_Boat.dStats.Speed : " + _data_Boat.dStats.Speed + " _accelerationSpeedForward : " + _accelerationSpeedForward
                 //+ " Time.deltaTime : " + Time.deltaTime);
-            _stoppingDistance = ((_data_Boat.dStats.Speed / 10) * (_data_Boat.dStats.Speed / 10)) * 50 / _decelerationSpeedForward;
+            _stoppingDistance = ((_data_Boat.Stats.Speed / 10) * (_data_Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
         }
 
         public void Decelerate()
         {
-            _data_Boat.dStats.Speed -= _decelerationSpeedForward * Time.deltaTime;
-            if (_data_Boat.dStats.Speed < 0)
+            _data_Boat.Stats.Speed -= _decelerationSpeedForward * Time.deltaTime;
+            if (_data_Boat.Stats.Speed < 0)
             {
-                _data_Boat.dStats.Speed = 0;
+                _data_Boat.Stats.Speed = 0;
             }
-            _stoppingDistance = ((_data_Boat.dStats.Speed / 10) * (_data_Boat.dStats.Speed / 10)) * 50 / _decelerationSpeedForward;
+            _stoppingDistance = ((_data_Boat.Stats.Speed / 10) * (_data_Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
         }
 
         /// <summary>
@@ -653,7 +653,7 @@ namespace ProjetPirate.Boat
                 Decelerate();
             }
 
-            if (_data_Boat.dStats.Speed > 0)
+            if (_data_Boat.Stats.Speed > 0)
             {
                 _isMovingForward = true;
             }
@@ -794,7 +794,7 @@ namespace ProjetPirate.Boat
 
         public float getSpeedForward()
         {
-            return _data_Boat.dStats.Speed;
+            return _data_Boat.Stats.Speed;
         }
 
         public float getMaxSpeedForward()

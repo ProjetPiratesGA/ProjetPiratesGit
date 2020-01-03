@@ -35,10 +35,10 @@ namespace ProjetPirate.Data
 
         private myVector3 colorBoat = new myVector3();
 
-        public Data_Transform dTransform { get { return transform; } set { transform = value; } }
-        public Data_StatsCharacters dStats { get { return stats; } set { stats = value; } }
+        public Data_Transform Transform { get { return transform; } set { transform = value; } }
+        public Data_StatsCharacters Stats { get { return stats; } set { stats = value; } }
         public Data_Sail Sail { get { return sail; } set { sail = value; } }
-        public List<Data_Canon> dCanon { get { return canon; } set { canon = value; } }
+        public List<Data_Canon> Canon { get { return canon; } set { canon = value; } }
 
         public myVector3 dColorBoat { get { return colorBoat; } set { colorBoat = value; } }
 
@@ -63,12 +63,12 @@ namespace ProjetPirate.Data
             transform.Position = _initPositionVector;
         }
 
-        public void ReloadTransform(GameObject boat)
+        public void LoadTransform(GameObject boat)
         {
             boat.transform.position = new Vector3(transform.Position.x, transform.Position.y, transform.Position.z);
         }
 
-        public void ReverseReloadTransform(GameObject boat)
+        public void UpdateTransform(GameObject boat)
         {
             _initPositionVector.x = boat.transform.position.x;
             _initPositionVector.y = boat.transform.position.y;

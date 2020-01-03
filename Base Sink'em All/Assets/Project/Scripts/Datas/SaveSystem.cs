@@ -155,7 +155,7 @@ namespace ProjetPirate.Data
                 {
                     Debug.Log("current ID : " + savedClientList[i].ID);
                     Debug.Break();
-                    LoadClientData(savedClientList[i].ID);
+                    //LoadClientData(savedClientList[i].ID);
                 }
                 stream.Close();
                 return savedClientList;
@@ -269,12 +269,17 @@ namespace ProjetPirate.Data
 
         public static Data_server LoadServer()
         {
+            Debug.LogWarning("In load server");
+
             //on saisie la localisation du fichier a charger
-            string path = Application.dataPath + "/Datas/Server/server.data";
+            string path = MonoData_Tools.pathHDDServer + "server";
             if (!File.Exists(path))
             {
                 (new FileInfo(path)).Directory.Create();
+                Debug.LogWarning("Folder has been created at " + path);
             }
+            else
+                Debug.LogWarning("Folder is already exist at" + path);
             ///Si le fichier existe bien alors
             if (File.Exists(path))
             {
@@ -305,60 +310,232 @@ namespace ProjetPirate.Data
         {
             BinaryFormatter br = new BinaryFormatter();
 
-            string path = Application.dataPath + "/Datas/Server/server.data";
+            string path = MonoData_Tools.pathHDDServer + "server";
             if (!File.Exists(path))
             {
                 (new FileInfo(path)).Directory.Create();
             }
             //string path = Application.DataPath + strDatasFolder + strPathServerData + "/ListClient.data";
-            //Debug.Log("Client List path " + strCompletePathToClientList);
+            Debug.Log("Client List path " + path);
             FileStream stream = new FileStream(path, FileMode.Create);
             br.Serialize(stream, pData);
 
             stream.Close();
         }
 
-        public static ClientData LoadClientData(int id)
+        //public static ClientData LoadClientData(int id)
+        //{
+        //    string strClientPath = strCompletePathToClientDatas + "/0_" + id + ".data";
+        //    string strPlayerPath = strCompletePathToPlayerDatas + "/1_" + id + ".data";
+        //    string strBoatPath = strCompletePathToBoatDatas + "/2_" + id + ".data";
+
+        //    FileStream stream_client = new FileStream(strClientPath, FileMode.Open);
+        //    FileStream stream_player = new FileStream(strPlayerPath, FileMode.Open);
+        //    FileStream stream_boat = new FileStream(strBoatPath, FileMode.Open);
+
+        //    //Debug.Log("LoadClientData Client Datas path : " + strClientPath);
+        //    //Debug.Log("LoadClientData Player Datas path : " + strPlayerPath);
+        //    //Debug.Log("LoadClientData Boat Datas path : " + strBoatPath);
+
+        //    BinaryFormatter bf = new BinaryFormatter();
+
+        //    ClientData loadedClient = null;
+        //    Data_Player loadedPlayer = null;
+        //    Data_Boat loadedBoat = null;
+
+        //    if (File.Exists(strClientPath))
+        //    {
+        //        loadedClient = bf.Deserialize(stream_client) as ClientData;
+        //        Debug.Log("client : " + loadedClient.ID + loadedClient.Username + loadedClient.Password);
+        //        //Debug.Log("2 client deserialize");
+        //    }
+
+        //    BinaryFormatter bf_1 = new BinaryFormatter();
+        //    if (File.Exists(strPlayerPath))
+        //    {
+        //        loadedPlayer = bf_1.Deserialize(stream_player) as Data_Player;
+        //        Debug.Log("Loading player : " + loadedPlayer.Player_ID + " " + loadedPlayer.dRessource.Golds + " " + loadedPlayer.dRessource.Reputation + " " + loadedPlayer.dRessource.WoodBoard);
+        //        //Debug.Log("2 player deserialize");
+        //    }
+        //    if (File.Exists(strBoatPath))
+        //    {
+        //        loadedBoat = bf.Deserialize(stream_boat) as Data_Boat;
+        //        Debug.Log("2 boat deserialize");
+        //    }
+        //    return new ClientData();
+        //}
+
+
+        public static void InitHDDFolder()
         {
-            string strClientPath = strCompletePathToClientDatas + "/0_" + id + ".data";
-            string strPlayerPath = strCompletePathToPlayerDatas + "/1_" + id + ".data";
-            string strBoatPath = strCompletePathToBoatDatas + "/2_" + id + ".data";
-
-            FileStream stream_client = new FileStream(strClientPath, FileMode.Open);
-            FileStream stream_player = new FileStream(strPlayerPath, FileMode.Open);
-            FileStream stream_boat = new FileStream(strBoatPath, FileMode.Open);
-
-            //Debug.Log("LoadClientData Client Datas path : " + strClientPath);
-            //Debug.Log("LoadClientData Player Datas path : " + strPlayerPath);
-            //Debug.Log("LoadClientData Boat Datas path : " + strBoatPath);
-
-            BinaryFormatter bf = new BinaryFormatter();
-
-            ClientData loadedClient = null;
-            Data_Player loadedPlayer = null;
-            Data_Boat loadedBoat = null;
-
-            if (File.Exists(strClientPath))
+            MonoData_Tools.initVar();
+            #region CreateFolder
+            ///Creat folder in AppData
+            ///Questes
+            if (!File.Exists(MonoData_Tools.pathHDDQuestes))
             {
-                loadedClient = bf.Deserialize(stream_client) as ClientData;
-                Debug.Log("client : " + loadedClient.ID + loadedClient.Username + loadedClient.Password);
-                //Debug.Log("2 client deserialize");
+                Debug.Log("In initFolder");
+                (new FileInfo(MonoData_Tools.pathHDDQuestes)).Directory.Create();
+                Debug.Log("FileCreated at " + MonoData_Tools.pathHDDQuestes);
             }
+            else
+                Debug.Log("FileCreated at " + MonoData_Tools.pathHDDQuestes + " as alrady exist");
 
-            BinaryFormatter bf_1 = new BinaryFormatter();
-            if (File.Exists(strPlayerPath))
+            ///Dock
+            if (!File.Exists(MonoData_Tools.pathHDDDock))
             {
-                loadedPlayer = bf_1.Deserialize(stream_player) as Data_Player;
-                Debug.Log("Loading player : " + loadedPlayer.Player_ID + " " + loadedPlayer.dRessource.Golds + " " + loadedPlayer.dRessource.Reputation + " " + loadedPlayer.dRessource.WoodBoard);
-                //Debug.Log("2 player deserialize");
+                (new FileInfo(MonoData_Tools.pathHDDDock)).Directory.Create();
+                Debug.Log("FileCreated at " + MonoData_Tools.pathHDDDock);
             }
-            if (File.Exists(strBoatPath))
+            else
+                Debug.Log("FileCreated at " + MonoData_Tools.pathHDDDock + " as alrady exist");
+
+            ///Dialogues
+            if (!File.Exists(MonoData_Tools.pathHDDDialogues))
             {
-                loadedBoat = bf.Deserialize(stream_boat) as Data_Boat;
-                Debug.Log("2 boat deserialize");
+                (new FileInfo(MonoData_Tools.pathHDDDialogues)).Directory.Create();
+                Debug.Log("FileCreated at " + MonoData_Tools.pathHDDDialogues);
             }
-            return new ClientData(loadedClient, loadedPlayer, loadedBoat);
+            else
+                Debug.Log("FileCreated at " + MonoData_Tools.pathHDDDialogues + " as alrady exist");
+
+            ///Pnj
+            if (!File.Exists(MonoData_Tools.pathHDDPnj))
+            {
+                (new FileInfo(MonoData_Tools.pathHDDPnj)).Directory.Create();
+                Debug.Log("FileCreated at " + MonoData_Tools.pathHDDPnj);
+            }
+            else
+                Debug.Log("FileCreated at " + MonoData_Tools.pathHDDPnj + " as alrady exist");
+
+            ///Objects
+            if (!File.Exists(MonoData_Tools.pathHDDbject))
+            {
+                (new FileInfo(MonoData_Tools.pathHDDbject)).Directory.Create();
+                Debug.Log("FileCreated at " + MonoData_Tools.pathHDDbject);
+            }
+            else
+                Debug.Log("FileCreated at " + MonoData_Tools.pathHDDbject + " as alrady exist");
+            #endregion CreateFolder
+            #region CreateFiles
+            StreamWriter streamWrite = null;
+            #region Questes
+            for (int indiceQuest = 0; indiceQuest < 5; indiceQuest++)
+            {
+                string RessourcesPath = "Datas/Questes/" + indiceQuest;
+                TextAsset ressourcesText = Resources.Load<TextAsset>(RessourcesPath);
+                if (ressourcesText != null)
+                {
+                    Debug.Log("Load resources " + RessourcesPath + " sucsessfull");
+                }
+                else
+                {
+                    Debug.Log("Failed to load resources " + RessourcesPath);
+                }
+
+                streamWrite = new StreamWriter(MonoData_Tools.pathHDDQuestes + indiceQuest);
+                streamWrite.WriteLine(ressourcesText.text);
+                streamWrite.Close();
+            }
+            #endregion Questes
+            #region Pnjs
+            List<string> tmpName = new List<string>();
+            tmpName.Add("Adalyn North");
+            tmpName.Add("Alvaro the Nightmare");
+            tmpName.Add("Horton two Face");
+            tmpName.Add("Jengo the Snake");
+            tmpName.Add("Kamkin");
+            tmpName.Add("Lord Grady");
+            tmpName.Add("Razortooth");
+            for (int indicePnj = 0; indicePnj < tmpName.Count; indicePnj++)
+            {
+                string RessourcesPath = "Datas/Pnj/" + tmpName[indicePnj];
+                TextAsset ressourcesText = Resources.Load<TextAsset>(RessourcesPath);
+                if (ressourcesText != null)
+                {
+                    Debug.Log("Load resources " + RessourcesPath + " sucsessfull");
+                }
+                else
+                {
+                    Debug.Log("Failed to load resources " + RessourcesPath);
+                }
+
+                streamWrite = new StreamWriter(MonoData_Tools.pathHDDPnj + tmpName[indicePnj]);
+                streamWrite.WriteLine(ressourcesText.text);
+                streamWrite.Close();
+            }
+            #endregion Pnjs
+            #region Objects
+            List<string> tmpNameObject = new List<string>();
+            tmpNameObject.Add("Boat");
+            tmpNameObject.Add("Bullet");
+            tmpNameObject.Add("Canon");
+            tmpNameObject.Add("Flag");
+            tmpNameObject.Add("Gold");
+            tmpNameObject.Add("Kraken");
+            tmpNameObject.Add("MilitaryBoat");
+            tmpNameObject.Add("Objects");
+            tmpNameObject.Add("Snail");
+            tmpNameObject.Add("StoreBoat");
+            tmpNameObject.Add("WoodenBoard");
+            
+            for (int indicePnj = 0; indicePnj < tmpNameObject.Count; indicePnj++)
+            {
+                string RessourcesPath = "Datas/Objects/" + tmpNameObject[indicePnj];
+                TextAsset ressourcesText = Resources.Load<TextAsset>(RessourcesPath);
+                if (ressourcesText != null)
+                {
+                    Debug.Log("Load resources " + RessourcesPath + " sucsessfull");
+                }
+                else
+                {
+                    Debug.Log("Failed to load resources " + RessourcesPath);
+                }
+
+                streamWrite = new StreamWriter(MonoData_Tools.pathHDDbject + tmpNameObject[indicePnj]);
+                streamWrite.WriteLine(ressourcesText.text);
+                streamWrite.Close();
+            }
+            #endregion Objects
+            #region Docks
+            for (int indiceDock = 0; indiceDock < 1; indiceDock++)
+            {
+                string RessourcesPath = "Datas/Docks/" + indiceDock;
+                TextAsset ressourcesText = Resources.Load<TextAsset>(RessourcesPath);
+                if (ressourcesText != null)
+                {
+                    Debug.Log("Load resources " + RessourcesPath + " sucsessfull");
+                }
+                else
+                {
+                    Debug.Log("Failed to load resources " + RessourcesPath);
+                }
+
+                streamWrite = new StreamWriter(MonoData_Tools.pathHDDDock + indiceDock);
+                streamWrite.WriteLine(ressourcesText.text);
+                streamWrite.Close();
+            }
+            #endregion Docks
+            #region Dialogues
+            for (int indiceDialogue = 0; indiceDialogue < 17; indiceDialogue++)
+            {
+                string RessourcesPath = "Datas/Dialogues/" + indiceDialogue;
+                TextAsset ressourcesText = Resources.Load<TextAsset>(RessourcesPath);
+                if (ressourcesText != null)
+                {
+                    Debug.Log("Load resources " + RessourcesPath + " sucsessfull");
+                }
+                else
+                {
+                    Debug.Log("Failed to load resources " + RessourcesPath);
+                }
+
+                streamWrite = new StreamWriter(MonoData_Tools.pathHDDDialogues + indiceDialogue);
+                streamWrite.WriteLine(ressourcesText.text);
+                streamWrite.Close();
+            }
+            #endregion Dialogues
+            #endregion CreateFiles
         }
-
     }
 }
