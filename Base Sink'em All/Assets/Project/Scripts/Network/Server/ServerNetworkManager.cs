@@ -47,8 +47,9 @@ namespace Project.Network
             LOGIN_USERNAME_DOES_NOT_EXIST = 0,
             LOGIN_USERNAME_PASSWORD_DOES_NOT_CORRESPOND = 1,
             REGISTER_SUCCESSFUL = 2,
-            LOGIN_USERNAME_PASSWORD_CORRESPOND = 3,
+            LOGIN_USERNAME_PASSWORD_CORRESPOND_AND_IS_NOT_CONNECTED = 3,
             TRY_TO_CONNECT_GAME = 4,
+            ACCOUNT_ALREADY_CONNECT = 5,
 
         }
 
@@ -76,11 +77,10 @@ namespace Project.Network
         public const short StateConnectionClientLoginMsgId = 777;
         public const short StateConnectionToGameClientMsgId = 666;
 
+        float fTimeSinceLastSaveServer;
+        float fTimeLastSaveServer;
 
         bool sendStateLoginRegister;
-
-        bool playerCanConnectOnGame;
-        bool playerCanCreateAccount;
 
         NetworkConnection _connBuffer;
 
@@ -97,23 +97,26 @@ namespace Project.Network
 
         void Start()
         {
-            data = SaveSystem.LoadServer();
             RegisterHandlers();
+            fTimeLastSaveServer = Time.time;
         }
 
         void Update()
         {
             SendErrorLoginRegister();
-
+            SaveServerEvery(1);
         }
         public override void OnStartServer()
         {
+            Debug.Log("On Start Server : Reinitialisation Account is used");
+
             data = SaveSystem.LoadServer();
             for (int j = 0; j < data.ClientRegistered.Count; j++)
             {
                 data.ClientRegistered[j].AccountIsUsed = false;
             }
         }
+
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
         {
             Player playerInstance = Instantiate(playerPrefab.GetComponent<Player>());
@@ -123,11 +126,11 @@ namespace Project.Network
 
             _connBuffer = conn;
 
-
             byte[] dataSend = formateToByte(_playerList[_playerList.Count - 1]._data);
 
 
             _playerList[_playerList.Count - 1].RpcRefreshPlayersDatas(dataSend);
+            Debug.Log("Add Player, New Client");
 
 
 
@@ -138,22 +141,7 @@ namespace Project.Network
             {
                 _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetParent(conn, _boatList[i].player.gameObject);
 
-                //if(_boatList[i].gameObject.GetComponent<BoatCharacter>().larboardCannons.Count == 0)
-                //{
-                //    Debug.Break();
-                //}
-
-                /// <summary>
-                /// TEST SEB
-                /// </summary>
                 _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetUpdateActiveCannons(conn);
-                // END TEST SEB //
-
-
-                //test de reset les liens de parenté du premier canon de chaque coté (boucler sur la liste par la suite) 
-                // _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetLardboardCanon1(conn, _boatList[i].gameObject.GetComponent<BoatCharacter>().larboardCannons[0].gameObject);
-                // _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetStarboardCanon1(conn, _boatList[i].gameObject.GetComponent<BoatCharacter>().starboardCannons[0].gameObject);
-                //_boatList[i].GetComponent<BarLife>().TargetRefreshLifeBar(conn);
             }
 
         }
@@ -175,12 +163,22 @@ namespace Project.Network
                             data.ClientRegistered[j].AccountIsUsed = false;
                         }
                     }
+                    for (int k = 0; k < _boatList.Count; k++)
+                    {
+                        if(_boatList[k].player.connectionToClient == conn)
+                        {
+                            _boatList.Remove(_boatList[k]);
+                            break;
+                        }
+                    }
+                    playerList.Remove(playerList[i]);
                 }
             }
+            Debug.LogWarning("Player list size = " + playerList.Count + " , Boat list size = " + _boatList.Count);
+
+
+            base.OnServerDisconnect(conn);
         }
-
-
-
 
         public byte[] formateToByte(Data_Player _dataReceive)
         {
@@ -245,8 +243,7 @@ namespace Project.Network
             if (objectMessage.stateConnectionMode != StateConnectionMode.LOGIN
                 && objectMessage.stateConnectionMode != StateConnectionMode.REGISTER)
             {
-                playerCanCreateAccount = false;
-                playerCanConnectOnGame = false;
+
             }
 
         }
@@ -255,7 +252,6 @@ namespace Project.Network
         {
             if (_objectMessage.stateConnectionMode == StateConnectionMode.REGISTER)
             {
-                playerCanConnectOnGame = false;
 
                 if (CheckUsernameExist(_objectMessage.username) == false)
                 {
@@ -263,14 +259,12 @@ namespace Project.Network
 
                     tmpDataBufferPlayerRegister = new ClientData(_objectMessage.username, _objectMessage.password, data.CountIDUnique);
 
-                    playerCanCreateAccount = true;
                     stateConnectionBuffer = StateConnectionMessage.REGISTER_SUCCESSFUL;
                     sendStateLoginRegister = true;
 
                     if (SaveSystem.RegisterPlayer(tmpDataBufferPlayerRegister, data) == true)
                     {
                         Debug.Log("Password Is Set : " + _objectMessage.password);
-                        playerCanCreateAccount = true;
                         stateConnectionBuffer = StateConnectionMessage.REGISTER_SUCCESSFUL;
                         sendStateLoginRegister = true;
 
@@ -279,7 +273,6 @@ namespace Project.Network
                     {
                         Debug.Log("Password Is Not Set : " + _objectMessage.password);
 
-                        playerCanCreateAccount = false;
                     }
 
 
@@ -292,8 +285,7 @@ namespace Project.Network
                     stateConnectionBuffer = StateConnectionMessage.REGISTER_USERNAME_NON_AVAILABLE;
 
 
-                    playerCanConnectOnGame = false;
-                    playerCanCreateAccount = false;
+
 
                 }
 
@@ -302,38 +294,41 @@ namespace Project.Network
 
         private void CheckPlayerCanLogin(RegisterClientLogin _objectMessage)
         {
-            playerCanCreateAccount = false;
             if (CheckUsernameExist(_objectMessage.username) == true)
             {
 
                 Debug.Log("Username exist");
                 if (CheckPasswordCorrespond(_objectMessage.username, _objectMessage.password) == true)
                 {
-
-                    Debug.Log("Password Correspond");
-
-                    for (int i = 0; i < _playerList.Count; i++)
+                    if (CheckAccountIsAlreadyConnect(_objectMessage.username) == true)
                     {
-                        if (_playerList[i].connectionToClient == _connBuffer)
+                        Debug.Log("Password Correspond");
+
+                        for (int i = 0; i < _playerList.Count; i++)
                         {
-                            _playerList[i]._username = _objectMessage.username;
+                            if (_playerList[i].connectionToClient == _connBuffer)
+                            {
+                                _playerList[i]._username = _objectMessage.username;
 
+                            }
                         }
+
+                        stateConnectionBuffer = StateConnectionMessage.LOGIN_USERNAME_PASSWORD_CORRESPOND_AND_IS_NOT_CONNECTED;
+                        sendStateLoginRegister = true;
+                        Debug.Log("Username Before Set Data" + _objectMessage.username);
+                        _usernameBuffer = formateToByte(_objectMessage.username);
+
+                        //Load Data Login
+                        LoadDataLoginClient(_connBuffer);
                     }
+                    else
+                    {
+                        stateConnectionBuffer = StateConnectionMessage.ACCOUNT_ALREADY_CONNECT;
 
-                    playerCanConnectOnGame = true;
-                    stateConnectionBuffer = StateConnectionMessage.LOGIN_USERNAME_PASSWORD_CORRESPOND;
-                    sendStateLoginRegister = true;
-                    Debug.Log("Username Before Set Data" + _objectMessage.username);
-                    _usernameBuffer = formateToByte(_objectMessage.username);
-
-                    //Load Data Login
-                    LoadDataLoginClient(_connBuffer);
-
+                    }
                 }
                 else
                 {
-                    playerCanConnectOnGame = false;
                     sendStateLoginRegister = true;
 
                     Debug.Log("Password doesn't Correspond");
@@ -342,7 +337,6 @@ namespace Project.Network
             }
             else
             {
-                playerCanConnectOnGame = false;
                 Debug.Log("Username doesn't exist");
                 stateConnectionBuffer = StateConnectionMessage.LOGIN_USERNAME_DOES_NOT_EXIST;
                 sendStateLoginRegister = true;
@@ -360,16 +354,26 @@ namespace Project.Network
                 {
                     if (data.ClientRegistered[i].Password == _password)
                     {
-                        if (data.ClientRegistered[i].AccountIsUsed == false)
-                        {
-                            data.ClientRegistered[i].AccountIsUsed = true;
-                            return true;
-
-                        }
-
+                        return true;
                     }
                 }
 
+            }
+            return false;
+        }
+
+        private bool CheckAccountIsAlreadyConnect(string _username)
+        {
+            for (int i = 0; i < data.ClientRegistered.Count; i++)
+            {
+                if (data.ClientRegistered[i].Username == _username)
+                {
+                    if (data.ClientRegistered[i].AccountIsUsed == false)
+                    {
+                        data.ClientRegistered[i].AccountIsUsed = true;
+                        return true;
+                    }
+                }
             }
             return false;
         }
@@ -414,20 +418,6 @@ namespace Project.Network
                 LoadDataEnterGameClient(_msg.conn);
 
             }
-        }
-
-        private bool SetPassword(string _username, int _password)
-        {
-
-            for (int i = 0; i < data.ClientRegistered.Count; i++)
-            {
-                if (data.ClientRegistered[i].Username == _username)
-                {
-                    data.ClientRegistered[i].Password = _password;
-                    return true;
-                }
-            }
-            return false;
         }
 
         #endregion
@@ -479,5 +469,32 @@ namespace Project.Network
 
         }
 
+        public void SaveServerEvery(int _timeBetweenEachServer)
+        {
+            fTimeSinceLastSaveServer = Time.time - fTimeLastSaveServer;
+
+            if (fTimeSinceLastSaveServer >= _timeBetweenEachServer
+                && ThereIsAccountUsed())
+            {
+                fTimeLastSaveServer = Time.time;
+                SaveServer();
+            }
+        }
+
+        public bool ThereIsAccountUsed()
+        {
+            for (int i = 0; i < data.ClientRegistered.Count; i++)
+            {
+                if (data.ClientRegistered[i].AccountIsUsed == true)
+                    return true;
+            }
+            return false;
+        }
+
+        public void SaveServer()
+        {
+            Debug.Log("Save Server !");
+            SaveSystem.SaveServer(data);
+        }
     }
 }

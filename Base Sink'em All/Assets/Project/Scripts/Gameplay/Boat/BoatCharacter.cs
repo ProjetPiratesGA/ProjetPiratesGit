@@ -240,6 +240,8 @@ namespace ProjetPirate.Boat
             //}
             _data_Boat.ReverseReloadTransform(this.gameObject);
 
+
+            //TEST DEBUG ADD CANNON
             if(this.hasAuthority)
             {
                 if(Input.GetKeyDown(KeyCode.F5))
@@ -253,6 +255,7 @@ namespace ProjetPirate.Boat
                     this.CmdUpdateActiveCanons();
                 }
             }
+            // END TEST
         }
         [Command]
         public void CmdAddCannons(bool left,bool right)
