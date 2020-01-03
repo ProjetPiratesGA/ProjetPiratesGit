@@ -12,7 +12,8 @@ namespace ProjetPirate.Data
     /// </summary>
     public static class SaveSystem
     {
-        private static string ApplicationPath = System.Environment.CurrentDirectory + "/Assets";
+        private static string ApplicationPath = Application.dataPath + "/Assets";
+        //private static string ApplicationPath = System.IO.Path.GetDirectoryName(). + "/Assets";
         private static string strDatasFolder = "/Datas";
 
         /* Clients */
@@ -270,6 +271,10 @@ namespace ProjetPirate.Data
         {
             //on saisie la localisation du fichier a charger
             string path = Application.dataPath + "/Datas/Server/server.data";
+            if (!File.Exists(path))
+            {
+                (new FileInfo(path)).Directory.Create();
+            }
             ///Si le fichier existe bien alors
             if (File.Exists(path))
             {
@@ -301,7 +306,10 @@ namespace ProjetPirate.Data
             BinaryFormatter br = new BinaryFormatter();
 
             string path = Application.dataPath + "/Datas/Server/server.data";
-
+            if (!File.Exists(path))
+            {
+                (new FileInfo(path)).Directory.Create();
+            }
             //string path = Application.DataPath + strDatasFolder + strPathServerData + "/ListClient.data";
             //Debug.Log("Client List path " + strCompletePathToClientList);
             FileStream stream = new FileStream(path, FileMode.Create);

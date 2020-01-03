@@ -18,10 +18,15 @@ namespace ProjetPirate.Data
         public Data_Boat(int _clientID = -1)
         {
             boat_ID = _clientID;
-            this.canon = new List<Data_Canon>();
-            this.colorBoat = new myVector3(Color.red);
-            Debug.Log("Boat constructor : " + this.canon.Count);
         }
+
+        private int maxCanonPerSide = 2;
+        private int currentCanonLeft = 1;
+        private int currentCanonRight = 1;
+
+        public int MaxCanonPerSide { get { return maxCanonPerSide; } set { maxCanonPerSide = value; } }
+        public int CurrentCanonLeft { get { return currentCanonLeft; } set { currentCanonLeft = value; } }
+        public int CurrentCanonRight { get { return currentCanonRight; } set { currentCanonRight = value; } }
 
         Data_Transform transform = new Data_Transform();
         Data_StatsCharacters stats = new Data_StatsCharacters();
