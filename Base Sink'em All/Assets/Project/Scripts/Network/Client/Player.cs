@@ -164,6 +164,9 @@ public class Player : Controller {
         tempList.Add(boatInstance.GetComponent<BoatController>());
         //spawn this new boat with player autorithy
         NetworkServer.SpawnWithClientAuthority(boatInstance, this.connectionToClient);
+
+        //SetDataBoat(boatInstance.GetComponent<BoatCharacter>());
+
         //Set reference to the player from client side
         TargetSetPlayerReference(this.connectionToClient, this.gameObject, boatInstance);
         
@@ -179,6 +182,8 @@ public class Player : Controller {
     public void TargetSetPlayerReference(NetworkConnection target, GameObject playerReference, GameObject obj)
     {
         obj.GetComponent<BoatController>().player = playerReference.GetComponent<Player>();
+        //SetDataBoat(obj.GetComponent<BoatCharacter>());
+
     }
 
 

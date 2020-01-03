@@ -113,11 +113,11 @@ namespace ProjetPirate.Boat
         /// <summary>
         /// TEST SEB
         /// </summary>
-        int _maxCannonsPerSide = 2;
-        int _startCannonsNumberLeft = 1;
-        int _startCannonsNumberRight = 1;
-        int _currentCannnonsNumberLeft = 1;
-        int _currentCannnonsNumberRight = 1;
+        //int _maxCannonsPerSide = 2;
+        //int _startCannonsNumberLeft = 1;
+        //int _startCannonsNumberRight = 1;
+        //int _currentCannnonsNumberLeft = 1;
+        //int _currentCannnonsNumberRight = 1;
         // END TEST SEB //
 
 
@@ -163,10 +163,15 @@ namespace ProjetPirate.Boat
         void Start()
         {
             _data_Boat.dStats = _data;
+
         }
+
+        bool _asUpdateDatas = false;
 
         void Update()
         {
+
+
             _isMovingForward = false;
 
             //GoldFxAnimation();
@@ -257,50 +262,67 @@ namespace ProjetPirate.Boat
             }
             // END TEST
         }
-        [Command]
-        public void CmdAddCannons(bool left,bool right)
-        {
-            if((_currentCannnonsNumberLeft < _maxCannonsPerSide) && left == true)
-            {
-                _currentCannnonsNumberLeft++;
-            }
-            if ((_currentCannnonsNumberRight < _maxCannonsPerSide) && right == true)
-            {
-                _currentCannnonsNumberRight++;
-            }
-            this.RpcAddCannons( left, right);
-        }
 
-        [ClientRpc]
-        public void RpcAddCannons( bool left , bool right)
-        {
-            if ((_currentCannnonsNumberLeft < _maxCannonsPerSide) && left == true)
-            {
-                _currentCannnonsNumberLeft++;
-            }
-            if ((_currentCannnonsNumberRight < _maxCannonsPerSide) && right == true)
-            {
-                _currentCannnonsNumberRight++;
-            }
-        }
 
 
         [Command]
         public void CmdSetUpBoat(GameObject player)
         {
-
+            
             this.gameObject.transform.SetParent(player.transform);
             //this.transform.localPosition = new Vector3(0, 0, 0);
             _controller = player.GetComponent<Controller>();
 
+            player.GetComponent<Player>().SetDataBoat(this);
             TargetSetParent(player.GetComponent<Player>().connectionToClient, player.gameObject);
+
 
             /// <summary>
             /// TEST SEB
             /// </summary>
-            for (int i =0;i< _larboardCannons.Count;i++)
+            this.SetActiveCannons();
+
+            this.RpcUpdateActiveCannons();
+            // END TEST SEB //
+        }
+
+        /// <summary>
+        /// TEST SEB
+        /// </summary>
+        [Command]
+        public void CmdAddCannons(bool left, bool right)
+        {
+
+            if ((_data_Boat.CurrentCanonLeft < _data_Boat.MaxCanonPerSide) && left == true)
             {
-                if(i<_currentCannnonsNumberLeft)
+                _data_Boat.CurrentCanonLeft++;
+            }
+            if ((_data_Boat.CurrentCanonRight < _data_Boat.MaxCanonPerSide) && right == true)
+            {
+                _data_Boat.CurrentCanonRight++;
+            }
+            this.RpcAddCannons(left, right);
+        }
+
+        [ClientRpc]
+        public void RpcAddCannons(bool left, bool right)
+        {
+            if ((_data_Boat.CurrentCanonLeft < _data_Boat.MaxCanonPerSide) && left == true)
+            {
+                _data_Boat.CurrentCanonLeft++;
+            }
+            if ((_data_Boat.CurrentCanonRight < _data_Boat.MaxCanonPerSide) && right == true)
+            {
+                _data_Boat.CurrentCanonRight++;
+            }
+        }
+
+
+        public void SetActiveCannons()
+        {
+            for (int i = 0; i < _larboardCannons.Count; i++)
+            {
+                if (i < _data_Boat.CurrentCanonLeft)
                 {
                     _larboardCannons[i].gameObject.SetActive(true);
                 }
@@ -312,7 +334,7 @@ namespace ProjetPirate.Boat
 
             for (int i = 0; i < _starboardCannons.Count; i++)
             {
-                if (i < _currentCannnonsNumberRight)
+                if (i < _data_Boat.CurrentCanonRight)
                 {
                     _starboardCannons[i].gameObject.SetActive(true);
                 }
@@ -321,9 +343,6 @@ namespace ProjetPirate.Boat
                     _starboardCannons[i].gameObject.SetActive(false);
                 }
             }
-
-            this.RpcUpdateActiveCannons();
-            // END TEST SEB //
         }
 
         [TargetRpc]
@@ -332,6 +351,8 @@ namespace ProjetPirate.Boat
             this.gameObject.transform.SetParent(player.transform);
             //this.transform.localPosition = new Vector3(0, 0, 0);
             _controller = player.GetComponent<Controller>();
+            player.GetComponent<Player>().SetDataBoat(this);
+
         }
 
         /// <summary>
@@ -340,30 +361,7 @@ namespace ProjetPirate.Boat
         [Command]
         public void CmdUpdateActiveCanons()
         {
-
-            for (int i = 0; i < _larboardCannons.Count; i++)
-            {
-                if (i < _currentCannnonsNumberLeft)
-                {
-                    _larboardCannons[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    _larboardCannons[i].gameObject.SetActive(false);
-                }
-            }
-
-            for (int i = 0; i < _starboardCannons.Count; i++)
-            {
-                if (i < _currentCannnonsNumberRight)
-                {
-                    _starboardCannons[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    _starboardCannons[i].gameObject.SetActive(false);
-                }
-            }
+            SetActiveCannons();
             RpcUpdateActiveCannons();
         }
 
@@ -372,31 +370,7 @@ namespace ProjetPirate.Boat
         [ClientRpc]
         public void RpcUpdateActiveCannons()
         {
-
-
-            for (int i = 0; i < _larboardCannons.Count; i++)
-            {
-                if (i < _currentCannnonsNumberLeft)
-                {
-                    _larboardCannons[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    _larboardCannons[i].gameObject.SetActive(false);
-                }
-            }
-
-            for (int i = 0; i < _starboardCannons.Count; i++)
-            {
-                if (i < _currentCannnonsNumberRight)
-                {
-                    _starboardCannons[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    _starboardCannons[i].gameObject.SetActive(false);
-                }
-            }
+            SetActiveCannons();
         }
 
 
@@ -404,31 +378,7 @@ namespace ProjetPirate.Boat
         [TargetRpc]
         public void TargetUpdateActiveCannons(NetworkConnection target)
         {
-
-
-            for (int i = 0; i < _larboardCannons.Count; i++)
-            {
-                if (i < _currentCannnonsNumberLeft)
-                {
-                    _larboardCannons[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    _larboardCannons[i].gameObject.SetActive(false);
-                }
-            }
-
-            for (int i = 0; i < _starboardCannons.Count; i++)
-            {
-                if (i < _currentCannnonsNumberRight)
-                {
-                    _starboardCannons[i].gameObject.SetActive(true);
-                }
-                else
-                {
-                    _starboardCannons[i].gameObject.SetActive(false);
-                }
-            }
+            SetActiveCannons();
         }
 
         // END TEST SEB //

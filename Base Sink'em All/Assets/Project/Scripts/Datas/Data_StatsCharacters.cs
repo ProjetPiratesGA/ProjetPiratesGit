@@ -7,7 +7,7 @@ namespace ProjetPirate.Data
     [System.Serializable]
     public class Data_StatsCharacters
     {
-        private int life = 0;
+        private int life = 100;
         private float speed = 0;
         Dictionary<int, int> damageReceived = new Dictionary<int, int>();
 
