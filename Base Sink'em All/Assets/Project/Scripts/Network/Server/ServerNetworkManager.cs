@@ -493,7 +493,22 @@ namespace Project.Network
 
         public void SaveServer()
         {
-            Debug.Log("Save Server !");
+            Debug.LogError("Save Server !");
+            for (int i = 0; i < data.ClientRegistered.Count; i++)
+            {
+                if(data.ClientRegistered[i].Player != null)
+                {
+                    Debug.LogError("Player data : " + data.ClientRegistered[i].Username + " , Gold : " + data.ClientRegistered[i].Player.dRessource.Golds);
+                    //if(data.ClientRegistered[i].Player.Boat != null )
+                    //{
+                    //    Debug.LogError("Boat CLeft : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft + " , Boat CRight : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft);
+                    //}
+                    //else
+                    //{
+                    //    Debug.LogError("NO BOAT DATA !!");
+                    //}
+                }
+            }
             SaveSystem.SaveServer(data);
         }
     }

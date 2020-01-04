@@ -33,6 +33,10 @@ public class Player : Controller {
     [SyncVar]
     public bool _isConnected;
 
+    //DEBUG SEB
+    private float _debugLogDisplayTimer = 0;
+
+
     public Data_Player _data
     {
         get { return data; }
@@ -96,7 +100,35 @@ public class Player : Controller {
         {
             //Debug.Log("Client | Identifiant : " + _data._identifiant + "  Password : " + _data._password);
         }
+
+        ///DEBUG SEB 0401
+        if(isLocalPlayer)
+        {
+            if (Input.GetKeyDown(KeyCode.F10))
+            {
+                _data.dRessource.Golds += 10;
+            }
+
+            _debugLogDisplayTimer += Time.deltaTime;
+
+            if(_debugLogDisplayTimer > 2.0f)
+            {
+                _debugLogDisplayTimer = 0;
+                CmdSendDebug(_data.dRessource.Golds);
+            }
+        }
+        ///FIN DEBUG
     }
+
+
+    ///DEBUG SEB 0401
+    [Command]
+    public void CmdSendDebug(int goldValue)
+    {
+        Debug.LogError("Gold : " + goldValue);
+    }
+    ///FIN DEBUG
+    
 
     // Player Data
     /// <summary>
