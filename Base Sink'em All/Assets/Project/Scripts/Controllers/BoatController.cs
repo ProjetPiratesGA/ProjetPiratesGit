@@ -146,7 +146,7 @@ namespace ProjetPirate.Boat
 
             _verticalInput = _playerController.GetJoystickInput().y;
             _horizontalInput = _playerController.GetJoystickInput().x;
-            Debug.Log("_verticalInput : " + _playerController.GetJoystickInput().y + " _horizontalInput : " + _playerController.GetJoystickInput().x);
+           // Debug.Log("_verticalInput : " + _playerController.GetJoystickInput().y + " _horizontalInput : " + _playerController.GetJoystickInput().x);
             _boatCharacter.PerformMovement(_playerController.GetJoystickInput().y, _playerController.GetJoystickInput().x);
         }
 

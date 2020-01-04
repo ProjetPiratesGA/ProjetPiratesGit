@@ -16,13 +16,6 @@ namespace ProjetPirate.Data
             y = _y;
             z = _z;
         }
-
-        public myVector3(Color _color)
-        {
-            x = _color.r;
-            y = _color.g;
-            z = _color.b;
-        }
         public float x { get; set; }
         public float y { get; set; }
         public float z { get; set; }
@@ -32,8 +25,6 @@ namespace ProjetPirate.Data
 
     public static class Data_Tools
     {
-        private static string Applicationpath = System.Environment.CurrentDirectory +"/Assets";
-
         public static int[] StringToIntASCII(string pString)
         {
             char[] charValue = pString.ToCharArray();
@@ -84,7 +75,7 @@ namespace ProjetPirate.Data
         public static Data_Quests DecryptingQuest(int IDquest)
         {
             Data_Quests quest = new Data_Quests();
-            string path = Applicationpath + "/Datas/Questes/" + IDquest + ".txt";
+            string path = MonoData_Tools.pathHDDQuestes + IDquest ;
             if (File.Exists(path))
             {
                 int count = 0;
@@ -98,8 +89,9 @@ namespace ProjetPirate.Data
                         quest.ItemNecessary = FindNameObjectByID(Int32.Parse(_text));
                     else if (count == 2)
                         quest.ItemCount = Int32.Parse(_text);
-                    else if (count >= 3)
+                    else if (count == 3)
                     {
+                        Debug.LogWarning("TExtQuest: " + _text);
                         quest.TextQuest = FindDialogueByID(Int32.Parse(_text));
                     }
                     count++;
@@ -107,13 +99,15 @@ namespace ProjetPirate.Data
                 stream.Close();
                 return quest;
             }
+            else
+                Debug.LogWarning("Quest doesn't exist in path " + path);
             return null;
         }
 
         public static Data_Dock DecriptingDock(int idDock)
         {
             Data_Dock dock = null;
-            string path = Applicationpath + "/Datas/Docks/" + idDock + ".txt";
+            string path = MonoData_Tools.pathHDDDock + idDock;
             if (File.Exists(path))
             {
                 StreamReader stream = new StreamReader(path);
@@ -129,7 +123,7 @@ namespace ProjetPirate.Data
         {
             Data_Quests quest = null;
 
-            string path = Applicationpath + "/Datas/Questes/" + IDquest + ".txt";
+            string path = MonoData_Tools.pathHDDQuestes + IDquest;
             if (File.Exists(path))
             {
                 quest.ID = IDquest;
@@ -152,7 +146,7 @@ namespace ProjetPirate.Data
         public static Data_Pnj FindPnj(string pName)
         {
             Data_Pnj pnj = new Data_Pnj();
-            string path = Applicationpath + "/Datas/Pnj/" + pName + ".txt";
+            string path = MonoData_Tools.pathHDDPnj + pName;
             if (File.Exists(path))
             {
                 int count = 0;
@@ -174,6 +168,7 @@ namespace ProjetPirate.Data
                     {
                         if (pnj.HaveQuest)
                         {
+                            Debug.LogWarning("QuestId: " + _text);
                             pnj.QuestId = StringToIntExact(_text);
                             pnj.Quete = DecryptingQuest(pnj.QuestId);
                             pnj.DialogueQuete = pnj.Quete.TextQuest;
@@ -199,14 +194,14 @@ namespace ProjetPirate.Data
                 stream.Close();
             }
             else
-                Debug.Log("File dosen't exist!");
+                Debug.LogWarning("File dosen't exist at " + path);
 
             return pnj;
         }
 
         public static string FindIdObjectByName(string objectName)
         {
-            string path = Applicationpath + "/Datas/Objects/Objects.txt";
+            string path = MonoData_Tools.pathHDDbject + "Objects";
             ///Si le fichier existe bien alors
             if (File.Exists(path))
             {
@@ -243,7 +238,7 @@ namespace ProjetPirate.Data
 
         public static string FindNameObjectByID(int objectID)
         {
-            string path = Applicationpath + "/Datas/Objects/Objects.txt";
+            string path = MonoData_Tools.pathHDDbject +"/Objects";
             ///Si le fichier existe bien alors
             if (File.Exists(path))
             {
@@ -282,7 +277,7 @@ namespace ProjetPirate.Data
         public static string FindDialogueByID(int IdDialogue)
         {
             string dialogue = null;
-            string path = Applicationpath + "/Datas/Dialogue/" + IdDialogue + ".txt";
+            string path = MonoData_Tools.pathHDDDialogues + IdDialogue;
             if (File.Exists(path))
             {
                 StreamReader stream = new StreamReader(path);

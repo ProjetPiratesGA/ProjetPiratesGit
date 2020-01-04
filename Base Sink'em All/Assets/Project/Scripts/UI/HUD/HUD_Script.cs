@@ -224,7 +224,7 @@ namespace ProjetPirate.UI.HUD
                 }
                 else
                 {
-                    Debug.Log("On ne touche rien");
+                    //Debug.Log("On ne touche rien");
                 }
             }
 #elif UNITY_ANDROID

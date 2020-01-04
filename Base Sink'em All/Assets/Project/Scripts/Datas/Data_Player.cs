@@ -15,14 +15,14 @@ namespace ProjetPirate.Data
             set { player_ID = value; }
         }
 
-        public Data_Player(int _clientID = -1)
+        public Data_Player()
+        {
+
+        }
+
+        public Data_Player (int _clientID)
         {
             player_ID = _clientID;
-            resources.Golds = 5000;
-            resources.Reputation = 1500;
-            resources.WoodBoard = 300;
-            Debug.Log("pLAYER CONSTRUCTOR : " + player_ID + " " + resources.Golds + " " + resources.Reputation + " " + resources.WoodBoard);
-            Boat = new Data_Boat(_clientID);
         }
 
         private Data_Resources resources = new Data_Resources();

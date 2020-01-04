@@ -10,7 +10,7 @@ public class CannonBall : MonoBehaviour
     private Rigidbody _rigidbody;
 
     private float _force;
-    private int _damage = 1;
+    private int _damage = 10;
     //private float _distMax = 10f;
     //private float _currentDist = 0f;
     private Vector3 _targetPosition;

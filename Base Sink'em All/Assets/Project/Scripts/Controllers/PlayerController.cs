@@ -9,7 +9,7 @@ namespace ProjetPirate.Controllers
 {
     public class PlayerController : MonoBehaviour
     {
-        [Header("MOVMENT")]
+        [Header("MOVEMENT")]
         public GameObject _joystick;
 
         [Header("SHOOT")]

@@ -109,7 +109,7 @@ namespace Project.Network
         public override void OnStartServer()
         {
             Debug.Log("On Start Server : Reinitialisation Account is used");
-
+            SaveSystem.InitHDDFolder();            
             data = SaveSystem.LoadServer();
             for (int j = 0; j < data.ClientRegistered.Count; j++)
             {

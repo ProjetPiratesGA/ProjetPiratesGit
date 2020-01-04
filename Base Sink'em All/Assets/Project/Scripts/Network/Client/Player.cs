@@ -12,9 +12,14 @@ using ProjetPirate.Data;
 using ProjetPirate.Boat;
 
 public class Player : Controller {
+    
+    // A virer test de pos respawn lier a l'ile
+    private Ile myIle;
 
     [SerializeField]
     GameObject _boatPrefab = null;
+
+    GameObject boatInstance;
 
     private Data_Player data;
 
@@ -69,6 +74,8 @@ public class Player : Controller {
                 Debug.LogError("IN SPAWN BOAT");
                 _asBoatSpawned = true;
                 CmdSpawnBoat();
+                
+                myIle = FindObjectOfType<Ile>();               
             }
         }
 
@@ -151,7 +158,7 @@ public class Player : Controller {
         //Get spawn point from network manager
         Transform spawnTransform = NetworkManager.singleton.GetStartPosition();
         //instanciate a new boat
-        GameObject boatInstance = Instantiate(_boatPrefab, spawnTransform.position, spawnTransform.rotation);
+        boatInstance = Instantiate(_boatPrefab, spawnTransform.position, spawnTransform.rotation);
         //Set the new instance as chil of player (server side only)
         boatInstance.transform.SetParent(this.gameObject.transform);
         //Set the reference to the player for the new boat (server side only)
@@ -160,6 +167,7 @@ public class Player : Controller {
         boatInstance.tag = "myBoat";
         //Get the boat list form the network manager
         List<BoatController> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().boatList;
+
         //Add the new boat instance to the list
         tempList.Add(boatInstance.GetComponent<BoatController>());
         //spawn this new boat with player autorithy
@@ -254,5 +262,14 @@ public class Player : Controller {
 
             Debug.Log("Data Entering on Game is NULL");
         }
+    }
+
+    public override void Disappear()
+    {
+        if (boatInstance == null)
+            boatInstance = GetComponentInChildren<BoatCharacter>().gameObject;
+        
+        boatInstance.transform.position = myIle._posRespawnBoat.position;
+        boatInstance.transform.rotation = myIle._posRespawnBoat.rotation;
     }
 }
