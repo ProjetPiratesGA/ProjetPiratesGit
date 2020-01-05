@@ -921,7 +921,7 @@ namespace ProjetPirate.Boat
         private void AccelerateRotation()
         {
             _currentAngularSpeed += _accelerationSpeedRotation * Time.deltaTime;
-            Debug.Log("AccelerateRotation : _currentAngularSpeed  " + _currentAngularSpeed + " _accelerationSpeedRotation : " + _accelerationSpeedRotation);
+            //Debug.Log("AccelerateRotation : _currentAngularSpeed  " + _currentAngularSpeed + " _accelerationSpeedRotation : " + _accelerationSpeedRotation);
             if (_currentAngularSpeed > _maxAngularSpeed)
             {
                 _currentAngularSpeed = _maxAngularSpeed;
@@ -998,7 +998,7 @@ namespace ProjetPirate.Boat
         {
             if (_isMovingForward)
             {
-                Debug.Log("TurnLarboard : _isMovingForward --> " + _isMovingForward);
+                //Debug.Log("TurnLarboard : _isMovingForward --> " + _isMovingForward);
                 this.transform.Rotate(0, -_maxAngularSpeed * Time.deltaTime, 0);
             }
         }
@@ -1010,7 +1010,7 @@ namespace ProjetPirate.Boat
         {
             if (_isMovingForward)
             {
-                Debug.Log("TurnLarboard : _isMovingForward --> " + _isMovingForward);
+                //Debug.Log("TurnLarboard : _isMovingForward --> " + _isMovingForward);
                 this.transform.Rotate(0, +_maxAngularSpeed * Time.deltaTime, 0);
             }
         }

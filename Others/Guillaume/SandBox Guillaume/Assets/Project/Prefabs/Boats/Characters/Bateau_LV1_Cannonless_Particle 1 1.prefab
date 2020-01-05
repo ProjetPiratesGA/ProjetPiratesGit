@@ -183,9 +183,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4042352908249720}
-  - component: {fileID: 114005799861834270}
-  - component: {fileID: 111131560963857230}
+  - component: {fileID: 114876058967573160}
   - component: {fileID: 95557073633889946}
+  - component: {fileID: 114005799861834270}
   m_Layer: 0
   m_Name: Player_Ship_Lv1
   m_TagString: Untagged
@@ -596,7 +596,7 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1850438952872728}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 99a6758f596d5904385e9c977ff8a6a4, type: 2}
   m_CullingMode: 0
@@ -607,20 +607,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!111 &111131560963857230
-Animation:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1850438952872728}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 7a5369b53db3e704e82913e2859f32e0, type: 2}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!114 &114005799861834270
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -843,6 +829,24 @@ MonoBehaviour:
   _isRotatingLarboard: 0
   _isRotatingStarboard: 0
   _isRotating: 0
+--- !u!114 &114876058967573160
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1850438952872728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7265abfca2f867644a3e48a016c20427, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Do_Roll_Idle_Z: 0
+  _Do_Roll_Larboard_Z: 0
+  _Do_Roll_Starboard_Z: 0
+  _Do_Center_To_Larboard: 0
+  _Do_Center_To_Starboard_Z: 0
+  _Do_Larboard_To_Center_Z: 0
+  _Do_Starboard_To_Center_Z: 0
 --- !u!136 &136380639261424386
 CapsuleCollider:
   m_ObjectHideFlags: 1

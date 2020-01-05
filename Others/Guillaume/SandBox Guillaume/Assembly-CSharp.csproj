@@ -95,6 +95,7 @@
     <Compile Include="Assets\Project\Scripts\Datas\SaveSystem.cs" />
     <Compile Include="Assets\Project\Scripts\Datas\ServerData.cs" />
     <Compile Include="Assets\Project\Scripts\Gameplay\Boat\AnimationBoat.cs" />
+    <Compile Include="Assets\Project\Scripts\Gameplay\Boat\AnimationBoatForAnimator.cs" />
     <Compile Include="Assets\Project\Scripts\Gameplay\Boat\Boat_Structure.cs" />
     <Compile Include="Assets\Project\Scripts\Gameplay\Boat\BoatCharacter.cs" />
     <Compile Include="Assets\Project\Scripts\Gameplay\Boat\BoatController.cs" />
