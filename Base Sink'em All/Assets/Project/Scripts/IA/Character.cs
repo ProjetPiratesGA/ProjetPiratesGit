@@ -145,6 +145,9 @@ namespace ProjetPirate.IA
             //    _controller.GetComponent<Shark_Controller>().ResetTime();
             //}
             _data.Life -= _damage;
+            this.CmdSetLife(_data.Life);
+
+
             if (_data.Life <= 0)
             {
                 Death();
@@ -152,6 +155,13 @@ namespace ProjetPirate.IA
             }
             return 0;
         }
+
+        [Command]
+        public void CmdSetLife(int life)
+        {
+            _data.Life = life;
+        }
+
 
         public virtual void Death()
         {

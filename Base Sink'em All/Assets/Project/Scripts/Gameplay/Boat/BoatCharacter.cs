@@ -54,6 +54,8 @@ namespace ProjetPirate.Boat
     {
         private Data_Boat _data_Boat = new Data_Boat();
 
+        [SerializeField] private ShipType _shipType;
+
         //Components
         private Rigidbody _rigidbody;
         private AttractObject _attractObject;
@@ -150,7 +152,11 @@ namespace ProjetPirate.Boat
         //int _currentCannnonsNumberLeft = 1;
         //int _currentCannnonsNumberRight = 1;
         // END TEST SEB //
+        [SerializeField] private List<Transform> _larboardCannonPositions;
+        [SerializeField] private List<Transform> _starboardCannonPositions;
 
+        [SerializeField] private GameObject _larboardCannonPrefab;
+        [SerializeField] private GameObject _starboardCannonPrefab;
 
         [SerializeField] private float _shootCooldown;
 
@@ -161,12 +167,41 @@ namespace ProjetPirate.Boat
         private float _currentLarboardShootCooldownTime = 0;
         private float _currentStarboardShootCooldownTime = 0;
 
-        [SerializeField] private GameObject _larboardCannonPrefab;
-        [SerializeField] private GameObject _starboardCannonPrefab;
+
+        [SerializeField]
+        private float _weakenedStateLifeRatio = 0.5f;
+        [SerializeField]
+        private float _endangeredStateLifeRatio = 0.1f;
+        public StructureState _structureState;
+
+        [SerializeField] public GameObject _droppedPlank;
+        [SerializeField] public GameObject _droppedChest;
+
+        private bool _goldFXIsPlaying = false;
+        private Vector3 _goldFXStartPosition;
+        private Vector3 _goldFXEndPosition;
+        private float _goldFXCurrentTime = 0;
+
+        public bool Safe = false;
+
+        public ShipType ShipType
+        {
+            get { return _shipType; }
+        }
 
         public Data_Boat Data
         {
             get { return _data_Boat; }
+        }
+
+        public float StoppingDistance
+        {
+            get { return _stoppingDistance; }
+        }
+
+        public float Deceleration
+        {
+            get { return _decelerationSpeedForward; }
         }
 
         public List<Cannon> larboardCannons
@@ -184,7 +219,20 @@ namespace ProjetPirate.Boat
         {
             get { return _defaultCannonNumberBySide; }
         }
+        public List<Transform> LarboardCannonPositions
+        {
+            get { return _larboardCannonPositions; }
+        }
 
+        public GameObject DroppedChest
+        {
+            get { return _droppedChest; }
+        }
+
+        public List<Transform> StarboardCannonPositions
+        {
+            get { return _starboardCannonPositions; }
+        }
 
         public float getShootCoolDown()
         {
@@ -205,7 +253,7 @@ namespace ProjetPirate.Boat
         {
             _data_Boat.Stats = _data;
 
-            _data.Life = _maxLifePoint;
+            //_data.Life = _maxLifePoint;
 
             _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
             _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
@@ -807,6 +855,18 @@ namespace ProjetPirate.Boat
             return _maxAngularSpeed;
         }
 
+        public int getCurrentXp()
+        {
+            if (_controller.GetComponent<Player>() != null)
+            {
+                return (int)_controller.GetComponent<Player>()._data.dRessource.Reputation;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
         //public float getShootCoolDown()
         //{
         //    return _shootCooldown;
@@ -829,5 +889,10 @@ namespace ProjetPirate.Boat
         //}
 
         #endregion ACCESSORS
+
+        public void SetUpBoat(Ship_Controller pController)
+        {
+            _controller = pController;
+        }
     }
 }

@@ -25,7 +25,8 @@ namespace ProjetPirate.Data
 
         public Data_Player Player
         {
-            get { return data_Player; } /*set { data_Player = value; }*/
+            get { return data_Player; }
+            set { data_Player = value; }
         }
 
         public ClientData(string _username, int cryptedPassword, int IdFromData)

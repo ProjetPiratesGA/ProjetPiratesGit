@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using ProjetPirate.Boat;
 //using ProjetPirate.Boat;
 
 namespace ProjetPirate.UI.HUD
@@ -38,6 +39,10 @@ namespace ProjetPirate.UI.HUD
         public int maxhp = 50;
 
         private GameObject _player;//On récupère le player afin que le controller possede ses info 
+        
+        private Player _playerScript = null;/// SEB
+        
+
         private GameObject _otherPlayer;
         private float maxLifeBarSize;
         //Gestion des interractions avec les joueurs
@@ -47,20 +52,24 @@ namespace ProjetPirate.UI.HUD
 
         bool informationCanBeDraw = false;
 
+       
+        bool _isPlayerNameSet = false; //SEB
+
+
         // Use this for initialization
         void Start()
         {
-            _player = GameObject.FindGameObjectWithTag("Player");
+            //_player = GameObject.FindGameObjectWithTag("Player");
             //_NumberWoodenBoardValue.text = ;
 
-            UpdateGoldValue();
-            UpdateXpValue();
+            //UpdateGoldValue();
+            //UpdateXpValue();
             if (_interractionPlayer != null)
             {
                 _interractionPlayer.SetActive(false);
             }
 
-            _playerInformations.SetActive(false);
+            _playerInformations.SetActive(true);
             _otherPlayerInformations.SetActive(false);
             _confirmQuitGroup.SetActive(false);
 
@@ -68,12 +77,32 @@ namespace ProjetPirate.UI.HUD
 
         }
 
+        //TEST SEB
+        public void SetPlayerReference(GameObject player)
+        {
+            _player = player;
+            _playerScript = _player.GetComponent<Player>();
+        }
+
+
+
         // Update is called once per frame
         void Update()
         {
-            if (_player == null)
+            //if (_player == null)
+            //{
+             //   _player = GameObject.FindGameObjectWithTag("Player");
+            //}
+
+            if(_player == null)
             {
-                _player = GameObject.FindGameObjectWithTag("Player");
+                return;
+            }
+
+            if(!_isPlayerNameSet)
+            {
+                _playerName.text = _playerScript._username;
+                _isPlayerNameSet = true;
             }
 
             //Check du button Harpon afin de le desactriver si on n'en possède pas
@@ -95,16 +124,19 @@ namespace ProjetPirate.UI.HUD
 
             UpdateGoldValue();
             UpdateXpValue();
-            UpdatePlankValue();
+            //UpdatePlankValue();
 
-            if (_interractionPlayer != null)
+            //if (_interractionPlayer != null)
+            //{
+            //    CheckClickOnBoat();
+            //}
+
+            if(_player.GetComponentInChildren<BoatCharacter>())
             {
-                CheckClickOnBoat();
+                UpdateLifeBar();
             }
 
-            UpdateLifeBar();
-
-            CheckIfPlayerDocked();
+            //CheckIfPlayerDocked();
         }
 
         void UpdateGoldValue()
@@ -113,7 +145,7 @@ namespace ProjetPirate.UI.HUD
             {
                 if (_player != null)
                 {
-                    // _goldValueText.text = accesseur gold player;
+                    _goldValueText.text = _playerScript._data.dRessource.Golds.ToString();
                 }
                 else
                 {
@@ -126,15 +158,15 @@ namespace ProjetPirate.UI.HUD
         {
             if (_XpValueText != null)
             {
-                //if (_player != null)
-                //{
-                //    _XpValueText.text = _player.GetComponent<BoatCharacter>()._currentXp.ToString();
-                //}
-                //else
-                //{
-                //    _XpValueText.text = "Joueur NULL";
+                if (_player != null)
+                {
+                    _XpValueText.text = _playerScript._data.dRessource.Reputation.ToString();
+                }
+                else
+                {
+                    _XpValueText.text = "Joueur NULL";
 
-                //}
+                }
             }
         }
 
@@ -268,17 +300,39 @@ namespace ProjetPirate.UI.HUD
 
         public void UpdateLifeBar()
         {
-            //if (_player != null)
-            //{
-            //    if (_player.GetComponent<BoatCharacter>().getCurrentLife() >= 0 && _player.GetComponent<BoatCharacter>().getCurrentLife() <= _player.GetComponent<BoatCharacter>().getMaxLife())
-            //        lifeBar.GetComponent<RectTransform>().sizeDelta = new Vector2((maxLifeBarSize / _player.GetComponent<BoatCharacter>().getMaxLife()) * _player.GetComponent<BoatCharacter>().getCurrentLife(), lifeBar.GetComponent<RectTransform>().sizeDelta.y);
-            //}
-            //else
-            //{
-            //    if (hp >= 0 && hp <= maxhp)
-            //        lifeBar.GetComponent<RectTransform>().sizeDelta = new Vector2((maxLifeBarSize / maxhp) * hp, lifeBar.GetComponent<RectTransform>().sizeDelta.y);
+            if (_player != null)
+            {
+                BoatCharacter boatChar = _player.GetComponentInChildren<BoatCharacter>();
+                if(boatChar == null)
+                {
+                    Debug.LogError("Boatchar is null");
+                    Debug.Break();
+                }
+                //if (boatChar.getCurrentLife() == null)
+                //{
+                //    Debug.LogError("Boatchar is null");
+                //    Debug.Break();
+                //}
+                //if (boatChar.getMaxLife() == null)
+                //{
+                //    Debug.LogError("Boatchar is null");
+                //    Debug.Break();
+                //}
+                if (boatChar.getCurrentLife() >= 0 && boatChar.getCurrentLife() <= boatChar.getMaxLife())
+                {
+                    //Debug.LogError("Life : " + boatChar.getCurrentLife());
+                    //Debug.LogError("before : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
+                    lifeBar.GetComponent<RectTransform>().sizeDelta = new Vector2((maxLifeBarSize / boatChar.getMaxLife()) * boatChar.getCurrentLife(), lifeBar.GetComponent<RectTransform>().sizeDelta.y);
+                    //Debug.LogError("after : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
+                    //Debug.Break();
+                }
+            }
+            else
+            {
+                if (hp >= 0 && hp <= maxhp)
+                    lifeBar.GetComponent<RectTransform>().sizeDelta = new Vector2((maxLifeBarSize / maxhp) * hp, lifeBar.GetComponent<RectTransform>().sizeDelta.y);
 
-            //}
+            }
         }
 
 
