@@ -253,7 +253,7 @@ namespace ProjetPirate.Boat
         {
             _data_Boat.Stats = _data;
 
-            _data.Life = _maxLifePoint;
+            //_data.Life = _maxLifePoint;
 
             _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
             _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;

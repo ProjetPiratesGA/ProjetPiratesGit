@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(Rigidbody))]
-public class CannonBall : MonoBehaviour
+public class CannonBall : NetworkBehaviour
 {
 
     private Rigidbody _rigidbody;
@@ -110,6 +111,7 @@ public class CannonBall : MonoBehaviour
                 Debug.Log("Hit boat");
 
                 collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().Damage(_damage, this.transform);
+                //this.CmdDamage(collision.gameObject);
                 /*if (collision.gameObject.GetComponent<projetpirate.ia.ship_controller>() != null)
                 {
                     collision.gameobject.getcomponent<projetpirate.ia.ship_controller>().alertfromshoot(_owner.gameobject);
@@ -126,5 +128,11 @@ public class CannonBall : MonoBehaviour
             }
             destroy(this.gameobject);
         }*/
+    }
+
+    [Command]
+    private void CmdDamage(GameObject collision)
+    {
+        collision.GetComponent<ProjetPirate.Boat.BoatCharacter>().Damage(_damage, this.transform);
     }
 }

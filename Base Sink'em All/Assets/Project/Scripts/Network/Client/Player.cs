@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 
 using ProjetPirate.Data;
 using ProjetPirate.Boat;
+using ProjetPirate.UI.HUD;
 
 public class Player : Controller {
     
@@ -39,6 +40,8 @@ public class Player : Controller {
     float timeSinceLastSetData;
     float timeLastSetData;
 
+    private HUD_Script _myhUD = null;
+
     #region IA
 
     [SerializeField] [Range(1, 3)] private int _shipLevel = 1;
@@ -57,6 +60,13 @@ public class Player : Controller {
 
     #endregion
 
+    public bool asBoatSpawned
+    {
+        get { return _asBoatSpawned; }
+    }
+
+
+
     public Data_Player _data
     {
         get { return data; }
@@ -69,7 +79,6 @@ public class Player : Controller {
         {
             Debug.Log("Init Player");
         }
-        
         data = new Data_Player();
         DontDestroyOnLoad(this);
     }
@@ -108,10 +117,13 @@ public class Player : Controller {
         {
             if(SceneManager.GetActiveScene().name == "Game")
             {
-                Debug.LogError("IN SPAWN BOAT");
+                //Debug.LogError("IN SPAWN BOAT");
                 _asBoatSpawned = true;
                 CmdSpawnBoat();
-                
+                //TEST SEB
+                _myhUD = FindObjectOfType<HUD_Script>();
+                _myhUD.SetPlayerReference(this.gameObject);
+                //END TEST
                 myIle = FindObjectOfType<Ile>();               
             }
         }
@@ -140,6 +152,7 @@ public class Player : Controller {
             if (Input.GetKeyDown(KeyCode.F10))
             {
                 _data.dRessource.Golds += 10;
+                CmdUpdateDataGold();
             }
 
             _debugLogDisplayTimer += Time.deltaTime;
@@ -156,9 +169,16 @@ public class Player : Controller {
 
     ///DEBUG SEB 0401
     [Command]
+    public void CmdUpdateDataGold()
+    {
+        _data.dRessource.Golds += 10;
+    }
+
+
+    [Command]
     public void CmdSendDebug(int goldValue)
     {
-        Debug.LogError("Gold : " + goldValue);
+        //Debug.LogError("Gold : " + goldValue);
     }
     ///FIN DEBUG
     
@@ -218,7 +238,7 @@ public class Player : Controller {
     [Command]
     public void CmdSpawnBoat()
     {
-        Debug.LogError("IN SERVER SPAWN BOAT");
+        //Debug.LogError("IN SERVER SPAWN BOAT");
 
         //Get spawn point from network manager
         Transform spawnTransform = NetworkManager.singleton.GetStartPosition();
