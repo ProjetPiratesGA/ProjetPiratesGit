@@ -15,6 +15,8 @@ namespace Project.Network
         private List<BoatController> _boatList = new List<BoatController>();
         private List<Player> _playerList = new List<Player>();
 
+        private List<GameObject> _enemyList = new List<GameObject>();
+
         public List<BoatController> boatList
         {
             get { return _boatList; }
@@ -25,6 +27,12 @@ namespace Project.Network
         {
             get { return _playerList; }
             set { _playerList = value; }
+        }
+
+        public List<GameObject> enemyList
+        {
+            get { return _enemyList; }
+            set { _enemyList = value; }
         }
 
         Data_server data = new Data_server();
@@ -95,6 +103,9 @@ namespace Project.Network
         public Data_Player tmpDataBufferPlayerEnterOnGame;
         public byte[] byteDataUpdatePlayerEnterOnGame;
 
+        public Data_Player tmpDataBufferUpdatePlayerEveryTime;
+        public byte[] byteDataUpdatePlayerEveryTime;
+
         void Start()
         {
             RegisterHandlers();
@@ -105,11 +116,13 @@ namespace Project.Network
         {
             SendErrorLoginRegister();
             SaveServerEvery(1);
+            SetDataToClient();
+
         }
         public override void OnStartServer()
         {
             Debug.Log("On Start Server : Reinitialisation Account is used");
-            SaveSystem.InitHDDFolder();            
+            SaveSystem.InitHDDFolder();
             data = SaveSystem.LoadServer();
             for (int j = 0; j < data.ClientRegistered.Count; j++)
             {
@@ -165,7 +178,7 @@ namespace Project.Network
                     }
                     for (int k = 0; k < _boatList.Count; k++)
                     {
-                        if(_boatList[k].player.connectionToClient == conn)
+                        if (_boatList[k].player.connectionToClient == conn)
                         {
                             _boatList.Remove(_boatList[k]);
                             break;
@@ -481,6 +494,26 @@ namespace Project.Network
             }
         }
 
+        public void SetDataToClient()
+        {
+
+            for (int i = 0; i < _playerList.Count; i++)
+            {
+
+                for (int j = 0; j < data.ClientRegistered.Count; j++)
+                {
+                    if (data.ClientRegistered[j].Username == _playerList[i]._username)
+                    {
+                        byteDataUpdatePlayerEveryTime = formateToByte(data.ClientRegistered[j].Player);
+
+                        Debug.Log("Load Data Every Time -> Set isSetData : " + i);
+
+                    }
+                }
+
+            }
+        }
+
         public bool ThereIsAccountUsed()
         {
             for (int i = 0; i < data.ClientRegistered.Count; i++)
@@ -493,10 +526,12 @@ namespace Project.Network
 
         public void SaveServer()
         {
+            SetDataServer();
+
             Debug.LogError("Save Server !");
             for (int i = 0; i < data.ClientRegistered.Count; i++)
             {
-                if(data.ClientRegistered[i].Player != null)
+                if (data.ClientRegistered[i].Player != null)
                 {
                     Debug.LogError("Player data : " + data.ClientRegistered[i].Username + " , Gold : " + data.ClientRegistered[i].Player.dRessource.Golds);
                     //if(data.ClientRegistered[i].Player.Boat != null )
@@ -510,6 +545,20 @@ namespace Project.Network
                 }
             }
             SaveSystem.SaveServer(data);
+        }
+
+        void SetDataServer()
+        {
+            for (int i = 0; i < _playerList.Count; i++)
+            {
+                for (int j = 0; j < data.ClientRegistered.Count; j++)
+                {
+                    if (data.ClientRegistered[j].Username == _playerList[i]._username)
+                    {
+                        data.ClientRegistered[j].Player = _playerList[i]._data;
+                    }
+                }
+            }
         }
     }
 }

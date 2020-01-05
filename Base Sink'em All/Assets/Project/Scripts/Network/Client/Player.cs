@@ -36,6 +36,26 @@ public class Player : Controller {
     //DEBUG SEB
     private float _debugLogDisplayTimer = 0;
 
+    float timeSinceLastSetData;
+    float timeLastSetData;
+
+    #region IA
+
+    [SerializeField] [Range(1, 3)] private int _shipLevel = 1;
+    [SerializeField] private List<GameObject> _structuresPerLevel;
+
+    [SerializeField] public int _maxXp = 10000; // max XP
+    public int _currentXp = 10;
+    [SerializeField] public int _maxPlank = 10000; // max XP
+    [SerializeField] public int _currentPlank;
+    [SerializeField] public int _maxMoney = 10000; // max XP
+    public int _currentMoney;
+
+    [SerializeField] public int _xpLostByDeath = 10;
+    [SerializeField] public float _goldRatiolostByDeath = 0.1f;
+    [SerializeField] Transform _respawnPoint;
+
+    #endregion
 
     public Data_Player _data
     {
@@ -71,7 +91,20 @@ public class Player : Controller {
 
     private void Update()
     {
-        if(!_asBoatSpawned && isLocalPlayer)
+
+        timeSinceLastSetData = Time.time - timeLastSetData;
+        if (isLocalPlayer)
+        {
+            if (timeSinceLastSetData >= 1)
+            {
+                timeLastSetData = Time.time;
+                //Debug.Log("Launch Set DATA COMMAND");
+                //_isSetData = false;
+                CmdLoadDataEveryTime();
+            }
+        }
+
+        if (!_asBoatSpawned && isLocalPlayer)
         {
             if(SceneManager.GetActiveScene().name == "Game")
             {
@@ -293,6 +326,49 @@ public class Player : Controller {
         {
 
             Debug.Log("Data Entering on Game is NULL");
+        }
+    }
+
+    [Command]
+    public void CmdLoadDataEveryTime()
+    {
+        Debug.Log("On Server Command Load Data for Every Time; try to set Data Resources");
+        Data_Player dataBuffer = unformateByte(NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEveryTime);
+
+        if (dataBuffer != null)
+        {
+            //Load Data
+            Debug.Log("Set data Entering on Game");
+
+            data = dataBuffer;
+
+        }
+        else
+        {
+
+            Debug.Log("Data Entering on Game is NULL");
+        }
+
+        TargetLoadDataEveryTime(this.connectionToClient, NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEveryTime);
+    }
+
+    [TargetRpc]
+    public void TargetLoadDataEveryTime(NetworkConnection target, byte[] _playerData)
+    {
+
+        Data_Player dataBuffer = unformateByte(_playerData);
+        if (dataBuffer != null)
+        {
+            //Load Data
+            //Debug.Log("Set data Every Time");
+
+            data = dataBuffer;
+
+        }
+        else
+        {
+
+            Debug.Log("Data Every Time is NULL");
         }
     }
 
