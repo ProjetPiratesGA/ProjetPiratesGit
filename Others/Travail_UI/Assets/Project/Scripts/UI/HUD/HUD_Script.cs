@@ -311,7 +311,7 @@ namespace ProjetPirate.UI.HUD
                 Debug.LogError("Vous Avez cliqué sur un autre joueur");
                
                 _interractionOtherPlayer.SetActive(true);
-                _interractionOtherPlayer.GetComponent<InterractionJoueur>().SetPlayerToFollow(_otherPlayer);
+                _interractionOtherPlayer.GetComponent<InterractionJoueur>().SetPlayerToKnow(_otherPlayer);
             }
         }
 
@@ -368,6 +368,18 @@ namespace ProjetPirate.UI.HUD
             //    if (_interactionIle.activeSelf)
             //        _interactionIle.SetActive(false);
             //}
+        }
+
+        /// <summary>
+        /// Appelé sur le onClick d'un boutton
+        /// le boutton envoie un int entre 0 et 3, il servira à parcourir le tableau du groupe afin de récupérer les informations de ce joueur
+        /// </summary>
+        /// <param name="whichMember"></param>
+        public void ClickOnGroupIcon(int whichMember)
+        {
+            //_otherPlayer = parcours tableau groupe joueur avec l ID whichMember-- > tableauGroupe[whichMember];
+
+            ActivateOtherPlayerInformation();
         }
     }
 }

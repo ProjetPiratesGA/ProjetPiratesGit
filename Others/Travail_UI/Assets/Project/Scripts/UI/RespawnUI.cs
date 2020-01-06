@@ -164,6 +164,24 @@ namespace ProjetPirate.UI
             {
                 //on ajoute un LvL
                 currentLvL += 1;
+
+                //On ajuste les plafond de valeurs (il ya un nbre max de canon par lvl)
+                if (currentLvL == 2)
+                {
+                    if (currentNumberCanon < 4)
+                    {
+                        currentNumberCanon = 4;
+                    }
+                }
+
+                if (currentLvL == 3)
+                {
+                    if (currentNumberCanon < 6)
+                    {
+                        currentNumberCanon = 6;
+                    }
+                }
+
                 //On actualise Le Coût
                 CalculatingBoatValue();
             }

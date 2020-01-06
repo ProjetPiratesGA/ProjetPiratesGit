@@ -16,6 +16,8 @@ namespace ProjetPirate.UI
         public GameObject _messageErreurNbreCanonMax;    
         public GameObject _messageErreurNbreCanonProueMax;    
         public GameObject _messageErreurLvLMax;    
+        public GameObject _messageInfoCanUpgrade;    
+
 
         [Header("TEXT")]
         public Text _goldValueInfoPlayerText;
@@ -28,7 +30,7 @@ namespace ProjetPirate.UI
         public Text _XpValueUpgradeText;
 
 
-        private GameObject _player;
+        GameObject _player;
 
         Data_Dock _dataDock;
 
@@ -41,9 +43,11 @@ namespace ProjetPirate.UI
         //Gestion Marchand 
 
         //currentValue
-        int currentLvL;
-        int currentNumberCanon;
-        int currentCanonProue;
+        int currentGold = 15000;
+        int currentXp = 1000;
+        int currentLvL = 1;
+        int currentNumberCanon = 2;
+        int currentCanonProue = 0;
         int currentBoatCost;
 
         //Max Value
@@ -51,8 +55,14 @@ namespace ProjetPirate.UI
         int maxLvL = 3;
         int maxCanonProue = 1;
 
+        //Cost Upgrade
+        int costUpgradeLvLGold;
+        int costUpgradeLvLXp;
+        int costCanon;
+        int costGoldCanonProue;
+        int costXpCanonProue;
 
-
+        bool canUpgradeCheck = false;
 
         // Use this for initialization
         void Start()
@@ -72,6 +82,9 @@ namespace ProjetPirate.UI
                 _questUI.SetActive(false);
                 _marchandUI.SetActive(true);
             }
+
+
+            UpdateCurrentValue();
         }
 
         private void OnEnable()
@@ -87,6 +100,9 @@ namespace ProjetPirate.UI
                 _questUI.SetActive(false);
                 _marchandUI.SetActive(true);
             }
+            canUpgradeCheck = false;
+
+            UpdateCurrentValue();
         }
         // Update is called once per frame
         void Update()
@@ -114,15 +130,15 @@ namespace ProjetPirate.UI
                     _messageErreurNbreCanonMax.SetActive(false);
                     _messageErreurNbreCanonProueMax.SetActive(false);
                     _messageErreurLvLMax.SetActive(false);
+                    _messageInfoCanUpgrade.SetActive(false);
                     this.GetComponent<GraphicRaycaster>().enabled = true;
                     blockInput = false;
                 }
             }
 
+            UpdateShopTextValue();
 
-
-
-            //if(accesseur lvl bateau > 1 || accesseur bateau possede canon proue == false)
+            //if(currentLvL > 1 || accesseur bateau possede canon proue == false)
             //{
             //    _buttonBuyCanonProue.SetActive(true);
             //}
@@ -131,6 +147,13 @@ namespace ProjetPirate.UI
             //    _buttonBuyCanonProue.SetActive(false);
             //}
 
+            if (_marchandUI.activeSelf)
+            {
+                if (!canUpgradeCheck)
+                {
+                    CheckIfCanUpgradeBoat();
+                }
+            }
         }
 
         public void AcceptQuest()
@@ -158,7 +181,7 @@ namespace ProjetPirate.UI
             {
                 if (_player != null)
                 {
-                    // _goldValueText.text = accesseur gold player;
+                    _goldValueInfoPlayerText.text = currentGold.ToString();
                 }
                 else
                 {
@@ -173,7 +196,7 @@ namespace ProjetPirate.UI
             {
                 if (_player != null)
                 {
-                    _XpValueInfoPlayerText.text = _player.GetComponent<BoatCharacter>()._currentXp.ToString();
+                    _XpValueInfoPlayerText.text = currentXp.ToString();
                 }
                 else
                 {
@@ -197,94 +220,166 @@ namespace ProjetPirate.UI
             // _goldValueBuyCanonText;
             // _goldValueBuyProueText;
             //_XpValueBuyProueText;
-            // _goldValueUpgradeText;
-            //_XpValueUpgradeText;
+
+            if (currentLvL == 1)
+            {
+                costUpgradeLvLGold = 10000;
+                costUpgradeLvLXp = 500;
+                _goldValueUpgradeText.text = costUpgradeLvLGold.ToString();
+                _XpValueUpgradeText.text = costUpgradeLvLXp.ToString();
+
+            }
+
+            if (currentLvL == 2)
+            {
+                costUpgradeLvLGold = 50000;
+                costUpgradeLvLXp = 2000;
+                _goldValueUpgradeText.text = costUpgradeLvLGold.ToString();
+                _XpValueUpgradeText.text = costUpgradeLvLXp.ToString();
+
+            }
+
+        }
+
+        void UpdateCurrentValue()
+        {
+            //currentGold = accesseurGoldPlayer;
+            //currentXp = accesseurXpPlayer;
+            //currentLvL = accesseurLvLPlayer;
+            //currentNumberCanon = accesseurCanonPlayer;
+            //currentCanonProue = accesseurCanonProuePlayer;
         }
 
         public void BuyCanon()
         {
             Debug.Log("Achat Canon");
+            Debug.Log(currentNumberCanon);
 
-            //if(accesseur gold player > accesseur cout canon)
-            //{
-            if (currentNumberCanon < ((maxCanon / maxLvL) * (currentLvL)))
+            if (currentGold > costCanon)
             {
+                if (currentNumberCanon < ((maxCanon / maxLvL) * (currentLvL)))
+                {
 
-                //    accesseur gold player -= accesseur canon 
-                //    fonction ajout de canon
+                    //Enlever le cout au current
+                    currentGold -= costCanon;
+
+                    //fonction ajout de canon
+                    currentNumberCanon += 1;
+
+
+
+                    UpdateCurrentValue();
+                }
+                else
+                {
+                    _messageErreurNbreCanonMax.SetActive(true);
+                    this.GetComponent<GraphicRaycaster>().enabled = false;
+                    timerBlockInput = 0;
+                    blockInput = true;
+                }
             }
             else
             {
-                //_messageErreurNbreCanonMax.SetActive(true);
-                //    this.GetComponent<GraphicRaycaster>().enabled = false;
-                //    timerBlockInput = 0;
-                //    blockInput = true;
+                _messageErreurRessources.SetActive(true);
+                this.GetComponent<GraphicRaycaster>().enabled = false;
+                timerBlockInput = 0;
+                blockInput = true;
             }
-            ////}
-            //else
-            //{
-            //    _messageErreurRessources.SetActive(true);
-            //    this.GetComponent<GraphicRaycaster>().enabled = false;
-            //    timerBlockInput = 0;
-            //    blockInput = true;
-            //}
         }
 
         public void BuyCanonProue()
         {
             Debug.Log("Achat Canon Proue");
-            //if(accesseur gold player > accesseur cout canon && accesseur xp player > accesseur Xp Canon)
-            //{
-            if (currentCanonProue < maxCanonProue && currentLvL > 1)
-            {
+            Debug.Log(currentCanonProue);
 
-                //    accesseur gold player -= accesseur canon 
-                //    fonction ajout de canon proue
+            if (currentGold > costGoldCanonProue && currentXp > costXpCanonProue)
+            {
+                if (currentCanonProue < maxCanonProue && currentLvL > 1)
+                {
+
+                    //Enlever le cout au current
+                    currentGold -= costGoldCanonProue;
+                    currentXp -= costXpCanonProue;
+
+                    // Set le current Gold et Xp au joueur
+
+
+                    //fonction ajout de canon proue
+                    currentCanonProue += 1;
+                    UpdateCurrentValue();
+                }
+                else
+                {
+                    _messageErreurNbreCanonProueMax.SetActive(true);
+                    this.GetComponent<GraphicRaycaster>().enabled = false;
+                    timerBlockInput = 0;
+                    blockInput = true;
+                }
             }
             else
             {
-                //_messageErreurNbreCanonProueMax.SetActive(true);
-                //    this.GetComponent<GraphicRaycaster>().enabled = false;
-                //    timerBlockInput = 0;
-                //    blockInput = true;
+                    _messageErreurRessources.SetActive(true);
+                    this.GetComponent<GraphicRaycaster>().enabled = false;
+                    timerBlockInput = 0;
+                    blockInput = true;
+                }
             }
-            ////}
-            //else
-            //{
-            //    _messageErreurRessources.SetActive(true);
-            //    this.GetComponent<GraphicRaycaster>().enabled = false;
-            //    timerBlockInput = 0;
-            //    blockInput = true;
-            //}
-        }
 
         public void UpgradeBoat()
         {
             Debug.Log("UpgradeBoat");
+            Debug.Log(currentLvL);
 
-            //if(accesseur gold player > accesseur cout upgrade && accesseur xp player > accesseur Xp upgrade )
-            //{
-            if (currentLvL < maxLvL)
+            if (currentGold > costUpgradeLvLGold && currentXp > costUpgradeLvLXp)
             {
+                if (currentLvL < maxLvL)
+                {
+                    //Enlever le cout au current
+                    currentGold -= costUpgradeLvLGold;
+                    currentXp -= costUpgradeLvLXp;
 
-                //    accesseur gold player -= accesseur upgrade 
-                //    fonction upgradeboat
+                    //Set le current Gold et Xp au joueur
+
+                    //Changement de LvL du bateau
+                    currentLvL += 1;
+                    //fonctionChangement lvl bateau
+
+
+                    //    fonction upgradeboat
+                    UpdateCurrentValue();
+                }
+                else
+                {
+                    _messageErreurLvLMax.SetActive(true);
+                    this.GetComponent<GraphicRaycaster>().enabled = false;
+                    timerBlockInput = 0;
+                    blockInput = true;
+                }
             }
             else
             {
-                //    _messageErreurLvLMax.SetActive(true);
-                //    this.GetComponent<GraphicRaycaster>().enabled = false;
-                //    timerBlockInput = 0;
-                //    blockInput = true;
+                _messageErreurRessources.SetActive(true);
+                this.GetComponent<GraphicRaycaster>().enabled = false;
+                timerBlockInput = 0;
+                blockInput = true;
             }
-            //}           
-            //else
-            //{
-            //    _messageErreurRessources.SetActive(true);
-            //    this.GetComponent<GraphicRaycaster>().enabled = false;
-            //    timerBlockInput = 0;
-            //    blockInput = true;
-            //}
+        }
+
+        void CheckIfCanUpgradeBoat()
+        {
+            if(currentGold > costUpgradeLvLGold && currentXp > costUpgradeLvLXp)
+            {
+                Debug.LogError("On peut améliorer le beateau");
+                canUpgradeCheck = true;
+                _messageInfoCanUpgrade.SetActive(true);
+                this.GetComponent<GraphicRaycaster>().enabled = false;
+                timerBlockInput = 0;
+                blockInput = true;
+            }
+            else
+            {
+                canUpgradeCheck = true;
+            }
         }
     }
 }
