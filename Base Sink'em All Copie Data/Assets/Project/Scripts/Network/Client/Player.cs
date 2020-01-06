@@ -22,7 +22,11 @@ public class Player : Controller {
 
     GameObject boatInstance;
 
+    [SyncVar]
     private Data_Player data;
+
+    [SyncVar]
+    public Data_TestSerialize datatest;
 
     private bool _asBoatSpawned = false;
 
@@ -43,6 +47,8 @@ public class Player : Controller {
     float timeLastSetData;
 
     private HUD_Script _myhUD = null;
+
+    bool isSerializable = false;
 
     #region IA
 
@@ -68,6 +74,7 @@ public class Player : Controller {
     }
 
     public bool isDataReady { get { return _isDataReady; }set { _isDataReady = value; } }
+
 
     public Data_Player _data
     {
@@ -104,6 +111,7 @@ public class Player : Controller {
 
     private void Update()
     {
+            
 
         timeSinceLastSetData = Time.time - timeLastSetData;
         if (isLocalPlayer)
@@ -156,8 +164,10 @@ public class Player : Controller {
             if (Input.GetKeyDown(KeyCode.F10))
             {
                 _data.dRessource.Golds += 10;
+                datatest.life += 10;
                 CmdUpdateDataGold();
                 Debug.LogError("GOLD CLIENT: " + _data.dRessource.Golds);
+                Debug.LogError("datatest.life CLIENT: " + datatest.life);
             }
 
             _debugLogDisplayTimer += Time.deltaTime;
@@ -247,7 +257,8 @@ public class Player : Controller {
     [TargetRpc]
     public void TargetSetDatas(NetworkConnection target, int Gold)
     {
-        _data.dRessource.Golds = Gold;
+        //_data.dRessource.Golds = Gold;
+        isSerializable = true;
         this.isDataReady = true;
     }
 
@@ -420,5 +431,62 @@ public class Player : Controller {
         
         boatInstance.transform.position = myIle._posRespawnBoat.position;
         boatInstance.transform.rotation = myIle._posRespawnBoat.rotation;
+    }
+
+
+
+    public override bool OnSerialize(NetworkWriter writer, bool forceAll)
+    {
+        Debug.LogWarning("OnSerialize - 0");
+        base.OnSerialize(writer, forceAll);
+        if (forceAll)
+        {
+            // the first time an object is sent to a client, send all the data (and no dirty bits)
+            writer.WritePackedUInt32((uint)this.datatest.life);
+            Debug.LogWarning("OnSerialize - 1");
+            return true;
+        }
+        bool wroteSyncVar = false;
+        if ((base.syncVarDirtyBits & 1u) != 0u)
+        {
+            Debug.LogWarning("OnSerialize - 2");
+
+            if (!wroteSyncVar)
+            {
+                Debug.LogWarning("OnSerialize - 3");
+
+                // write dirty bits if this is the first SyncVar written
+
+                writer.WritePackedUInt32((uint)this.datatest.life);
+                Debug.LogWarning("OnSerialize - 4");
+                wroteSyncVar = true;
+            }
+            writer.WritePackedUInt32((uint)this.datatest.life);
+        }
+        return wroteSyncVar;
+    }
+
+    public override void OnDeserialize(NetworkReader reader, bool initialState)
+    {
+        Debug.LogWarning("OnDeserialize - 1");
+
+        base.OnDeserialize(reader, initialState);
+        if (initialState)
+        {
+            Debug.LogWarning("OnDeserialize - 2");
+
+            this.datatest.life = (int)reader.ReadPackedUInt32();
+            Debug.LogWarning("OnDeserialize - 3");
+            return;
+        }
+        int num = (int)reader.ReadPackedUInt32();
+        if ((num & 1) == 0)
+        {
+            Debug.LogWarning("OnDeserialize - 4");
+
+            this.datatest.life = (int)reader.ReadPackedUInt32();
+            Debug.LogWarning("OnDeserialize - 5");
+
+        }
     }
 }
