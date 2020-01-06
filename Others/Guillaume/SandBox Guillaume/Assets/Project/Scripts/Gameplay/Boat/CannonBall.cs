@@ -63,8 +63,9 @@ public class CannonBall : MonoBehaviour
         if (_achievePosition == true)
         {
             _rigidbody.useGravity = true;
-            _rigidbody.MovePosition(this.transform.position + this.transform.forward * _force * Time.fixedDeltaTime);
-            //_rigidbody.MovePosition(this.transform.position + _travelVector * _force * Time.fixedDeltaTime);
+            Debug.Log(this.name + " forward : " + this.transform.forward);
+            //_rigidbody.MovePosition(this.transform.position + this.transform.forward * _force * Time.fixedDeltaTime);
+            _rigidbody.MovePosition(this.transform.position + new Vector3(this.transform.forward.x, 0f, this.transform.forward.z) * _force * Time.fixedDeltaTime);
         }
         //Move the cannonBall
         else
@@ -72,7 +73,7 @@ public class CannonBall : MonoBehaviour
             //_rigidbody.MovePosition(this.transform.position + this.transform.forward * _force * Time.fixedDeltaTime);
             _rigidbody.MovePosition(this.transform.position + _travelVector.normalized * (_force * Time.fixedDeltaTime));
         }
-
+        Debug.DrawRay(this.transform.position, this.transform.forward * _force , Color.red);
 
     }
 
@@ -87,12 +88,12 @@ public class CannonBall : MonoBehaviour
 
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    //draw cube at the target position
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawSphere(_targetPosition, 0.5f);
-    //}
+    private void OnDrawGizmos()
+    {
+        //draw cube at the target position
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(_targetPosition, 0.5f);
+    }
 
     private void Delete()
     {
