@@ -96,13 +96,13 @@ namespace ProjetPirate.Boat
         private float _deathAnimationCurrentMovementTime = 0;
         private float _deathAnimationMovementDelay = 2;
         private float _deathAnimationRotationTime = 4;
-        private float _deathAnimationMovementTime = 2;
+        private float _deathAnimationMovementTime = 6;
         private Vector3 _deathAnimationStartRotation;
         private Vector3 _deathAnimationEndRotation;
         private Vector3 _deathAnimationStartPosition;
         private Vector3 _deathAnimationEndPosition;
-        private Vector3 _deathAnimationPositionOffset = new Vector3(0, -100, 0);
-        private Vector3 _deathAnimationRotationOffset = new Vector3(-80, 0, 0);
+        private Vector3 _deathAnimationPositionOffset = new Vector3(0, -10, 0);
+        private Vector3 _deathAnimationRotationOffset = new Vector3(0, 0, -80);
 
         private bool _fallAnimationIsPlaying = false;
         private float _fallAnimationCurrentRotationTime = 0;
