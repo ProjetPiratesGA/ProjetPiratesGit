@@ -6,7 +6,6 @@ using ProjetPirate.Data;
 
 namespace ProjetPirate.Boat
 {
-
     public class AnimationBoat : MonoBehaviour
     {        
 

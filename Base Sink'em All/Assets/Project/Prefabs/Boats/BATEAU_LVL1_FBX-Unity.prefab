@@ -1626,13 +1626,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be9cef66f2b582342860a1ef6dd96c1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxLifePoint: 0
-  _attackDamage: 0
+  _maxLifePoint: 150
+  _attackDamage: 25
   _maxMovingSpeed: 30
   _maxAngularSpeed: 20
   _goldDropped: 0
   _xpEarned: 0
   _directionLocator: {fileID: 0}
+  _shipType: 0
   _HeightFallingDeath: -10
   _boatMovementState: 0
   _boatRotationState: 0
@@ -1645,12 +1646,20 @@ MonoBehaviour:
   _starboardCannons:
   - {fileID: 114607522781932920}
   - {fileID: 114577487525742644}
-  _shootCooldown: 0
-  _defaultCannonNumberBySide: 1
+  _larboardCannonPositions: []
+  _starboardCannonPositions: []
   _larboardCannonPrefab: {fileID: 1886762558630412, guid: c1b3a86bd6823c745900ae7409e8856f,
     type: 2}
   _starboardCannonPrefab: {fileID: 1397878430249924, guid: 5f08ce98d8383754781dfffd6af6748f,
     type: 2}
+  _shootCooldown: 0
+  _defaultCannonNumberBySide: 1
+  _weakenedStateLifeRatio: 0.5
+  _endangeredStateLifeRatio: 0.1
+  _structureState: 0
+  _droppedPlank: {fileID: 0}
+  _droppedChest: {fileID: 0}
+  Safe: 0
 --- !u!114 &114911190053192394
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1663,7 +1672,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 1
-  m_SendInterval: 0.04
+  m_SendInterval: 0.033333335
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
   m_SyncSpin: 0

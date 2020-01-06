@@ -10,10 +10,10 @@ namespace ProjetPirate.IA
         protected ProjetPirate.Data.Data_StatsCharacters _data = new Data.Data_StatsCharacters();
         [Header("Character Data")]
         [SerializeField] protected int _maxLifePoint;
-        //protected int _data.Life;
+        //protected int _currentLifePoint;
         [SerializeField] protected int _attackDamage;
         [SerializeField] protected float _maxMovingSpeed;
-        //protected float _currentMovingSpeed;
+        protected float _currentMovingSpeed;
         [SerializeField] protected float _maxAngularSpeed;
         protected float _currentAngularSpeed;
         [SerializeField] protected int _goldDropped;
@@ -33,10 +33,10 @@ namespace ProjetPirate.IA
             get { return _maxLifePoint; }
         }
 
-        //public int CurrentLifePoint
-        //{
-        //    get { return _data.Life; }
-        //}
+        public int CurrentLifePoint
+        {
+            get { return _data.Life; }
+        }
 
         public int AttackDamage
         {
@@ -48,10 +48,10 @@ namespace ProjetPirate.IA
             get { return _maxMovingSpeed; }
         }
 
-        //public float CurrentMovingSpeed
-        //{
-        //    get { return _currentMovingSpeed; }
-        //}
+        public float CurrentMovingSpeed
+        {
+            get { return _currentMovingSpeed; }
+        }
 
         public float MaxAngularSpeed
         {
@@ -117,14 +117,14 @@ namespace ProjetPirate.IA
 
         public virtual int Damage(int _damage)
         {
-            //if (_controller.GetComponent<Ship_Controller>() != null)
-            //{
-            //    _controller.GetComponent<Ship_Controller>().ResetTime();
-            //}
-            //if (_controller.GetComponent<Shark_Controller>() != null)
-            //{
-            //    _controller.GetComponent<Shark_Controller>().ResetTime();
-            //}
+            /*if (_controller.GetComponent<Ship_Controller>() != null)
+            {
+                _controller.GetComponent<Ship_Controller>().ResetTime();
+            }
+            if (_controller.GetComponent<Shark_Controller>() != null)
+            {
+                _controller.GetComponent<Shark_Controller>().ResetTime();
+            }*/
             _data.Life -= _damage;
             if (_data.Life <= 0)
             {
@@ -145,6 +145,9 @@ namespace ProjetPirate.IA
             //    _controller.GetComponent<Shark_Controller>().ResetTime();
             //}
             _data.Life -= _damage;
+            this.CmdSetLife(_data.Life);
+
+
             if (_data.Life <= 0)
             {
                 Death();
@@ -153,9 +156,18 @@ namespace ProjetPirate.IA
             return 0;
         }
 
+        [Command]
+        public void CmdSetLife(int life)
+        {
+            _data.Life = life;
+        }
+
+
         public virtual void Death()
         {
             Destroy(this.gameObject);
         }
+
+
     }
 }

@@ -53,8 +53,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\ClientStart.cs" />
-     <Compile Include="Assets\hugoScriptTestPush.cs" />
      <Compile Include="Assets\Project\Scripts\Controllers\Billboad.cs" />
      <Compile Include="Assets\Project\Scripts\Controllers\BoatController.cs" />
      <Compile Include="Assets\Project\Scripts\Controllers\CanvasDontDestroy.cs" />
@@ -92,18 +90,36 @@
      <Compile Include="Assets\Project\Scripts\Datas\Data_Tools.cs" />
      <Compile Include="Assets\Project\Scripts\Datas\Data_Transform.cs" />
      <Compile Include="Assets\Project\Scripts\Datas\HugoTest.cs" />
+     <Compile Include="Assets\Project\Scripts\Datas\MonoData_Tools.cs" />
      <Compile Include="Assets\Project\Scripts\Datas\SaveSystem.cs" />
+     <Compile Include="Assets\Project\Scripts\Datas\ServerData.cs" />
+     <Compile Include="Assets\Project\Scripts\Datas\YanisTest.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Boat\BoatCharacter.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Boat\Cannon.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Boat\CannonBall.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Controller.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Sea.cs" />
      <Compile Include="Assets\Project\Scripts\IA\Character.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Detector.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\IA_Character.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\IA_Controller.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\IA_Patrol.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Kraken_Character.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Kraken_Controller.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Kraken_Head.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Kraken_Tentacle.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Patrol_Checkpoint.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Patrol_Static.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Patrol_Wander.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Shark_Character.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Shark_Controller.cs" />
+     <Compile Include="Assets\Project\Scripts\IA\Ship_Controller.cs" />
      <Compile Include="Assets\Project\Scripts\Managers\GameManager.cs" />
+     <Compile Include="Assets\Project\Scripts\Map\Ile.cs" />
      <Compile Include="Assets\Project\Scripts\Map\Sea.cs" />
+     <Compile Include="Assets\Project\Scripts\Network\Client\ClientStart.cs" />
      <Compile Include="Assets\Project\Scripts\Network\Client\Player.cs" />
      <Compile Include="Assets\Project\Scripts\Network\Client\respawnPlayer.cs" />
-     <Compile Include="Assets\Project\Scripts\Network\Client\StartClient.cs" />
      <Compile Include="Assets\Project\Scripts\Network\Server\ServerInit.cs" />
      <Compile Include="Assets\Project\Scripts\Network\Server\ServerNetworkManager.cs" />
      <Compile Include="Assets\Project\Scripts\Network\Server\testServer.cs" />
@@ -118,143 +134,140 @@
      <Compile Include="Assets\Project\Scripts\UI\InterfaceIle.cs" />
      <Compile Include="Assets\Project\Scripts\UI\Menu\MenuManager.cs" />
      <Compile Include="Assets\Project\Scripts\UI\Menu\Setting.cs" />
-     <None Include="Assets\Datas\Objects\README.txt" />
+     <None Include="Assets\Resources\Datas\Objects\_README.txt" />
      <None Include="Assets\Project\Materials\Map\README.txt" />
-     <None Include="Assets\Datas\Dialogue\7.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\7.txt" />
      <None Include="Assets\Project\Scripts\Tools\README.txt" />
-     <None Include="Assets\Datas\Dialogue\1.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\1.txt" />
+     <None Include="Assets\Resources\Datas\Questes\0.txt" />
      <None Include="Assets\Project\Shaders\Enemies\README.txt" />
      <None Include="Assets\Project\Scenes\README.txt" />
      <None Include="Assets\Project\Musics\README.txt" />
-     <None Include="Assets\Datas\Dialogue\8.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\8.txt" />
      <None Include="Assets\Project\Textures\Boats\README.txt" />
      <None Include="Assets\Project\Scripts\UI\README.txt" />
-     <None Include="Assets\Datas\Questes\README.txt" />
+     <None Include="Assets\Resources\Datas\Questes\README.txt" />
      <None Include="Assets\Project\Prefabs\Map\README.txt" />
-     <None Include="Assets\Datas\Docks\README.txt" />
-     <None Include="Assets\Datas\Pnj\Sinaaq.txt" />
+     <None Include="Assets\Resources\Datas\Docks\README.txt" />
      <None Include="Assets\Project\Animations\Boats\README.txt" />
      <None Include="Assets\Project\Prefabs\UI\README.txt" />
      <None Include="Assets\Project\Scripts\Physics\README.txt" />
-     <None Include="Assets\Datas\Questes\5.txt" />
      <None Include="Assets\Project\Scripts\Gameplay\README.txt" />
      <None Include="Assets\Project\Materials\README.txt" />
-     <None Include="Assets\Datas\Pnj\README.txt" />
+     <None Include="Assets\Resources\Datas\Pnj\README.txt" />
      <None Include="Assets\Project\Sprites\UI\README.txt" />
-     <None Include="Assets\Datas\Questes\6.txt" />
-     <None Include="Assets\Datas\Objects\Canon.txt" />
+     <None Include="Assets\Resources\Datas\Objects\Canon.txt" />
      <None Include="Assets\Project\Animations\Items\README.txt" />
-     <None Include="Assets\Datas\Pnj\Tao Fang.txt" />
-     <None Include="Assets\Datas\Pnj\Jengo the Snake.txt" />
+     <None Include="Assets\Resources\Datas\Pnj\Jengo the Snake.txt" />
      <None Include="Assets\Project\Animations\Enemies\README.txt" />
      <None Include="Assets\Project\Materials\Enemies\README.txt" />
      <None Include="Assets\Project\Shaders\Map\README.txt" />
      <None Include="Assets\Project\Scripts\Network\README.txt" />
      <None Include="Assets\Project\Textures\Map\README.txt" />
-     <None Include="Assets\Datas\Objects\WoodenBoard.txt" />
-     <None Include="Assets\Datas\Questes\10.txt" />
-     <None Include="Assets\Datas\Objects\Bullet.txt" />
+     <None Include="Assets\Resources\Datas\Objects\WoodenBoard.txt" />
+     <None Include="Assets\Resources\Datas\Objects\Bullet.txt" />
      <None Include="Assets\Project\Shaders\Items\README.txt" />
      <None Include="Assets\Project\Textures\Enemies\README.txt" />
      <None Include="Assets\Project\Scripts\Datas\README.txt" />
-     <None Include="Assets\Datas\Questes\7.txt" />
-     <None Include="Assets\Datas\Dialogue\15.txt" />
-     <None Include="Assets\Datas\Pnj\Adalyn North.txt" />
-     <None Include="Assets\Datas\Questes\3.txt" />
-     <None Include="Assets\Datas\README.txt" />
-     <None Include="Assets\Datas\Dialogue\10.txt" />
-     <None Include="Assets\Datas\Objects\Gold.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\15.txt" />
+     <None Include="Assets\Resources\Datas\Pnj\Adalyn North.txt" />
+     <None Include="Assets\Resources\Datas\Questes\3.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\10.txt" />
+     <None Include="Assets\Resources\Datas\Objects\Gold.txt" />
      <None Include="Assets\Project\Scripts\Managers\README.txt" />
-     <None Include="Assets\Datas\Questes\1.txt" />
-     <None Include="Assets\Datas\Objects\Boat.txt" />
+     <None Include="Assets\Resources\Datas\Questes\1.txt" />
+     <None Include="Assets\Resources\Datas\Objects\Boat.txt" />
      <None Include="Assets\Project\Prefabs\Enemies\README.txt" />
      <None Include="Assets\Project\Animations\README.txt" />
      <None Include="Assets\Project\Scripts\Singletons\README.txt" />
-     <None Include="Assets\Datas\Pnj\Alvaro the Nightmare.txt" />
-     <None Include="Assets\Datas\Questes\9.txt" />
+     <None Include="Assets\Resources\Datas\Pnj\Alvaro the Nightmare.txt" />
      <None Include="Assets\Project\Textures\UI\README.txt" />
      <None Include="Assets\Project\Models\Boats\README.txt" />
      <None Include="Assets\Project\Models\Enemies\README.txt" />
-     <None Include="Assets\Datas\Objects\Kraken.txt" />
+     <None Include="Assets\Resources\Datas\Objects\Kraken.txt" />
      <None Include="Assets\Project\Scripts\README.txt" />
      <None Include="Assets\Project\Models\Map\README.txt" />
-     <None Include="Assets\Datas\Pnj\Kamkin.txt" />
-     <None Include="Assets\Datas\Dialogue\4.txt" />
+     <None Include="Assets\Resources\Datas\Pnj\Kamkin.txt" />
+     <None Include="Assets\Resources\Datas\Ameliorations\Snail.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\4.txt" />
      <None Include="Assets\Project\Prefabs\README.txt" />
-     <None Include="Assets\Datas\Objects\MilitaryBoat.txt" />
-     <None Include="Assets\Datas\Dialogue\5.txt" />
+     <None Include="Assets\Resources\Datas\Objects\MilitaryBoat.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\5.txt" />
      <None Include="Assets\Project\Materials\Items\README.txt" />
      <None Include="Assets\Project\Models\README.txt" />
-     <None Include="Assets\Datas\Dialogue\11.txt" />
-     <None Include="Assets\Datas\Pnj\Horton two Face.txt" />
-     <None Include="Assets\Datas\Dialogue\14.txt" />
-     <None Include="Assets\Datas\Questes\4.txt" />
-     <None Include="Assets\Datas\Dialogue\6.txt" />
-     <None Include="Assets\Datas\Objects\Snail.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\11.txt" />
+     <None Include="Assets\Resources\Datas\Pnj\Horton two Face.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\14.txt" />
+     <None Include="Assets\Resources\Datas\Questes\4.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\0.txt" />
+     <None Include="Assets\Resources\Datas\README.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\6.txt" />
+     <None Include="Assets\Resources\Datas\Objects\Snail.txt" />
      <None Include="Assets\Project\Textures\Items\README.txt" />
-     <None Include="Assets\Datas\Dialogue\16.txt" />
-     <None Include="Assets\Datas\Pnj\Razortooth.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\16.txt" />
+     <None Include="Assets\Resources\Datas\Pnj\Razortooth.txt" />
      <None Include="Assets\Project\Prefabs\Items\README.txt" />
-     <None Include="Assets\Datas\Dialogue\12.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\12.txt" />
      <None Include="Assets\Project\Shaders\Boats\README.txt" />
-     <None Include="Assets\Datas\Objects\Objects.txt" />
+     <None Include="Assets\Resources\Datas\Objects\Objects.txt" />
      <None Include="Assets\Project\Shaders\README.txt" />
      <None Include="Assets\Project\Materials\Boats\README.txt" />
      <None Include="Assets\Project\Animations\UI\README.txt" />
-     <None Include="Assets\Datas\Dialogue\2.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\2.txt" />
      <None Include="Assets\Project\Animations\Map\README.txt" />
-     <None Include="Assets\Datas\Questes\8.txt" />
      <None Include="Assets\Project\Scripts\Controllers\README.txt" />
      <None Include="Assets\Project\Sounds\README.txt" />
-     <None Include="Assets\Datas\Docks\1.txt" />
-     <None Include="Assets\Datas\Dialogue\9.txt" />
+     <None Include="Assets\Resources\Datas\Docks\0.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\9.txt" />
      <None Include="Assets\Project\Textures\README.txt" />
      <None Include="Assets\Project\Scripts\IA\README.txt" />
      <None Include="Assets\Project\Prefabs\Boats\README.txt" />
-     <None Include="Assets\Datas\Dialogue\13.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\13.txt" />
      <None Include="Assets\Project\Fonts\README.txt" />
-     <None Include="Assets\Datas\Pnj\Lord Grady.txt" />
+     <None Include="Assets\Resources\Datas\Pnj\Lord Grady.txt" />
      <None Include="Assets\Project\Models\Items\README.txt" />
-     <None Include="Assets\Datas\Questes\2.txt" />
-     <None Include="Assets\Datas\Objects\Flag.txt" />
-     <None Include="Assets\Datas\Objects\StoreBoat.txt" />
-     <None Include="Assets\Datas\Dialogue\3.txt" />
+     <None Include="Assets\Resources\Datas\Ameliorations\Canon.txt" />
+     <None Include="Assets\Resources\Datas\Questes\2.txt" />
+     <None Include="Assets\Resources\Datas\Ameliorations\Boat.txt" />
+     <None Include="Assets\Resources\Datas\Objects\Flag.txt" />
+     <None Include="Assets\Resources\Datas\Objects\StoreBoat.txt" />
+     <None Include="Assets\Resources\Datas\Dialogues\3.txt" />
      <None Include="Assets\Project\Sprites\README.txt" />
  <Reference Include="Unity.RenderPipelines.Core.Editor">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Core.Runtime">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.StandardEvents">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Lightweight.Runtime">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Runtime.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Lightweight.Editor">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Editor.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.PackageManagerUI.Editor">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Postprocessing.Editor">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Postprocessing.Runtime">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="Unity.ShaderGraph.Editor">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Core.IncludePaths">
- <HintPath>D:/Git/Sinkemall new git/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.IncludePaths.dll</HintPath>
+ <HintPath>F:/DepotGit/Projet Pirates ga84/ProjetPiratesGit/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.IncludePaths.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2018.2.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -452,10 +465,10 @@
  <HintPath>C:/Program Files/Unity/Hub/Editor/2018.2.0f2/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Analytics">
- <HintPath>C:/Users/s.mattia/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.16/UnityEngine.Analytics.dll</HintPath>
+ <HintPath>C:/Users/PeZeD/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.16/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.StandardEvents">
- <HintPath>C:/Users/s.mattia/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.13/UnityEngine.StandardEvents.dll</HintPath>
+ <HintPath>C:/Users/PeZeD/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.13/UnityEngine.StandardEvents.dll</HintPath>
  </Reference>
  <Reference Include="mscorlib">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2018.2.0f2/Editor/Data/MonoBleedingEdge/lib/mono/unity/mscorlib.dll</HintPath>
