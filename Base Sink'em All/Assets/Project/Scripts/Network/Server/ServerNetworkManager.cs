@@ -12,10 +12,19 @@ namespace Project.Network
 {
     public class ServerNetworkManager : NetworkManager
     {
+        private List<PlankOnSea> _plankList = new List<PlankOnSea>();
+
         private List<BoatController> _boatList = new List<BoatController>();
+        
         private List<Player> _playerList = new List<Player>();
 
         private List<GameObject> _enemyList = new List<GameObject>();
+
+        public List<PlankOnSea> plankList
+        {
+            get { return _plankList; }
+            set { _plankList = value; }
+        }
 
         public List<BoatController> boatList
         {

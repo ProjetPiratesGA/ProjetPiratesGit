@@ -18,7 +18,6 @@ namespace ProjetPirate.Boat
         private GameObject _buttonShootLeft;
         private GameObject _buttonShootRight;
 
-
         private Player _player = null;
 
         private BoatCharacter _boatCharacter = null;
@@ -38,7 +37,6 @@ namespace ProjetPirate.Boat
         {
             get { return _player; }
             set { _player = value; }
-
         }
 
         // Use this for initialization
@@ -48,6 +46,9 @@ namespace ProjetPirate.Boat
             {
                 InitLocalBoat();
             }
+
+            
+
             DontDestroyOnLoad(this.gameObject);
         }
 
@@ -81,6 +82,11 @@ namespace ProjetPirate.Boat
             Vector3 pos = _cameraPosition.localPosition;
             pos *= _zoom;
             Camera.main.transform.localPosition = pos;
+
+            if (_player == null)
+            {
+                Debug.LogError("Player Null in boat controller");
+            }
         }
 
         // Update is called once per frame

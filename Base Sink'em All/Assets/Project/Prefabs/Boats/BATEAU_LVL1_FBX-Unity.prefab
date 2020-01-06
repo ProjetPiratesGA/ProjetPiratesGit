@@ -1634,6 +1634,8 @@ MonoBehaviour:
   _xpEarned: 0
   _directionLocator: {fileID: 0}
   _shipType: 0
+  _plankDroppedByDeath: 1
+  _moneyDroppedByDeath: 0
   _HeightFallingDeath: -10
   _boatMovementState: 0
   _boatRotationState: 0
@@ -1657,7 +1659,8 @@ MonoBehaviour:
   _weakenedStateLifeRatio: 0.5
   _endangeredStateLifeRatio: 0.1
   _structureState: 0
-  _droppedPlank: {fileID: 0}
+  _droppedPlank: {fileID: 1494260278651724, guid: dea7ae8bb1288c546a076e94838a9f2c,
+    type: 2}
   _droppedChest: {fileID: 0}
   Safe: 0
 --- !u!114 &114911190053192394

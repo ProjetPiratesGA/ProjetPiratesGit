@@ -13,7 +13,6 @@ namespace ProjetPirate.IA
         [SerializeField] private float _maxRange = 15;
         [SerializeField] private float _minRange = 10;
 
-        
 
         private Data_BoatEnemy data_boatenemy = new Data_BoatEnemy();
         public BoatCharacter Character
@@ -174,7 +173,7 @@ namespace ProjetPirate.IA
 
         public override void Death()
         {
-            //PlankOnSea.SpawnPlank(_character.GetComponent<BoatCharacter>()._droppedPlank, this.transform.position, _character.GetComponent<BoatCharacter>()._plankDroppedByDeath);
+            //PlankOnSea.CmdSpawnPlankOnServer(_character.GetComponent<BoatCharacter>()._droppedPlank, this.transform.position, _character.GetComponent<BoatCharacter>()._plankDroppedByDeath);
             //Chest.SpawnChest(_character.GetComponent<BoatCharacter>().DroppedChest, this.transform.position, _character.GetComponent<BoatCharacter>()._moneyDroppedByDeath, 0);
 
         }

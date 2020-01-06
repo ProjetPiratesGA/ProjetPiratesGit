@@ -7,6 +7,7 @@ using ProjetPirate.Physic;
 using ProjetPirate.Data;
 using UnityEngine.Networking;
 using ProjetPirate.IA;
+using Project.Network;
 
 namespace ProjetPirate.Boat
 {
@@ -63,6 +64,9 @@ namespace ProjetPirate.Boat
         //isMovingForward
         private bool _isMovingForward = false;
         private float _stoppingDistance;
+
+        [SerializeField] public int _plankDroppedByDeath;
+        [SerializeField] public int _moneyDroppedByDeath;
 
         [Header("FALL DEATH")]
         [SerializeField]
@@ -207,7 +211,7 @@ namespace ProjetPirate.Boat
         public List<Cannon> larboardCannons
         {
             get { return _larboardCannons; }
-            set { _larboardCannons = value ; }
+            set { _larboardCannons = value; }
         }
 
         public List<Cannon> starboardCannons
@@ -257,15 +261,33 @@ namespace ProjetPirate.Boat
 
             _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
             _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
-
+            
+            CmdcreateListPlankOnClient();
         }
+
+        [Command]
+        private void CmdcreateListPlankOnClient()
+        {
+            List<PlankOnSea> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().plankList;
+            
+            for(int i = 0; i < tempList.Count; i++)
+            {
+                TargetcreateListPlankOnClient(this.connectionToClient, tempList[i].gameObject);
+            }
+        }
+
+        [TargetRpc]
+        private void TargetcreateListPlankOnClient(NetworkConnection _conn ,GameObject _templist)
+        {
+            Debug.Log("Spawn Plank on client");
+            NetworkServer.SpawnWithClientAuthority(_templist, _conn);            
+        }
+
 
         bool _asUpdateDatas = false;
 
         void Update()
         {
-
-
             _isMovingForward = false;
 
             if (Input.GetKeyDown(KeyCode.Keypad0))
@@ -316,7 +338,7 @@ namespace ProjetPirate.Boat
             {
                 _starboardCannonInCooldown = false;
                 _currentStarboardShootCooldownTime = 0;
-            }           
+            }
 
             //if (!_isDocking)
             //{
@@ -325,7 +347,7 @@ namespace ProjetPirate.Boat
             //        CheckRightInvisibleWall();
             //    }
             //}
-            
+
 
             //for (int i = 0; i < _waterTrails.Count; i++)
             //{
@@ -352,11 +374,48 @@ namespace ProjetPirate.Boat
             // END TEST
         }
 
+        [Command]
+        private void CmdAddPlank(int nbPlank, Vector3 _position)
+        {
+
+            //NetworkServer.SpawnWithClientAuthority(plank.gameObject, this.connectionToClient);
+
+            List<PlankOnSea> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().plankList;
+
+            for (int i = 0; i < nbPlank; i++)
+            {
+                GameObject plank = Instantiate(_droppedPlank);
+
+                plank.transform.position = _position + new Vector3(0, 0.712f, 0);
+                plank.GetComponent<PlankOnSea>().SetDestination();
+
+                tempList.Add(plank.GetComponent<PlankOnSea>());
+
+                //TargetSpawnPlank(this.connectionToClient, plank.gameObject);
+                NetworkServer.Spawn(plank);
+
+                RpcSpawnPlank(plank);
+            }
+        }
+
+        [ClientRpc]
+        private void RpcSpawnPlank(GameObject _plank)
+        {
+            NetworkServer.Spawn(_plank);
+        }
+        
         public override void Death()
         {
             _data.Life = _maxLifePoint;
+
+            this.GetComponentInParent<Player>().Death();
             this.GetComponent<BoxCollider>().enabled = false;
-            _controller.Death();
+
+            // Chest.SpawnChest(_boat.DroppedChest, _boat.transform.position, lostMoney, _currentPlank);
+
+            CmdAddPlank(this._plankDroppedByDeath, this.transform.position);
+
+
             /*ProjetPirate.IA.Ship_Controller[] enemies = FindObjectsOfType<ProjetPirate.IA.Ship_Controller>();
             for (int i = 0; i < enemies.Length; i++)
             {
@@ -401,8 +460,10 @@ namespace ProjetPirate.Boat
                 _deathAnimationIsPlaying = false;
                 _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
                 _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
-                _controller.Disappear();
+
+                this.GetComponentInParent<Player>().Disappear();
                 this.GetComponent<BoxCollider>().enabled = true;
+
                 _currentMovingSpeed = _maxMovingSpeed;
                 _respawninfAnimationIsPlaying = true;
             }
@@ -422,10 +483,10 @@ namespace ProjetPirate.Boat
         [Command]
         public void CmdSetUpBoat(GameObject player)
         {
-            
+
             this.gameObject.transform.SetParent(player.transform);
             //this.transform.localPosition = new Vector3(0, 0, 0);
-            _controller = player.GetComponent<Controller>();
+            //_controller = player.GetComponent<Controller>();
 
             player.GetComponent<Player>().SetDataBoat(this);
             TargetSetParent(player.GetComponent<Player>().connectionToClient, player.gameObject);
@@ -500,11 +561,11 @@ namespace ProjetPirate.Boat
         }
 
         [TargetRpc]
-        public void TargetSetParent(NetworkConnection target,GameObject player)
+        public void TargetSetParent(NetworkConnection target, GameObject player)
         {
             this.gameObject.transform.SetParent(player.transform);
             //this.transform.localPosition = new Vector3(0, 0, 0);
-            _controller = player.GetComponent<Controller>();
+            //_controller = player.GetComponent<Controller>();
             player.GetComponent<Player>().SetDataBoat(this);
 
         }
@@ -667,7 +728,7 @@ namespace ProjetPirate.Boat
                 _data_Boat.Stats.Speed = _maxMovingSpeed;
             }
             //Debug.Log(this.name + " --> Acclerate / _data_Boat.dStats.Speed : " + _data_Boat.dStats.Speed + " _accelerationSpeedForward : " + _accelerationSpeedForward
-                //+ " Time.deltaTime : " + Time.deltaTime);
+            //+ " Time.deltaTime : " + Time.deltaTime);
             _stoppingDistance = ((_data_Boat.Stats.Speed / 10) * (_data_Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
         }
 
@@ -739,8 +800,8 @@ namespace ProjetPirate.Boat
             //{
             //    if (_attractObject._isFalling == false)
             //    {
-                    MoveForward();
-                    //this.transform.position += _currentVelocity_MovementDirection;
+            MoveForward();
+            //this.transform.position += _currentVelocity_MovementDirection;
             //    }
             //}
             //else
@@ -857,9 +918,9 @@ namespace ProjetPirate.Boat
 
         public int getCurrentXp()
         {
-            if (_controller.GetComponent<Player>() != null)
+            if (this.GetComponent<BoatController>().player != null)
             {
-                return (int)_controller.GetComponent<Player>()._data.dRessource.Reputation;
+                return (int)this.GetComponent<BoatController>().player._data.dRessource.Reputation;
             }
             else
             {
@@ -871,10 +932,6 @@ namespace ProjetPirate.Boat
         //{
         //    return _shootCooldown;
         //}
-
-
-
-
 
         //public int getCurrentXp()
         //{
@@ -893,6 +950,45 @@ namespace ProjetPirate.Boat
         public void SetUpBoat(Ship_Controller pController)
         {
             _controller = pController;
+        }
+
+        public override int Damage(int _damage)
+        {
+            if (!Safe)
+            {
+                _data.Life -= _damage;
+                if (_data.Life <= 0)
+                {
+                    Death();
+                    return _xpEarned;
+                }
+            }
+            return 0;
+        }
+
+        public override int Damage(int _damage, Transform pDamageLocation)
+        {
+            if (!Safe)
+            {
+                /*if (_damageFX != null)
+                {
+                    Vector3 vec = pDamageLocation.eulerAngles;
+                    vec.y += 180;
+                    _damageFX.transform.eulerAngles = vec;
+                    vec = pDamageLocation.position;
+                    vec += pDamageLocation.forward * 0.112f;
+                    _damageFX.transform.position = vec;
+                    _damageFX.Play();
+                }*/
+
+                _data.Life -= _damage;
+                if (_data.Life <= 0)
+                {
+                    Death();
+                    return _xpEarned;
+                }
+            }
+            return 0;
         }
     }
 }

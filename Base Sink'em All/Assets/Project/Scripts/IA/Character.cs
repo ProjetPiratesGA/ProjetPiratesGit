@@ -167,7 +167,5 @@ namespace ProjetPirate.IA
         {
             Destroy(this.gameObject);
         }
-
-
     }
 }

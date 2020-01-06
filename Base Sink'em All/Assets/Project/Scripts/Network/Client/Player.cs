@@ -48,16 +48,14 @@ public class Player : Controller {
     [SerializeField] private List<GameObject> _structuresPerLevel;
 
     [SerializeField] public int _maxXp = 10000; // max XP
-    public int _currentXp = 10;
     [SerializeField] public int _maxPlank = 10000; // max XP
-    [SerializeField] public int _currentPlank;
     [SerializeField] public int _maxMoney = 10000; // max XP
-    public int _currentMoney;
 
     [SerializeField] public int _xpLostByDeath = 10;
     [SerializeField] public float _goldRatiolostByDeath = 0.1f;
     [SerializeField] Transform _respawnPoint;
 
+    int idBoatOnServer;
     #endregion
 
     public bool asBoatSpawned
@@ -100,7 +98,7 @@ public class Player : Controller {
 
     private void Update()
     {
-
+    
         timeSinceLastSetData = Time.time - timeLastSetData;
         if (isLocalPlayer)
         {
@@ -255,6 +253,9 @@ public class Player : Controller {
 
         //Add the new boat instance to the list
         tempList.Add(boatInstance.GetComponent<BoatController>());
+
+        data.Boat = boatInstance.GetComponent<BoatCharacter>().Data;
+
         //spawn this new boat with player autorithy
         NetworkServer.SpawnWithClientAuthority(boatInstance, this.connectionToClient);
 
@@ -262,7 +263,6 @@ public class Player : Controller {
 
         //Set reference to the player from client side
         TargetSetPlayerReference(this.connectionToClient, this.gameObject, boatInstance);
-        
     }
 
     /// <summary>
@@ -392,12 +392,94 @@ public class Player : Controller {
         }
     }
 
-    public override void Disappear()
+    public virtual void GainXP(int pEarnedXP)
     {
-        if (boatInstance == null)
-            boatInstance = GetComponentInChildren<BoatCharacter>().gameObject;
-        
-        boatInstance.transform.position = myIle._posRespawnBoat.position;
-        boatInstance.transform.rotation = myIle._posRespawnBoat.rotation;
+        data.dRessource.Reputation += pEarnedXP;
+        if (data.dRessource.Reputation > _maxXp)
+        {
+            data.dRessource.Reputation = _maxXp;
+        }
+    }
+
+    public virtual void GainPlank(int pGainedPlank)
+    {
+        data.dRessource.WoodBoard += pGainedPlank;
+        if (data.dRessource.WoodBoard > _maxPlank)
+        {
+            data.dRessource.WoodBoard = _maxPlank;
+        }
+    }
+
+    public virtual void GainMoney(int pGainedMoney)
+    {
+        data.dRessource.Golds += pGainedMoney;
+        if (data.dRessource.Golds > _maxMoney)
+        {
+            data.dRessource.Golds = _maxMoney;
+        }
+    }
+
+    public virtual void LoseXP(int pLostXP)
+    {
+        data.dRessource.Reputation -= pLostXP;
+        if (data.dRessource.Reputation < 0)
+        {
+            data.dRessource.Reputation = 0;
+        }
+    }
+
+    public virtual void LosePlank(int pLostPlank)
+    {
+        data.dRessource.WoodBoard += pLostPlank;
+        if (data.dRessource.WoodBoard < 0)
+        {
+            data.dRessource.WoodBoard = 0;
+        }
+    }
+
+    public virtual void LoseMoney(int pLostMoney)
+    {
+        data.dRessource.Golds += pLostMoney;
+        if (data.dRessource.Golds < 0)
+        {
+            data.dRessource.Golds = 0;
+        }
+    }
+
+    public override void Death()
+    {
+        LoseXP(_xpLostByDeath);
+        int lostMoney = (int)(data.dRessource.Golds * _goldRatiolostByDeath);
+
+        LoseMoney(lostMoney);
+        LosePlank(data.dRessource.WoodBoard);
+    }
+
+    [Command]
+    public void CmdCallDisappear()
+    {
+        List<BoatController> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().boatList;
+
+        for(int i = 0; i < tempList.Count; i++)
+        {
+            if(this.connectionToClient == tempList[i].connectionToClient)
+            {
+                GameObject boatInstance = tempList[i].gameObject;
+            }
+        }
+
+        TargetDisppear(this.connectionToClient, boatInstance);
+    }
+
+    [TargetRpc]
+    public void TargetDisppear(NetworkConnection target, GameObject _myBoat)
+    {
+        _myBoat.transform.position = myIle._posRespawnBoat.position;
+        _myBoat.transform.rotation = myIle._posRespawnBoat.rotation;
+    }
+
+    public override void Disappear()
+    {        
+        CmdCallDisappear();
     }
 }

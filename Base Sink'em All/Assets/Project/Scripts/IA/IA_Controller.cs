@@ -116,7 +116,7 @@ namespace ProjetPirate.IA
                                 case Boat.ShipType.Player_Level_1:
                                 case Boat.ShipType.Player_Level_2:
                                 case Boat.ShipType.Player_Level_3:
-                                    if (pPotentialTarget.Controller.GetComponent<Player>()._currentXp >= _onDetectionRangeCategories[i].Quantity)
+                                    if (pPotentialTarget.Controller.GetComponent<Player>()._data.dRessource.Reputation >= _onDetectionRangeCategories[i].Quantity)
                                     {
                                         Debug.Log(i);
                                         _behaviour = _onDetectionRangeCategories[i].AssociatedBehaviour;
@@ -133,7 +133,7 @@ namespace ProjetPirate.IA
                                 case Boat.ShipType.Player_Level_1:
                                 case Boat.ShipType.Player_Level_2:
                                 case Boat.ShipType.Player_Level_3:
-                                    if (pPotentialTarget.Controller.GetComponent<Player>()._currentXp <= _onDetectionRangeCategories[i].Quantity)
+                                    if (pPotentialTarget.Controller.GetComponent<Player>()._data.dRessource.Reputation <= _onDetectionRangeCategories[i].Quantity)
                                     {
                                         Debug.Log(i);
                                         _behaviour = _onDetectionRangeCategories[i].AssociatedBehaviour;
@@ -244,7 +244,7 @@ namespace ProjetPirate.IA
                                 case Boat.ShipType.Player_Level_1:
                                 case Boat.ShipType.Player_Level_2:
                                 case Boat.ShipType.Player_Level_3:
-                                    if (pPotentialTarget.Controller.GetComponent<Player>()._currentXp >= _onAttackRangeCategories[i].Quantity)
+                                    if (pPotentialTarget.Controller.GetComponent<Player>()._data.dRessource.Reputation >= _onAttackRangeCategories[i].Quantity)
                                     {
                                         _behaviour = _onAttackRangeCategories[i].AssociatedBehaviour;
                                         return true;
@@ -260,7 +260,7 @@ namespace ProjetPirate.IA
                                 case Boat.ShipType.Player_Level_1:
                                 case Boat.ShipType.Player_Level_2:
                                 case Boat.ShipType.Player_Level_3:
-                                    if (pPotentialTarget.Controller.GetComponent<Player>()._currentXp <= _onDetectionRangeCategories[i].Quantity)
+                                    if (pPotentialTarget.Controller.GetComponent<Player>()._data.dRessource.Reputation <= _onDetectionRangeCategories[i].Quantity)
                                     {
                                         Debug.Log(i);
                                         _behaviour = _onDetectionRangeCategories[i].AssociatedBehaviour;
