@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\E_Water\Scripts_C\FlyDeko.cs" />
+     <Compile Include="Assets\E_Water\Scripts_C\WaterAnim2.cs" />
      <Compile Include="Assets\Project\Scripts\Controllers\PinchZoom.cs" />
      <Compile Include="Assets\Project\Scripts\Controllers\PlayerController.cs" />
      <Compile Include="Assets\Project\Scripts\Datas\ClientData.cs" />

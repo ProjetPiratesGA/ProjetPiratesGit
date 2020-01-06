@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Shader_Water_Test
+  m_Shader: {fileID: 4800000, guid: 76abbca804b695c4b8f6d670abe381d3, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_3516D1A4:
+        m_Texture: {fileID: 2800000, guid: 252a68079969d57449477baf2ebfc674, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_8A834522:
+        m_Texture: {fileID: 2800000, guid: 2b9e98c2ff4a3534aa305766d57ffd24, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_BA2E0590:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_F1DB7803:
+        m_Texture: {fileID: 2800000, guid: 16671f1af35fb944ab90b2d4c0d1df98, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_3981D68C: 1
+    - Vector1_4B4E1DB: 1
+    - Vector1_561ABF8: 1
+    - Vector1_67C49DD9: 1
+    - Vector1_6CDFAE13: 0.005
+    - Vector1_701D5AC4: 1.5
+    - Vector1_7BAA57D3: 2
+    - Vector1_7D6B6FF4: 1
+    - Vector1_862FA851: 1
+    - Vector1_9F1CCEE7: 1
+    - Vector1_9F3F51DB: 0
+    - Vector1_C2A4592: 2
+    - Vector1_CBA5EF80: 1
+    - Vector1_DB4C1053: 200
+    - Vector1_DE65687: 2
+    - Vector1_E1C2C842: 1
+    - Vector1_F4EB4A4: 1
+    m_Colors:
+    - Color_441A3668: {r: 0, g: 0.1404357, b: 1, a: 0}
+    - Color_A0B3BA15: {r: 0.09291565, g: 0.58318, b: 0.6792453, a: 0}
+    - Color_DD3B20CD: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 1}
+    - Vector2_391D8DB8: {r: 1, g: 1, b: 0, a: 0}
+    - Vector2_62FD54D8: {r: 0.02, g: 0.02, b: 0, a: 0}
+    - Vector2_B147570C: {r: 0, g: 0, b: 0, a: 0}
+    - Vector2_D025D111: {r: 100, g: 100, b: 0, a: 0}
