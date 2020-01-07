@@ -537,7 +537,7 @@ namespace Project.Network
             {
                 if (data.ClientRegistered[i].Player != null)
                 {
-                   // Debug.LogError("Player data : " + data.ClientRegistered[i].Username + " , Gold : " + data.ClientRegistered[i].Player.dRessource.Golds);
+                    // Debug.LogError("Player data : " + data.ClientRegistered[i].Username + " , Gold : " + data.ClientRegistered[i].Player.dRessource.Golds);
                     //if(data.ClientRegistered[i].Player.Boat != null )
                     //{
                     //    Debug.LogError("Boat CLeft : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft + " , Boat CRight : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft);
@@ -563,6 +563,7 @@ namespace Project.Network
                         {
                             data.ClientRegistered[j].Player = _playerList[i]._data;
                             Debug.LogError("Player data : " + _playerList[i]._username + " , Gold : " + _playerList[i]._data.dRessource.Golds);
+                            Debug.LogError("TEST TEST TEST -> " + _playerList[i].datatest.life);
                         }
                     }
                 }

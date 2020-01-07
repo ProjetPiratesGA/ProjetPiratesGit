@@ -308,7 +308,6 @@ GameObject:
   - component: {fileID: 114187017729336764}
   - component: {fileID: 114440688649139940}
   - component: {fileID: 114609878830940810}
-  - component: {fileID: 114168283884755500}
   - component: {fileID: 114834699175988596}
   m_Layer: 0
   m_Name: Boat
@@ -1387,19 +1386,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114168283884755500
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1584579801495920}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f69a179bf0e493d4dadc31d10edf0a62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentLife: 100
-  _barLife: {fileID: 224051180353305124}
 --- !u!114 &114187017729336764
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1411,19 +1397,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b643dd60f50fbf5428f8101e0cafd5ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  posCam: {fileID: 4448399763712056}
-  ObjVoile: {fileID: 1874662063408702}
-  listposShoot:
-  - {fileID: 4006494703315426}
-  - {fileID: 4313324778882974}
-  - {fileID: 4365487863489232}
-  - {fileID: 4413002100215660}
-  - {fileID: 4798278684362330}
-  - {fileID: 4827631739906402}
-  parentBullet: {fileID: 4782544025244234, guid: db8d435d2586eb3408f2a7b0fd099d57,
-    type: 2}
-  prefabBulletCanon: {fileID: 1815223218099404, guid: a5c7d7640dff8764e961135d120f9d63,
-    type: 2}
+  _zoom: 2
+  _minZoom: 1
+  _maxZoom: 4
 --- !u!114 &114440688649139940
 MonoBehaviour:
   m_ObjectHideFlags: 1
