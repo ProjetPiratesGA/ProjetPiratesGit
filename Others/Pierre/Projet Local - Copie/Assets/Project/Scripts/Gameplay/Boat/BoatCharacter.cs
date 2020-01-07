@@ -96,7 +96,7 @@ namespace ProjetPirate.Boat
         private float _deathAnimationCurrentMovementTime = 0;
         private float _deathAnimationMovementDelay = 2;
         private float _deathAnimationRotationTime = 4;
-        private float _deathAnimationMovementTime = 6;
+        private float _deathAnimationMovementTime = 4;
         private Vector3 _deathAnimationStartRotation;
         private Vector3 _deathAnimationEndRotation;
         private Vector3 _deathAnimationStartPosition;
@@ -121,6 +121,8 @@ namespace ProjetPirate.Boat
         private bool _respawninfAnimationIsPlaying = false;
         private float _respawnAnimationCurrentTime = 0;
         private float _respawnAnimationTime = 1.5f;
+
+        private bool _hasExploded = false;
 
         private int _nextDockingCheckpointId;
 
@@ -198,6 +200,8 @@ namespace ProjetPirate.Boat
         [SerializeField] ParticleSystem _damageFX;
         [SerializeField] Material _damageFXColor;
         [SerializeField] private ParticleSystem _goldFX;
+        [SerializeField] private TestSmokeDeath _smokeDeathFX;
+        [SerializeField] private ParticleSystem _explosionFX;
 
         [Header("BOAT STATES (DON'T TOUCH)")]
         [SerializeField]
@@ -281,6 +285,11 @@ namespace ProjetPirate.Boat
             {
                 _goldFX.Stop();
             }
+            if (_explosionFX)
+            {
+                _explosionFX.Stop();
+                _explosionFX.transform.parent = null;
+            }
 
             _currentLifePoint = _maxLifePoint;
             _directionLocator = Instantiate(new GameObject()).transform;
@@ -348,6 +357,7 @@ namespace ProjetPirate.Boat
 
             if (Input.GetKeyDown(KeyCode.Keypad0))
             {
+                _currentLifePoint = 0;
                 Death();
             }
 
@@ -542,7 +552,6 @@ namespace ProjetPirate.Boat
 
         public override void Death()
         {
-            _currentLifePoint = _maxLifePoint;
             this.GetComponent<BoxCollider>().enabled = false;
             _controller.Death();
             ProjetPirate.IA.Ship_Controller[] enemies = FindObjectsOfType<ProjetPirate.IA.Ship_Controller>();
@@ -558,6 +567,8 @@ namespace ProjetPirate.Boat
             _deathAnimationEndPosition = _deathAnimationStartPosition + (_deathAnimationPositionOffset.x * this.transform.right) + (_deathAnimationPositionOffset.y * this.transform.up) + (_deathAnimationPositionOffset.z * this.transform.forward);
             _deathAnimationEndRotation = _deathAnimationStartRotation + _deathAnimationRotationOffset;
             _deathAnimationIsPlaying = true;
+
+            _smokeDeathFX.Play();
         }
 
         public void DeathAnimation()
@@ -583,6 +594,13 @@ namespace ProjetPirate.Boat
 
             }
 
+            if (_deathAnimationCurrentMovementTime > 0.8f & !_hasExploded)
+            {
+                _explosionFX.transform.position = this.transform.position;
+                _explosionFX.Play();
+                _hasExploded = true;
+            }
+
             if (_deathAnimationCurrentRotationTime >= 1 & _deathAnimationCurrentMovementTime >= 1)
             {
                 _deathAnimationIsPlaying = false;
@@ -592,6 +610,9 @@ namespace ProjetPirate.Boat
                 this.GetComponent<BoxCollider>().enabled = true;
                 _currentMovingSpeed = _maxMovingSpeed;
                 _respawninfAnimationIsPlaying = true;
+                _currentLifePoint = _maxLifePoint;
+                _hasExploded = false;
+
             }
         }
 
@@ -1236,6 +1257,11 @@ namespace ProjetPirate.Boat
                 //If the destination si to the right, turn right.
                 TurnStarboard();
             }
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(_explosionFX);
         }
     }
 }
