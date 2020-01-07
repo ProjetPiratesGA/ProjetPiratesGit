@@ -18,10 +18,14 @@ MonoBehaviour:
   - __PanelContainer__rootVisualContainer__150bf7eff8070b3468711a74359b8584__MaterialGraphView__UnityEditor.Experimental.UIElements.GraphView.GraphView+PersistedSelection
   - __PanelContainer__rootVisualContainer__76abbca804b695c4b8f6d670abe381d3__MaterialGraphView__UnityEditor.Experimental.UIElements.GraphView.GraphView+PersistedViewTransform
   - __PanelContainer__rootVisualContainer__76abbca804b695c4b8f6d670abe381d3__MaterialGraphView__UnityEditor.Experimental.UIElements.GraphView.GraphView+PersistedSelection
+  - __PanelContainer__rootVisualContainer__5547f620d55903247bb5e5968a8110a6__MaterialGraphView__UnityEditor.Experimental.UIElements.GraphView.GraphView+PersistedViewTransform
+  - __PanelContainer__rootVisualContainer__5547f620d55903247bb5e5968a8110a6__MaterialGraphView__UnityEditor.Experimental.UIElements.GraphView.GraphView+PersistedSelection
   m_Values:
   - '{}'
   - '{}'
   - '{}'
   - '{}'
-  - '{"position":{"x":-558.0819091796875,"y":-461.8690185546875,"z":0.0},"scale":{"x":0.5717532634735107,"y":0.5717532634735107,"z":1.0}}'
-  - '{"m_Version":287,"m_SelectedElements":[]}'
+  - '{"position":{"x":-2325.914306640625,"y":-226.19769287109376,"z":0.0},"scale":{"x":0.6575162410736084,"y":0.6575162410736084,"z":1.0}}'
+  - '{"m_Version":382,"m_SelectedElements":[]}'
+  - '{}'
+  - '{}'

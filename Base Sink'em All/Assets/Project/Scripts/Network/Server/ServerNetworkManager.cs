@@ -12,10 +12,18 @@ namespace Project.Network
 {
     public class ServerNetworkManager : NetworkManager
     {
+        private List<PlankOnSea> _plankList = new List<PlankOnSea>();
         private List<BoatController> _boatList = new List<BoatController>();
         private List<Player> _playerList = new List<Player>();
 
         private List<GameObject> _enemyList = new List<GameObject>();
+
+
+        public List<PlankOnSea> plankList
+        {
+            get { return _plankList; }
+            set { _plankList = value; }
+        }
 
         public List<BoatController> boatList
         {
@@ -89,7 +97,6 @@ namespace Project.Network
         float fTimeLastSaveServer;
 
         bool sendStateLoginRegister;
-
         NetworkConnection _connBuffer;
 
         StateConnectionMessage stateConnectionBuffer;
@@ -101,7 +108,7 @@ namespace Project.Network
         public byte[] _usernameBuffer;
 
         public Data_Player tmpDataBufferPlayerEnterOnGame;
-        public byte[] byteDataUpdatePlayerEnterOnGame;
+        //public byte[] byteDataUpdatePlayerEnterOnGame;
 
         public Data_Player tmpDataBufferUpdatePlayerEveryTime;
         public byte[] byteDataUpdatePlayerEveryTime;
@@ -116,7 +123,7 @@ namespace Project.Network
         {
             SendErrorLoginRegister();
             SaveServerEvery(1);
-            SetDataToClient();
+            //SetDataToClient();
 
         }
         public override void OnStartServer()
@@ -132,7 +139,25 @@ namespace Project.Network
 
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
         {
+            Debug.Log("Server Add player connection " + conn.connectionId);
             Player playerInstance = Instantiate(playerPrefab.GetComponent<Player>());
+
+            for (int i = 0; i < _boatList.Count; i++)
+            {
+                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetParent(conn, _boatList[i].player.gameObject);
+            }
+            for (int i = 0; i < playerList.Count; i++)
+            {
+                Debug.Log("Player: " + playerList[i]._username + "  Conexion: " + conn.connectionId);
+                playerList[i].TargetSetPlayerReference(conn, playerList[i].gameObject);
+
+                _playerList[i].TargetSetStartData(conn, _playerList[i]._data.Boat.Stats.Life, _playerList[i]._data.Ressource.Golds, _playerList[i]._data.Boat.CurrentCanonLeft
+                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.MaxCanonPerSide, _playerList[i]._data.Boat.Stats.Speed);
+            }
+            for (int i = 0; i < _boatList.Count; i++)
+            {     
+                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetUpdateActiveCannons(conn);
+            }
             _playerList.Add(playerInstance);
 
             _playerList[_playerList.Count - 1].InitPlayer();
@@ -149,13 +174,16 @@ namespace Project.Network
 
             NetworkServer.AddPlayerForConnection(conn, _playerList[_playerList.Count - 1].gameObject, playerControllerId);
 
-            //Rafraichissement des liens de parenté ainsi que des paramétres des clients déja spawn pour le nouveau client
-            for (int i = 0; i < _boatList.Count; i++)
-            {
-                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetParent(conn, _boatList[i].player.gameObject);
+            ////Rafraichissement des liens de parenté ainsi que des paramétres des clients déja spawn pour le nouveau client
+            //for (int i = 0; i < _boatList.Count; i++)
+            //{
+            //    _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetParent(conn, _boatList[i].player.gameObject);
 
-                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetUpdateActiveCannons(conn);
-            }
+            //    _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetUpdateActiveCannons(conn);
+
+
+            //}
+
 
         }
 
@@ -468,15 +496,16 @@ namespace Project.Network
                     {
                         if (data.ClientRegistered[j].Username == _playerList[i]._username)
                         {
-                            byteDataUpdatePlayerEnterOnGame = formateToByte(data.ClientRegistered[j].Player);
-
-                            Debug.Log("Load Data Enter On Game -> Set isEnteringGame");
-
+                            _playerList[i]._data = data.ClientRegistered[j].Player;
+                            _playerList[i].RpcSetStartData(_playerList[i]._data.Boat.Stats.Life, _playerList[i]._data.Ressource.Golds, _playerList[i]._data.Boat.CurrentCanonLeft
+                                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.MaxCanonPerSide, _playerList[i]._data.Boat.Stats.Speed);
+                            _playerList[i].isDataReady = true;
+                            _playerList[i].TargetSetDataOk(_conn);
                             _playerList[i]._isEnteringGame = true;
-
+                            break;
                         }
                     }
-
+                    break;
                 }
             }
 
@@ -528,22 +557,23 @@ namespace Project.Network
         {
             SetDataServer();
 
-            Debug.LogError("Save Server !");
-            //for (int i = 0; i < data.ClientRegistered.Count; i++)
-            //{
-            //    if (data.ClientRegistered[i].Player != null)
-            //    {
-            //        Debug.LogError("Player data : " + data.ClientRegistered[i].Username + " , Gold : " + data.ClientRegistered[i].Player.dRessource.Golds);
-            //        //if(data.ClientRegistered[i].Player.Boat != null )
-            //        //{
-            //        //    Debug.LogError("Boat CLeft : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft + " , Boat CRight : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft);
-            //        //}
-            //        //else
-            //        //{
-            //        //    Debug.LogError("NO BOAT DATA !!");
-            //        //}
-            //    }
-            //}
+            //Debug.LogError("Save Server !");
+
+            for (int i = 0; i < data.ClientRegistered.Count; i++)
+            {
+                if (data.ClientRegistered[i].Player != null)
+                {
+                    // Debug.LogError("Player data : " + data.ClientRegistered[i].Username + " , Gold : " + data.ClientRegistered[i].Player.dRessource.Golds);
+                    //if(data.ClientRegistered[i].Player.Boat != null )
+                    //{
+                    //    Debug.LogError("Boat CLeft : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft + " , Boat CRight : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft);
+                    //}
+                    //else
+                    //{
+                    //    Debug.LogError("NO BOAT DATA !!");
+                    //}
+                }
+            }
             SaveSystem.SaveServer(data);
         }
 
@@ -555,7 +585,11 @@ namespace Project.Network
                 {
                     if (data.ClientRegistered[j].Username == _playerList[i]._username)
                     {
-                        data.ClientRegistered[j].Player = _playerList[i]._data;
+                        if (_playerList[i].isDataReady)
+                        {
+                            data.ClientRegistered[j].Player = _playerList[i]._data;
+                            //Debug.LogError("Player data : " + _playerList[i]._username + " , Gold : " + _playerList[i]._data.Ressource.Golds);
+                        }
                     }
                 }
             }
