@@ -7,6 +7,7 @@ using ProjetPirate.Physic;
 using ProjetPirate.Data;
 using UnityEngine.Networking;
 using ProjetPirate.IA;
+using Project.Network;
 
 namespace ProjetPirate.Boat
 {
@@ -52,8 +53,6 @@ namespace ProjetPirate.Boat
     [RequireComponent(typeof(AttractObject))]
     public class BoatCharacter : ProjetPirate.IA.Character
     {
-        private Data_Boat _data_Boat = new Data_Boat();
-
         [SerializeField] private ShipType _shipType;
 
         //Components
@@ -63,6 +62,11 @@ namespace ProjetPirate.Boat
         //isMovingForward
         private bool _isMovingForward = false;
         private float _stoppingDistance;
+
+        private bool isDying = false;
+
+        [SerializeField] public int _plankDroppedByDeath;
+        [SerializeField] public int _moneyDroppedByDeath;
 
         [Header("FALL DEATH")]
         [SerializeField]
@@ -184,14 +188,15 @@ namespace ProjetPirate.Boat
 
         public bool Safe = false;
 
+        public bool _isDying
+        {
+            get { return isDying; }
+            set { isDying = value; }
+        }
+
         public ShipType ShipType
         {
             get { return _shipType; }
-        }
-
-        public Data_Boat Data
-        {
-            get { return _data_Boat; }
         }
 
         public float StoppingDistance
@@ -207,7 +212,7 @@ namespace ProjetPirate.Boat
         public List<Cannon> larboardCannons
         {
             get { return _larboardCannons; }
-            set { _larboardCannons = value ; }
+            set { _larboardCannons = value; }
         }
 
         public List<Cannon> starboardCannons
@@ -246,26 +251,20 @@ namespace ProjetPirate.Boat
 
         public float getCurrentLife()
         {
-            return _data.Life;
+            return player._data.Boat.Stats.Life;
         }
 
         void Start()
         {
-            _data_Boat.Stats = _data;
-
-            //_data.Life = _maxLifePoint;
-
             _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
             _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
-
         }
+
 
         bool _asUpdateDatas = false;
 
         void Update()
         {
-
-
             _isMovingForward = false;
 
             if (Input.GetKeyDown(KeyCode.Keypad0))
@@ -316,7 +315,7 @@ namespace ProjetPirate.Boat
             {
                 _starboardCannonInCooldown = false;
                 _currentStarboardShootCooldownTime = 0;
-            }           
+            }
 
             //if (!_isDocking)
             //{
@@ -325,14 +324,14 @@ namespace ProjetPirate.Boat
             //        CheckRightInvisibleWall();
             //    }
             //}
-            
+
 
             //for (int i = 0; i < _waterTrails.Count; i++)
             //{
             //    ParticleSystem.MainModule main = _waterTrails[i].main;
             //    main.startLifetime = _data_Boat.dStats.Speed / _maxMovingSpeed;
             //}
-            _data_Boat.UpdateTransform(this.gameObject);
+            player._data.Boat.UpdateTransform(this.gameObject);
 
 
             //TEST DEBUG ADD CANNON
@@ -341,22 +340,76 @@ namespace ProjetPirate.Boat
                 if (Input.GetKeyDown(KeyCode.F5))
                 {
                     this.CmdAddCannons(true, false);
+                    if ((player._data.Boat.CurrentCanonLeft < player._data.Boat.MaxCanonPerSide))
+                    {
+                        player._data.Boat.CurrentCanonLeft++;
+                    }
+
+                    player.CmdSendCurrentCanonLeft(player._data.Boat.CurrentCanonLeft);
+
                     this.CmdUpdateActiveCanons();
+
                 }
                 if (Input.GetKeyDown(KeyCode.F6))
                 {
-                    this.CmdAddCannons(false, true);
+                    if ((player._data.Boat.CurrentCanonRight < player._data.Boat.MaxCanonPerSide))
+                    {
+                        player._data.Boat.CurrentCanonRight++;
+                    }
+
+                    player.CmdSendCurrentCanonRight(player._data.Boat.CurrentCanonRight);
+
                     this.CmdUpdateActiveCanons();
                 }
             }
             // END TEST
         }
 
+        [Command]
+        public void CmdDestroyPlank(GameObject _plank)
+        {
+            List<PlankOnSea> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().plankList;
+
+            tempList.Remove(_plank.GetComponent<PlankOnSea>());
+            Destroy(_plank);
+        }
+
+        [Command]
+        private void CmdAddPlank(int nbPlank, Vector3 _position)
+        {
+            //NetworkServer.SpawnWithClientAuthority(plank.gameObject, this.connectionToClient);
+
+            List<PlankOnSea> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().plankList;
+
+            for (int i = 0; i < nbPlank; i++)
+            {
+                GameObject plank = Instantiate(_droppedPlank);
+
+                plank.transform.position = _position + new Vector3(0, 0.712f, 0);
+                plank.GetComponent<PlankOnSea>().SetDestination();
+
+                tempList.Add(plank.GetComponent<PlankOnSea>());
+
+                //TargetSpawnPlank(this.connectionToClient, plank.gameObject);
+                NetworkServer.Spawn(plank);
+            }
+        }
+
         public override void Death()
         {
-            _data.Life = _maxLifePoint;
+            player._data.Boat.Stats.Life = _maxLifePoint;
+            player.CmdSendLife(player._data.Boat.Stats.Life);
+
+            isDying = true;
+
             this.GetComponent<BoxCollider>().enabled = false;
-            _controller.Death();
+            this.GetComponentInParent<Player>().Death();
+
+            // Chest.SpawnChest(_boat.DroppedChest, _boat.transform.position, lostMoney, _currentPlank);
+
+            CmdAddPlank(this._plankDroppedByDeath, this.transform.position);
+
+
             /*ProjetPirate.IA.Ship_Controller[] enemies = FindObjectsOfType<ProjetPirate.IA.Ship_Controller>();
             for (int i = 0; i < enemies.Length; i++)
             {
@@ -401,8 +454,10 @@ namespace ProjetPirate.Boat
                 _deathAnimationIsPlaying = false;
                 _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
                 _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
-                _controller.Disappear();
+
+                this.GetComponentInParent<Player>().Disappear();
                 this.GetComponent<BoxCollider>().enabled = true;
+
                 _currentMovingSpeed = _maxMovingSpeed;
                 _respawninfAnimationIsPlaying = true;
             }
@@ -422,12 +477,10 @@ namespace ProjetPirate.Boat
         [Command]
         public void CmdSetUpBoat(GameObject player)
         {
-            
+
             this.gameObject.transform.SetParent(player.transform);
             //this.transform.localPosition = new Vector3(0, 0, 0);
-            _controller = player.GetComponent<Controller>();
-
-            player.GetComponent<Player>().SetDataBoat(this);
+            //_controller = player.GetComponent<Controller>();
             TargetSetParent(player.GetComponent<Player>().connectionToClient, player.gameObject);
 
 
@@ -447,13 +500,13 @@ namespace ProjetPirate.Boat
         public void CmdAddCannons(bool left, bool right)
         {
 
-            if ((_data_Boat.CurrentCanonLeft < _data_Boat.MaxCanonPerSide) && left == true)
+            if ((player._data.Boat.CurrentCanonLeft < player._data.Boat.MaxCanonPerSide) && left == true)
             {
-                _data_Boat.CurrentCanonLeft++;
+                player._data.Boat.CurrentCanonLeft++;
             }
-            if ((_data_Boat.CurrentCanonRight < _data_Boat.MaxCanonPerSide) && right == true)
+            if ((player._data.Boat.CurrentCanonRight < player._data.Boat.MaxCanonPerSide) && right == true)
             {
-                _data_Boat.CurrentCanonRight++;
+                player._data.Boat.CurrentCanonRight++;
             }
             this.RpcAddCannons(left, right);
         }
@@ -461,22 +514,46 @@ namespace ProjetPirate.Boat
         [ClientRpc]
         public void RpcAddCannons(bool left, bool right)
         {
-            if ((_data_Boat.CurrentCanonLeft < _data_Boat.MaxCanonPerSide) && left == true)
+            if (( player._data.Boat.CurrentCanonLeft <  player._data.Boat.MaxCanonPerSide) && left == true)
             {
-                _data_Boat.CurrentCanonLeft++;
+                 player._data.Boat.CurrentCanonLeft++;
             }
-            if ((_data_Boat.CurrentCanonRight < _data_Boat.MaxCanonPerSide) && right == true)
+            if (( player._data.Boat.CurrentCanonRight <  player._data.Boat.MaxCanonPerSide) && right == true)
             {
-                _data_Boat.CurrentCanonRight++;
+                 player._data.Boat.CurrentCanonRight++;
             }
         }
 
 
         public void SetActiveCannons()
         {
+            if(player == null)
+            {
+                Debug.Log("PLAYER NULL");
+                Debug.Break();
+            }
+            else
+                Debug.Log("PLAYER OK");
+
+            if (player._data == null)
+            {
+                Debug.Log("DATA NULL");
+                Debug.Break();
+            }
+            else
+                Debug.Log("DATA OK");
+
+            if (player._data.Boat == null)
+            {
+                Debug.Log("DATA_BOAT NULL");
+                Debug.Break();
+            }
+            else
+                Debug.Log("DATA_BOAT OK");
+
             for (int i = 0; i < _larboardCannons.Count; i++)
             {
-                if (i < _data_Boat.CurrentCanonLeft)
+                if (i <  player._data.Boat.CurrentCanonLeft)
                 {
                     _larboardCannons[i].gameObject.SetActive(true);
                 }
@@ -488,7 +565,7 @@ namespace ProjetPirate.Boat
 
             for (int i = 0; i < _starboardCannons.Count; i++)
             {
-                if (i < _data_Boat.CurrentCanonRight)
+                if (i <  player._data.Boat.CurrentCanonRight)
                 {
                     _starboardCannons[i].gameObject.SetActive(true);
                 }
@@ -500,13 +577,9 @@ namespace ProjetPirate.Boat
         }
 
         [TargetRpc]
-        public void TargetSetParent(NetworkConnection target,GameObject player)
+        public void TargetSetParent(NetworkConnection target, GameObject player)
         {
             this.gameObject.transform.SetParent(player.transform);
-            //this.transform.localPosition = new Vector3(0, 0, 0);
-            _controller = player.GetComponent<Controller>();
-            player.GetComponent<Player>().SetDataBoat(this);
-
         }
 
         /// <summary>
@@ -553,8 +626,9 @@ namespace ProjetPirate.Boat
         {
             #region MANAGE BOAT MOVEMENT STATE
 
+
             //use the input to define the state of the boat
-            if (_data_Boat.Stats.Speed == 0)
+            if ( player._data.Boat.Stats.Speed == 0)
             {
                 _boatMovementState = BoatMovementState.IDLE;
             }
@@ -562,26 +636,22 @@ namespace ProjetPirate.Boat
             {
                 //acceleration
                 //if (_currentSpeedForward > 0 && (_zInputMovement != 0 || _xInputMovement != 0))
-                if (_data_Boat.Stats.Speed > 0 && _ControllerIsMoving == true)
+                if ( player._data.Boat.Stats.Speed > 0 && _ControllerIsMoving == true)
                 {
                     _boatMovementState = BoatMovementState.ACCELERATE;
                 }
                 //deceleration
                 //else if (_currentSpeedForward > 0 && (_zInputMovement == 0 && _xInputMovement == 0))
-                else if (_data_Boat.Stats.Speed > 0 && _ControllerIsMoving == false)
+                else if ( player._data.Boat.Stats.Speed > 0 && _ControllerIsMoving == false)
                 {
                     _boatMovementState = BoatMovementState.DECELERATE;
                 }
                 //cruise_speed
-                if (_data_Boat.Stats.Speed >= _maxMovingSpeed)
+                if ( player._data.Boat.Stats.Speed >= _maxMovingSpeed)
                 {
                     _boatMovementState = BoatMovementState.CRUISE_SPEED;
                 }
             }
-
-
-
-
             #endregion MANAGE BOAT MOVEMENT STATE
         }
 
@@ -652,7 +722,7 @@ namespace ProjetPirate.Boat
         public override void MoveForward()
         {
             Vector3 pos = this.transform.position;
-            pos += this.transform.forward * _data_Boat.Stats.Speed * Time.deltaTime;
+            pos += this.transform.forward *  player._data.Boat.Stats.Speed * Time.deltaTime;
             //pos.y = 0;
             this.transform.position = pos;
             _isMovingForward = true;
@@ -661,24 +731,24 @@ namespace ProjetPirate.Boat
         public void Accelerate()
         {
             Debug.Log(this.name + "je suis dans le accelerate");
-            _data_Boat.Stats.Speed += _accelerationSpeedForward * Time.deltaTime;
-            if (_data_Boat.Stats.Speed > _maxMovingSpeed)
+             player._data.Boat.Stats.Speed += _accelerationSpeedForward * Time.deltaTime;
+            if ( player._data.Boat.Stats.Speed > _maxMovingSpeed)
             {
-                _data_Boat.Stats.Speed = _maxMovingSpeed;
+                 player._data.Boat.Stats.Speed = _maxMovingSpeed;
             }
-            //Debug.Log(this.name + " --> Acclerate / _data_Boat.dStats.Speed : " + _data_Boat.dStats.Speed + " _accelerationSpeedForward : " + _accelerationSpeedForward
-                //+ " Time.deltaTime : " + Time.deltaTime);
-            _stoppingDistance = ((_data_Boat.Stats.Speed / 10) * (_data_Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
+            //Debug.Log(this.name + " --> Acclerate /  player._data.Boat.dStats.Speed : " +  player._data.Boat.dStats.Speed + " _accelerationSpeedForward : " + _accelerationSpeedForward
+            //+ " Time.deltaTime : " + Time.deltaTime);
+            _stoppingDistance = (( player._data.Boat.Stats.Speed / 10) * ( player._data.Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
         }
 
         public void Decelerate()
         {
-            _data_Boat.Stats.Speed -= _decelerationSpeedForward * Time.deltaTime;
-            if (_data_Boat.Stats.Speed < 0)
+             player._data.Boat.Stats.Speed -= _decelerationSpeedForward * Time.deltaTime;
+            if ( player._data.Boat.Stats.Speed < 0)
             {
-                _data_Boat.Stats.Speed = 0;
+                 player._data.Boat.Stats.Speed = 0;
             }
-            _stoppingDistance = ((_data_Boat.Stats.Speed / 10) * (_data_Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
+            _stoppingDistance = (( player._data.Boat.Stats.Speed / 10) * ( player._data.Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
         }
 
         /// <summary>
@@ -688,7 +758,7 @@ namespace ProjetPirate.Boat
         {
             //acceleration
             //if (_zInputMovement != 0 || _xInputMovement != 0)
-            Debug.Log(this.name + " --> UpdateSpeedForwardForDirection / _ControllerIsMoving" + _ControllerIsMoving);
+            //Debug.Log(this.name + " --> UpdateSpeedForwardForDirection / _ControllerIsMoving" + _ControllerIsMoving);
             if (_ControllerIsMoving == true)
             {
                 Debug.Log(this.name + "je suis passere");
@@ -701,7 +771,7 @@ namespace ProjetPirate.Boat
                 Decelerate();
             }
 
-            if (_data_Boat.Stats.Speed > 0)
+            if ( player._data.Boat.Stats.Speed > 0)
             {
                 _isMovingForward = true;
             }
@@ -715,7 +785,7 @@ namespace ProjetPirate.Boat
 
         public void PerformMovement(float pInputVertical, float pInputHorizontal)
         {
-            //Debug.Log(this.name + " --> performMovement / _data_Boat.dStats.Speed : " + _data_Boat.dStats.Speed + " _currentAngularSpeed : " + _currentAngularSpeed + " this.transform.position : " + this.transform.position);
+            //Debug.Log(this.name + " --> performMovement /  player._data.Boat.dStats.Speed : " +  player._data.Boat.dStats.Speed + " _currentAngularSpeed : " + _currentAngularSpeed + " this.transform.position : " + this.transform.position);
             _joystickController = FindObjectOfType<JoystickController>();
             if (_joystickController == null)
             {
@@ -739,8 +809,8 @@ namespace ProjetPirate.Boat
             //{
             //    if (_attractObject._isFalling == false)
             //    {
-                    MoveForward();
-                    //this.transform.position += _currentVelocity_MovementDirection;
+            MoveForward();
+            //this.transform.position += _currentVelocity_MovementDirection;
             //    }
             //}
             //else
@@ -842,7 +912,7 @@ namespace ProjetPirate.Boat
 
         public float getSpeedForward()
         {
-            return _data_Boat.Stats.Speed;
+            return  player._data.Boat.Stats.Speed;
         }
 
         public float getMaxSpeedForward()
@@ -857,9 +927,9 @@ namespace ProjetPirate.Boat
 
         public int getCurrentXp()
         {
-            if (_controller.GetComponent<Player>() != null)
+            if (this.GetComponent<BoatController>().player != null)
             {
-                return (int)_controller.GetComponent<Player>()._data.dRessource.Reputation;
+                return (int)this.GetComponent<BoatController>().player._data.Ressource.Reputation;
             }
             else
             {
@@ -871,10 +941,6 @@ namespace ProjetPirate.Boat
         //{
         //    return _shootCooldown;
         //}
-
-
-
-
 
         //public int getCurrentXp()
         //{
@@ -893,6 +959,46 @@ namespace ProjetPirate.Boat
         public void SetUpBoat(Ship_Controller pController)
         {
             _controller = pController;
+        }
+
+        public override int Damage(int _damage)
+        {
+            if (!Safe)
+            {
+                player._data.Boat.Stats.Life -= _damage;
+                if (player._data.Boat.Stats.Life <= 0)
+                {
+                    Death();
+                    return _xpEarned;
+                }
+            }
+            return 0;
+        }
+
+        public override int Damage(int _damage, Transform pDamageLocation)
+        {
+            if (!Safe)
+            {
+                /*if (_damageFX != null)
+                {
+                    Vector3 vec = pDamageLocation.eulerAngles;
+                    vec.y += 180;
+                    _damageFX.transform.eulerAngles = vec;
+                    vec = pDamageLocation.position;
+                    vec += pDamageLocation.forward * 0.112f;
+                    _damageFX.transform.position = vec;
+                    _damageFX.Play();
+                }*/
+
+                player._data.Boat.Stats.Life -= _damage;
+                player.CmdSendLife(player._data.Boat.Stats.Life);
+                if (player._data.Boat.Stats.Life <= 0)
+                {
+                    Death();
+                    return _xpEarned;
+                }
+            }
+            return 0;
         }
     }
 }

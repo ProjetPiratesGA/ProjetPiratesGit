@@ -316,7 +316,7 @@ namespace ProjetPirate.Data
                 (new FileInfo(path)).Directory.Create();
             }
             //string path = Application.DataPath + strDatasFolder + strPathServerData + "/ListClient.data";
-            Debug.Log("Client List path " + path);
+            //Debug.Log("Client List path " + path);
             FileStream stream = new FileStream(path, FileMode.Create);
             br.Serialize(stream, pData);
 

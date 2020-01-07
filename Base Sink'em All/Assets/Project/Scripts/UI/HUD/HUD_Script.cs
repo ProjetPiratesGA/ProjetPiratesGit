@@ -145,7 +145,7 @@ namespace ProjetPirate.UI.HUD
             {
                 if (_player != null)
                 {
-                    _goldValueText.text = _playerScript._data.dRessource.Golds.ToString();
+                    _goldValueText.text = _playerScript._data.Ressource.Golds.ToString();
                 }
                 else
                 {
@@ -160,7 +160,7 @@ namespace ProjetPirate.UI.HUD
             {
                 if (_player != null)
                 {
-                    _XpValueText.text = _playerScript._data.dRessource.Reputation.ToString();
+                    _XpValueText.text = _playerScript._data.Ressource.Reputation.ToString();
                 }
                 else
                 {

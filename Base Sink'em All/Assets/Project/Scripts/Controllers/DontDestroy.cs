@@ -9,14 +9,6 @@ public class DontDestroy : MonoBehaviour
     // Use this for initialization
     void Start () 
     {
-        if (!once_call)
-        {
-            DontDestroyOnLoad(this);
-            once_call = true;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        DontDestroyOnLoad(this);
     }
 }
