@@ -21,7 +21,22 @@ ModelImporter:
     2300000: Bateau_pirate
     3300000: Bateau_pirate
     4300000: Bateau_pirate
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2
+    second: {fileID: 2100000, guid: 716a40f042547564a9d22c4be1584c6e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert3
+    second: {fileID: 2100000, guid: ba44abf897c14c34fab9898605334015, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert4
+    second: {fileID: 2100000, guid: 5382fa6ac156779498a6f8593cd7000b, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

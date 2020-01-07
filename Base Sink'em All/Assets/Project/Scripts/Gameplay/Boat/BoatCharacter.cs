@@ -180,6 +180,7 @@ namespace ProjetPirate.Boat
 
         [SerializeField] public GameObject _droppedPlank;
         [SerializeField] public GameObject _droppedChest;
+        [SerializeField] private ParticleSystem _goldFX;
 
         private bool _goldFXIsPlaying = false;
         private Vector3 _goldFXStartPosition;
@@ -365,6 +366,21 @@ namespace ProjetPirate.Boat
             // END TEST
         }
 
+        public void GoldFx(Vector3 pChestLocation, int pContainedMoney)
+        {
+            if (_goldFX != null)
+            {
+                _goldFXStartPosition = pChestLocation;
+                _goldFXEndPosition = this.transform.position;
+                _goldFXIsPlaying = true;
+                _goldFX.transform.position = _goldFXStartPosition;
+                _goldFXCurrentTime = 0;
+                ParticleSystem.EmissionModule module = _goldFX.emission;
+                module.rateOverTime = pContainedMoney * 25;
+                _goldFX.Play();
+            }
+        }
+
         [Command]
         public void CmdDestroyPlank(GameObject _plank)
         {
@@ -402,13 +418,11 @@ namespace ProjetPirate.Boat
 
             isDying = true;
 
-            this.GetComponent<BoxCollider>().enabled = false;
-            this.GetComponentInParent<Player>().Death();
-
-            // Chest.SpawnChest(_boat.DroppedChest, _boat.transform.position, lostMoney, _currentPlank);
-
             CmdAddPlank(this._plankDroppedByDeath, this.transform.position);
 
+            this.GetComponent<BoxCollider>().enabled = false;
+            this.GetComponentInParent<Player>().Death();
+  
 
             /*ProjetPirate.IA.Ship_Controller[] enemies = FindObjectsOfType<ProjetPirate.IA.Ship_Controller>();
             for (int i = 0; i < enemies.Length; i++)

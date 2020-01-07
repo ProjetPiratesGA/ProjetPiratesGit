@@ -1661,7 +1661,9 @@ MonoBehaviour:
   _structureState: 0
   _droppedPlank: {fileID: 1494260278651724, guid: dea7ae8bb1288c546a076e94838a9f2c,
     type: 2}
-  _droppedChest: {fileID: 0}
+  _droppedChest: {fileID: 1967134703231096, guid: 37b4b39dd211ae14992664de9dce6d64,
+    type: 2}
+  _goldFX: {fileID: 0}
   Safe: 0
 --- !u!114 &114911190053192394
 MonoBehaviour:

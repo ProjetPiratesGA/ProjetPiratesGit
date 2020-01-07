@@ -555,33 +555,10 @@ public class Player : Controller
         LoseXP(_xpLostByDeath);
         int lostMoney = (int)(data.Ressource.Golds * _goldRatiolostByDeath);
 
+        CmdSpawnChest(lostMoney, data.Ressource.WoodBoard);
+
         LoseMoney(lostMoney);
         LosePlank(data.Ressource.WoodBoard);
-    }
-
-    [Command]
-    public void CmdCallDisappear()
-    {
-        List<BoatController> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().boatList;
-
-        for (int i = 0; i < tempList.Count; i++)
-        {
-            if (this.connectionToClient == tempList[i].connectionToClient)
-            {
-                GameObject boatInstance = tempList[i].gameObject;
-            }
-        }
-
-        TargetDisppear(this.connectionToClient, boatInstance);
-    }
-
-    [TargetRpc]
-    public void TargetDisppear(NetworkConnection target, GameObject _myBoat)
-    {
-        _myBoat.transform.position = myIle._posRespawnBoat.position;
-        _myBoat.transform.rotation = myIle._posRespawnBoat.rotation;
-
-        this.GetComponent<BoatCharacter>()._isDying = false;
     }
 
     [ClientRpc]
@@ -607,8 +584,41 @@ public class Player : Controller
 
     }
 
+    [Command]
+    public void CmdDestroyChest(GameObject _chest)
+    {
+        Debug.LogError("Destroy Cmd Player chest");
+        List<Chest> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().ChestList;
+
+        tempList.Remove(_chest.GetComponent<Chest>());
+        Destroy(_chest);
+    }
+
+    [Command]
+    private void CmdSpawnChest(int pContainedMoney, int pContainedPlank)
+    {
+        Chest chest = Instantiate(boatInstance.GetComponent<BoatCharacter>().DroppedChest).GetComponent<Chest>();
+        chest.transform.position = boatInstance.transform.position + new Vector3(0, 0.712f, 0);
+        chest.containedMoney = pContainedMoney;
+        chest.containedPlank = pContainedPlank;
+
+        List<Chest> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().ChestList;
+
+        tempList.Add(chest);
+
+        NetworkServer.Spawn(chest.gameObject);
+    }
+
     public override void Disappear()
     {
-        CmdCallDisappear();
+        if (boatInstance == null)
+        {
+            boatInstance = this.GetComponentInChildren<BoatCharacter>().gameObject;
+        }
+
+        boatInstance.transform.position = myIle._posRespawnBoat.position;
+        boatInstance.transform.rotation = myIle._posRespawnBoat.rotation;
+
+        boatInstance.GetComponent<BoatCharacter>()._isDying = false;
     }
 }

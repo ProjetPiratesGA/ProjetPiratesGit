@@ -97,6 +97,7 @@
      <Compile Include="Assets\Project\Scripts\Gameplay\Boat\BoatCharacter.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Boat\Cannon.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Boat\CannonBall.cs" />
+     <Compile Include="Assets\Project\Scripts\Gameplay\Chest.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Controller.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\PlankOnSea.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Sea.cs" />
