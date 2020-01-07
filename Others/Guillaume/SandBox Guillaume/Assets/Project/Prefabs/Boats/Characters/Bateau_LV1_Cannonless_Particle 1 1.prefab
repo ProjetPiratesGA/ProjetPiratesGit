@@ -613,73 +613,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1850438952872728}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7866b7e5e06c374f90f375b423221f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _transformParent: {fileID: 4332223685237926}
-  _canDoAnimation: 0
-  _currentAngleRotation: {x: 0, y: 0, z: 0}
-  _tempBoatRotationState_ForRoll_Z: 0
-  _tempBoatRotationState_ForRoll_X: 0
-  _currentTargetInclinaison_Z: 0
-  _currentCanVerifyReachTargetInclinaison_Z: 1
-  _currentReachTargetInclinaison_Z: 0
-  _tempTargetAngleForRoll_Z: 0
-  _tempStartPosAngleForRoll_Z: 0
-  _currentTargetInclinaison_X: 0
-  _currentCanVerifyReachTargetInclinaison_X: 1
-  _currentReachTargetInclinaison_X: 0
-  _tempTargetAngleForRoll_X: 0
-  _currentAngleMaxInclinaison_Z: 0
-  _currentRollSpeed_Z: 0
-  _currentRollAccelerationSpeed_Z: 0
-  _currentRollDecelerationSpeed_Z: 0
-  _currentRollMaxSpeed_Z: 0
-  _currentRollMinSpeed_Z: 0
-  _currentIsRotating_Larboard: 0
-  _currentIsRotating_Starboard: 0
-  _currentAngleMaxInclinaison_X: 0
-  _currentRollSpeed_X: 0
-  _currentIsRotating_Forward: 0
-  _currentIsRotating_Backward: 0
-  _RollIdleMovement_AngleMaxInclinaison_Z: 3
-  _RollIdleMovement_SpeedRotation_Z: 0.02
-  _RollIdleMovement_AccelerationRotation_Z: 0.1
-  _RollIdleMovement_DecelerationRotation_Z: 0.1
-  _RollIdleMovement_MaxSpeedRotation_Z: 1
-  _RollIdleMovement_MinSpeedRotation_Z: 1
-  _RollForwardMovement_AngleMaxInclinaison_Z: 1.5
-  _RollForwardMovement_SpeedRotation_Z: 0.05
-  _RollLarboardMovement_AngleMaxInclinaison_Z: 1.5
-  _RollLarboardMovement_SpeedRotation_Z: 0.05
-  _RollStarboardMovement_AngleMaxInclinaison_Z: 1.5
-  _RollStarboardMovement_SpeedRotation_Z: 0.05
-  _RollIdleMovement_AngleMaxInclinaison_X: 1
-  _RollIdleMovement_SpeedRotation_X: 0.01
-  _RollForwardMovement_AngleMaxInclinaison_X: 1.5
-  _RollForwardMovement_SpeedRotation_X: 0.02
-  _RollLarboardMovement_AngleMaxInclinaison_X: 1.5
-  _RollLarboardMovement_SpeedRotation_X: 0.02
-  _RollStarboardMovement_AngleMaxInclinaison_X: 1.5
-  _RollStarboardMovement_SpeedRotation_X: 0.02
-  _Forward_SpeedRotationToTarget_Z: 0.05
-  _Forward_ReachAngleInclinaisonTarget_Z: 0
-  _Larboard_SpeedRotationToTarget_Z: 0.05
-  _Larboard_ReachAngleInclinaisonTarget_Z: 0
-  _Larboard_TargetInclinaison_Z: 5
-  _Starboard_SpeedRotationToTarget_Z: 0.05
-  _Starboard_ReachAngleInclinaisonTarget_Z: 0
-  _Starboard_TargetInclinaison_Z: 355
-  _Forward_SpeedRotationToTarget_X: 0.02
-  _Forward_ReachAngleInclinaisonTarget_X: 0
-  _Larboard_SpeedRotationToTarget_X: 0.02
-  _Larboard_ReachAngleInclinaisonTarget_X: 0
-  _Larboard_TargetInclinaison_X: 2
-  _Starboard_SpeedRotationToTarget_X: 0.02
-  _Starboard_ReachAngleInclinaisonTarget_X: 0
-  _Starboard_TargetInclinaison_X: 358
 --- !u!114 &114049749616499506
 MonoBehaviour:
   m_ObjectHideFlags: 1

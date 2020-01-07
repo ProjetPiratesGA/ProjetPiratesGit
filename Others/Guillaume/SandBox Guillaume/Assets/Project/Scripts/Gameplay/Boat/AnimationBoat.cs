@@ -50,7 +50,7 @@ namespace ProjetPirate.Boat
 
                 _transformMesh.eulerAngles = _rotationeulerToApply;
 
-                _boatCharacter.Data_Boat.ChildTransform.Rotation = new myVector3(_rotationeulerToApply.x, _rotationeulerToApply.y, _rotationeulerToApply.z);
+                //_boatCharacter.Data_Boat.ChildTransform.Rotation = new myVector3(_rotationeulerToApply.x, _rotationeulerToApply.y, _rotationeulerToApply.z);
         }
 
     }
