@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 using ProjetPirate.Data;
 using ProjetPirate.Boat;
 using ProjetPirate.UI.HUD;
+using ProjetPirate.IA;
 
 public class Player : Controller {
     
@@ -33,6 +34,10 @@ public class Player : Controller {
 
     [SyncVar]
     public bool _isConnected;
+
+    bool _isDataReady = false;
+
+    public bool isDataReady { get { return _isDataReady; }set { _isDataReady = value; } }
 
     //DEBUG SEB
     private float _debugLogDisplayTimer = 0;
@@ -81,10 +86,6 @@ public class Player : Controller {
         DontDestroyOnLoad(this);
     }
 
-    public void SetDataBoat(BoatCharacter pBoat)
-    {
-        _data.Boat = pBoat.Data;
-    }
 
     public override void OnStartClient()
     {
@@ -148,8 +149,7 @@ public class Player : Controller {
         if(isLocalPlayer)
         {
             if (Input.GetKeyDown(KeyCode.F10))
-            {
-                _data.dRessource.Golds += 10;
+            {             
                 CmdUpdateDataGold();
             }
 
@@ -170,14 +170,26 @@ public class Player : Controller {
     public void CmdUpdateDataGold()
     {
         _data.dRessource.Golds += 10;
+        RpcUpdateDataGold();
     }
-
+    [ClientRpc]
+    public void RpcUpdateDataGold()
+    {
+        _data.dRessource.Golds += 10;
+    }
 
     [Command]
     public void CmdSendDebug(int goldValue)
     {
-        //Debug.LogError("Gold : " + goldValue);
+        Debug.LogError("Gold : " + goldValue);
     }
+
+    [TargetRpc]
+    public void TargetSetDataOk(NetworkConnection target)
+    {
+        isDataReady = true;
+    }
+
     ///FIN DEBUG
     
 
@@ -246,6 +258,7 @@ public class Player : Controller {
         boatInstance.transform.SetParent(this.gameObject.transform);
         //Set the reference to the player for the new boat (server side only)
         boatInstance.GetComponent<BoatController>().player = this;
+        boatInstance.GetComponent<Character>().player = this;
         //Set new tag
         boatInstance.tag = "myBoat";
         //Get the boat list form the network manager
@@ -253,8 +266,6 @@ public class Player : Controller {
 
         //Add the new boat instance to the list
         tempList.Add(boatInstance.GetComponent<BoatController>());
-
-        data.Boat = boatInstance.GetComponent<BoatCharacter>().Data;
 
         //spawn this new boat with player autorithy
         NetworkServer.SpawnWithClientAuthority(boatInstance, this.connectionToClient);
@@ -275,6 +286,7 @@ public class Player : Controller {
     public void TargetSetPlayerReference(NetworkConnection target, GameObject playerReference, GameObject obj)
     {
         obj.GetComponent<BoatController>().player = playerReference.GetComponent<Player>();
+        obj.GetComponent<Character>().player = playerReference.GetComponent<Player>();
         //SetDataBoat(obj.GetComponent<BoatCharacter>());
 
     }
@@ -309,24 +321,24 @@ public class Player : Controller {
     [Command]
     public void CmdLoadDataEnterOnGame()
     {
-        Debug.Log("On Server Command Load Data for Enter the Game; try to set Data Resources");
-        Data_Player dataBuffer = unformateByte(NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEnterOnGame);
+        //Debug.Log("On Server Command Load Data for Enter the Game; try to set Data Resources");
+        //Data_Player dataBuffer = unformateByte(NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEnterOnGame);
 
-        if (dataBuffer != null)
-        {
-            //Load Data
-            Debug.Log("Set data Entering on Game");
+        //if (dataBuffer != null)
+        //{
+        //    //Load Data
+        //    Debug.Log("Set data Entering on Game");
 
-            data = dataBuffer;
+        //    data = dataBuffer;
 
-        }
-        else
-        {
+        //}
+        //else
+        //{
 
-            Debug.Log("Data Entering on Game is NULL");
-        }
+        //    Debug.Log("Data Entering on Game is NULL");
+        //}
 
-        TargetLoadDataEnterOnGame(this.connectionToClient, NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEnterOnGame);
+        //TargetLoadDataEnterOnGame(this.connectionToClient, NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEnterOnGame);
     }
 
     [TargetRpc]
@@ -352,24 +364,24 @@ public class Player : Controller {
     [Command]
     public void CmdLoadDataEveryTime()
     {
-        Debug.Log("On Server Command Load Data for Every Time; try to set Data Resources");
-        Data_Player dataBuffer = unformateByte(NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEveryTime);
+        //Debug.Log("On Server Command Load Data for Every Time; try to set Data Resources");
+        //Data_Player dataBuffer = unformateByte(NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEveryTime);
 
-        if (dataBuffer != null)
-        {
-            //Load Data
-            Debug.Log("Set data Entering on Game");
+        //if (dataBuffer != null)
+        //{
+        //    //Load Data
+        //    Debug.Log("Set data Entering on Game");
 
-            data = dataBuffer;
+        //    data = dataBuffer;
 
-        }
-        else
-        {
+        //}
+        //else
+        //{
 
-            Debug.Log("Data Entering on Game is NULL");
-        }
+        //    Debug.Log("Data Entering on Game is NULL");
+        //}
 
-        TargetLoadDataEveryTime(this.connectionToClient, NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEveryTime);
+        //TargetLoadDataEveryTime(this.connectionToClient, NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().byteDataUpdatePlayerEveryTime);
     }
 
     [TargetRpc]

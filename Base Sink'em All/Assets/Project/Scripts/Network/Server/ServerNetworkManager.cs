@@ -13,12 +13,11 @@ namespace Project.Network
     public class ServerNetworkManager : NetworkManager
     {
         private List<PlankOnSea> _plankList = new List<PlankOnSea>();
-
         private List<BoatController> _boatList = new List<BoatController>();
-        
         private List<Player> _playerList = new List<Player>();
 
         private List<GameObject> _enemyList = new List<GameObject>();
+
 
         public List<PlankOnSea> plankList
         {
@@ -98,7 +97,6 @@ namespace Project.Network
         float fTimeLastSaveServer;
 
         bool sendStateLoginRegister;
-
         NetworkConnection _connBuffer;
 
         StateConnectionMessage stateConnectionBuffer;
@@ -110,7 +108,7 @@ namespace Project.Network
         public byte[] _usernameBuffer;
 
         public Data_Player tmpDataBufferPlayerEnterOnGame;
-        public byte[] byteDataUpdatePlayerEnterOnGame;
+        //public byte[] byteDataUpdatePlayerEnterOnGame;
 
         public Data_Player tmpDataBufferUpdatePlayerEveryTime;
         public byte[] byteDataUpdatePlayerEveryTime;
@@ -125,7 +123,7 @@ namespace Project.Network
         {
             SendErrorLoginRegister();
             SaveServerEvery(1);
-            SetDataToClient();
+            //SetDataToClient();
 
         }
         public override void OnStartServer()
@@ -477,15 +475,14 @@ namespace Project.Network
                     {
                         if (data.ClientRegistered[j].Username == _playerList[i]._username)
                         {
-                            byteDataUpdatePlayerEnterOnGame = formateToByte(data.ClientRegistered[j].Player);
-
-                            Debug.Log("Load Data Enter On Game -> Set isEnteringGame");
-
+                            _playerList[i]._data = data.ClientRegistered[j].Player;
+                            _playerList[i].isDataReady = true;
+                            _playerList[i].TargetSetDataOk(_conn);
                             _playerList[i]._isEnteringGame = true;
-
+                            break;
                         }
                     }
-
+                    break;
                 }
             }
 
@@ -537,22 +534,23 @@ namespace Project.Network
         {
             SetDataServer();
 
-            Debug.LogError("Save Server !");
-            //for (int i = 0; i < data.ClientRegistered.Count; i++)
-            //{
-            //    if (data.ClientRegistered[i].Player != null)
-            //    {
-            //        Debug.LogError("Player data : " + data.ClientRegistered[i].Username + " , Gold : " + data.ClientRegistered[i].Player.dRessource.Golds);
-            //        //if(data.ClientRegistered[i].Player.Boat != null )
-            //        //{
-            //        //    Debug.LogError("Boat CLeft : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft + " , Boat CRight : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft);
-            //        //}
-            //        //else
-            //        //{
-            //        //    Debug.LogError("NO BOAT DATA !!");
-            //        //}
-            //    }
-            //}
+            //Debug.LogError("Save Server !");
+
+            for (int i = 0; i < data.ClientRegistered.Count; i++)
+            {
+                if (data.ClientRegistered[i].Player != null)
+                {
+                    // Debug.LogError("Player data : " + data.ClientRegistered[i].Username + " , Gold : " + data.ClientRegistered[i].Player.dRessource.Golds);
+                    //if(data.ClientRegistered[i].Player.Boat != null )
+                    //{
+                    //    Debug.LogError("Boat CLeft : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft + " , Boat CRight : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft);
+                    //}
+                    //else
+                    //{
+                    //    Debug.LogError("NO BOAT DATA !!");
+                    //}
+                }
+            }
             SaveSystem.SaveServer(data);
         }
 
@@ -564,7 +562,11 @@ namespace Project.Network
                 {
                     if (data.ClientRegistered[j].Username == _playerList[i]._username)
                     {
-                        data.ClientRegistered[j].Player = _playerList[i]._data;
+                        if (_playerList[i].isDataReady)
+                        {
+                            data.ClientRegistered[j].Player = _playerList[i]._data;
+                            Debug.LogError("Player data : " + _playerList[i]._username + " , Gold : " + _playerList[i]._data.dRessource.Golds);
+                        }
                     }
                 }
             }
