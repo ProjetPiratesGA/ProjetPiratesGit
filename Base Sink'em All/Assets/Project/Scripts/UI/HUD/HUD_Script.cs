@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using ProjetPirate.Boat;
-//using ProjetPirate.Boat;
 
 namespace ProjetPirate.UI.HUD
 {
@@ -39,10 +38,6 @@ namespace ProjetPirate.UI.HUD
         public int maxhp = 50;
 
         private GameObject _player;//On récupère le player afin que le controller possede ses info 
-        
-        private Player _playerScript = null;/// SEB
-        
-
         private GameObject _otherPlayer;
         private float maxLifeBarSize;
         //Gestion des interractions avec les joueurs
@@ -52,10 +47,8 @@ namespace ProjetPirate.UI.HUD
 
         bool informationCanBeDraw = false;
 
-       
+        private Player _playerScript = null;/// SEB
         bool _isPlayerNameSet = false; //SEB
-
-
         // Use this for initialization
         void Start()
         {
@@ -63,13 +56,13 @@ namespace ProjetPirate.UI.HUD
             //_NumberWoodenBoardValue.text = ;
 
             //UpdateGoldValue();
-            //UpdateXpValue();
+           // UpdateXpValue();
             if (_interractionPlayer != null)
             {
                 _interractionPlayer.SetActive(false);
             }
 
-            _playerInformations.SetActive(true);
+            _playerInformations.SetActive(false);
             _otherPlayerInformations.SetActive(false);
             _confirmQuitGroup.SetActive(false);
 
@@ -80,26 +73,19 @@ namespace ProjetPirate.UI.HUD
         //TEST SEB
         public void SetPlayerReference(GameObject player)
         {
+            
             _player = player;
             _playerScript = _player.GetComponent<Player>();
         }
 
-
-
         // Update is called once per frame
         void Update()
         {
-            //if (_player == null)
-            //{
-             //   _player = GameObject.FindGameObjectWithTag("Player");
-            //}
-
-            if(_player == null)
+            if (_player == null)
             {
-                return;
+                _player = GameObject.FindGameObjectWithTag("Player");
             }
-
-            if(!_isPlayerNameSet)
+            if (!_isPlayerNameSet)
             {
                 _playerName.text = _playerScript._username;
                 _isPlayerNameSet = true;
@@ -124,14 +110,14 @@ namespace ProjetPirate.UI.HUD
 
             UpdateGoldValue();
             UpdateXpValue();
-            //UpdatePlankValue();
+            UpdatePlankValue();
 
-            //if (_interractionPlayer != null)
-            //{
-            //    CheckClickOnBoat();
-            //}
+            if (_interractionPlayer != null)
+            {
+                CheckClickOnBoat();
+            }
 
-            if(_player.GetComponentInChildren<BoatCharacter>())
+            if (_player.GetComponentInChildren<BoatCharacter>())
             {
                 UpdateLifeBar();
             }
@@ -174,14 +160,14 @@ namespace ProjetPirate.UI.HUD
         {
             if (_NumberWoodenBoardValue != null)
             {
-                //if (_player != null)
-                //{
-                //    _NumberWoodenBoardValue.text = _player.GetComponent<BoatCharacter>()._currentPlank.ToString();
-                //}
-                //else
-                //{
-                //    _NumberWoodenBoardValue.text = "Joueur NULL";
-                //}
+                if (_player != null)
+                {
+                    _NumberWoodenBoardValue.text = _playerScript._data.Ressource.WoodBoard.ToString();
+                }
+                else
+                {
+                    _NumberWoodenBoardValue.text = "Joueur NULL";
+                }
             }
         }
 
@@ -210,13 +196,6 @@ namespace ProjetPirate.UI.HUD
             // SceneManager.LoadScene(1);
         }
 
-        public void UtilisateWoodenStick()
-        {
-            //Fonction pour rendre des pv au joueurs
-            //Actualisation du nombre de planches du joueurs
-            //_NumberWoodenBoardValue.text = ;
-        }
-
         public void CheckClickOnBoat()
         {
 
@@ -230,11 +209,12 @@ namespace ProjetPirate.UI.HUD
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    Debug.Log(hit.collider.gameObject);
+                    Debug.LogError("Je clique sur : "+hit.collider.gameObject);
                     //On check si on est sur le player
 
-                    if (hit.collider.gameObject == _player)
+                    if (hit.collider.gameObject.tag == "Player")
                     {
+                        Debug.LogError("J'ai cliqué sur un joueur");
                         interractCanBeDraw = true;
                         ActivateInterractionPlayer();
                         
@@ -245,31 +225,35 @@ namespace ProjetPirate.UI.HUD
                         interractOtherPlayerCanBeDraw = true;
                         ActivateInterractionOtherPlayer();
                     }
-                    else if (hit.collider.gameObject != _player && !EventSystem.current.IsPointerOverGameObject() && hit.collider.gameObject.tag != "Enemy")
+                    else if (hit.collider.gameObject.tag != "Player" && !EventSystem.current.IsPointerOverGameObject() && hit.collider.gameObject.tag != "Enemy")
                     {
-
+                        Debug.LogError("On sort de l interaction player");
                         interractOtherPlayerCanBeDraw = false;
                         interractCanBeDraw = false;
                         ActivateInterractionOtherPlayer();
-                        ActivateInterractionPlayer();
+                        ActivateInterractionPlayer();                     
+
+
                     }
                 }
                 else
                 {
-                    //Debug.Log("On ne touche rien");
+                    Debug.LogError("On ne touche rien");
                 }
             }
 #elif UNITY_ANDROID
+              if (Input.touchCount == 1)
+            {
                  Ray ray;
                 ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                  RaycastHit hit;
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    Debug.Log(hit.collider.gameObject);
+                    Debug.LogError(hit.collider.gameObject);
                     //On check si on est sur le player
 
-                    if (hit.collider.gameObject == _player)
+                    if (hit.collider.gameObject.tag == "Player")
                     {
                         interractCanBeDraw = true;
                         ActivateInterractionPlayer();
@@ -281,19 +265,23 @@ namespace ProjetPirate.UI.HUD
                         interractOtherPlayerCanBeDraw = true;
                         ActivateInterractionOtherPlayer();
                     }
-                    else if (hit.collider.gameObject != _player && !EventSystem.current.IsPointerOverGameObject() && hit.collider.gameObject.tag != "Enemy")
+                    else if (hit.collider.gameObject.tag != "Player" &&  hit.collider.gameObject.tag != "Enemy")
                     {
-
-                        interractOtherPlayerCanBeDraw = false;
-                        interractCanBeDraw = false;
-                        ActivateInterractionOtherPlayer();
-                        ActivateInterractionPlayer();
+                        if(!EventSystem.current.currentSelectedGameObject)
+                         {
+                            Debug.LogError("On sort de l interaction player");
+                            interractOtherPlayerCanBeDraw = false;
+                            interractCanBeDraw = false;
+                            ActivateInterractionOtherPlayer();
+                            ActivateInterractionPlayer();
+                         }
                     }
                 }
                 else
                 {
-                    Debug.Log("On ne touche rien");
+                    Debug.LogError("On ne touche rien");
                 }
+            }
 #endif
 
         }
@@ -303,7 +291,7 @@ namespace ProjetPirate.UI.HUD
             if (_player != null)
             {
                 BoatCharacter boatChar = _player.GetComponentInChildren<BoatCharacter>();
-                if(boatChar == null)
+                if (boatChar == null)
                 {
                     Debug.LogError("Boatchar is null");
                     Debug.Break();
@@ -369,10 +357,10 @@ namespace ProjetPirate.UI.HUD
             }
             else
             {
-                Debug.LogError("Vous Avez cliqué sur un autre joueur");
+                //Debug.LogError("Vous Avez cliqué sur un autre joueur");
                
                 _interractionOtherPlayer.SetActive(true);
-                _interractionOtherPlayer.GetComponent<InterractionJoueur>().SetPlayerToFollow(_otherPlayer);
+                _interractionOtherPlayer.GetComponent<InterractionJoueur>().SetPlayerToKnow(_otherPlayer);
             }
         }
 
@@ -429,6 +417,18 @@ namespace ProjetPirate.UI.HUD
             //    if (_interactionIle.activeSelf)
             //        _interactionIle.SetActive(false);
             //}
+        }
+
+        /// <summary>
+        /// Appelé sur le onClick d'un boutton
+        /// le boutton envoie un int entre 0 et 3, il servira à parcourir le tableau du groupe afin de récupérer les informations de ce joueur
+        /// </summary>
+        /// <param name="whichMember"></param>
+        public void ClickOnGroupIcon(int whichMember)
+        {
+            //_otherPlayer = parcours tableau groupe joueur avec l ID whichMember-- > tableauGroupe[whichMember];
+
+            ActivateOtherPlayerInformation();
         }
     }
 }

@@ -8,9 +8,6 @@ using ProjetPirate.Network;
 
 namespace ProjetPirate.UI.Menu
 {
-
-
-
     public class MenuManager : MonoBehaviour
     {
         [Header("GroupButton")]
@@ -45,7 +42,8 @@ namespace ProjetPirate.UI.Menu
         [SerializeField]
         ClientStart _clientStart;
 
-        public enum LaunchStateMessage {
+        public enum LaunchStateMessage
+        {
             LAUNCH_USERNAME_NON_AVAILABLE,
             LAUNCH_USERNAME_DOES_NOT_EXIST,
             LAUNCH_PASSWORD_DOES_NOT_CORRESPOND,
@@ -73,17 +71,17 @@ namespace ProjetPirate.UI.Menu
 
         void Update()
         {
-            if(blockInput)
+            if (blockInput)
             {
                 timerBlockInput += Time.deltaTime;
-                if(timerBlockInput >= 2)
+                if (timerBlockInput >= 2)
                 {
                     _messageErreur.SetActive(false);
                     _messageErreurInvalidUserName.SetActive(false);
                     _messageErreurInvalidPassword.SetActive(false);
                     _messageErreurPasswordNotEntered.SetActive(false);
                     this.GetComponent<GraphicRaycaster>().enabled = true;
-                    _userName.text = "";                   
+                    _userName.text = "";
                     _password.text = "";
                     _userNameInscrire.text = "";
                     _passwordInscrire.text = "";
@@ -112,7 +110,7 @@ namespace ProjetPirate.UI.Menu
         public void GoToChoice()
         {
             Debug.Log("Create Player");
-           //SceneManager.LoadScene("Game");
+            //SceneManager.LoadScene("Game");
             _choix.SetActive(false);
             _mainMenu.SetActive(false);
             _buttonReturnMainMenu.SetActive(true);
@@ -134,7 +132,7 @@ namespace ProjetPirate.UI.Menu
 
         public void ConnectingToServor()
         {
-   
+
             _clientStart.tryToLogin = true;
 
             this.GetComponent<GraphicRaycaster>().enabled = false;
@@ -230,6 +228,22 @@ namespace ProjetPirate.UI.Menu
         private void LoadGame()
         {
             isTryingToConnectClientOnGame = true;
+        }
+
+
+        public void GoToChoiceBeginMenu()
+        {
+            if (_sInscrire.activeSelf)
+            {
+                _sInscrire.SetActive(false);
+                _choix.SetActive(true);
+            }
+
+            if (_LogIn.activeSelf)
+            {
+                _LogIn.SetActive(false);
+                _choix.SetActive(true);
+            }
         }
     }
 }

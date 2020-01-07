@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-//using ProjetPirate.Boat;
+using ProjetPirate.Boat;
 
 namespace ProjetPirate.UI.HUD
 {
@@ -40,9 +40,13 @@ namespace ProjetPirate.UI.HUD
             
         }
 
-        public void SetPlayerToFollow(GameObject _playerToFolow)
+        /// <summary>
+        /// On envoie en paramètre le player concerné afin de récupérer ses informations
+        /// </summary>
+        /// <param name="_playerToKnow"></param>
+        public void SetPlayerToKnow(GameObject _playerToKnow)
         {
-            _player = _playerToFolow;
+            _player = _playerToKnow;
         }
 
         void UpdateXpOtherPlayer()

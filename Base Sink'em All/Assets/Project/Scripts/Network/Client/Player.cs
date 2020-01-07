@@ -119,7 +119,7 @@ public class Player : Controller
         {
             if (SceneManager.GetActiveScene().name == "Game")
             {
-                //Debug.LogError("IN SPAWN BOAT");
+               // Debug.LogError("IN SPAWN BOAT");
                 _asBoatSpawned = true;
                 CmdSpawnBoat();
                 //TEST SEB

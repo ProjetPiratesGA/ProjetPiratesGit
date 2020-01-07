@@ -1654,7 +1654,7 @@ MonoBehaviour:
     type: 2}
   _starboardCannonPrefab: {fileID: 1397878430249924, guid: 5f08ce98d8383754781dfffd6af6748f,
     type: 2}
-  _shootCooldown: 0
+  _shootCooldown: 1
   _defaultCannonNumberBySide: 1
   _weakenedStateLifeRatio: 0.5
   _endangeredStateLifeRatio: 0.1
