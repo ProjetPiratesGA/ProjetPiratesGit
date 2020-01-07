@@ -13,10 +13,27 @@ using ProjetPirate.Boat;
 using ProjetPirate.UI.HUD;
 using ProjetPirate.IA;
 
-public class Player : Controller {
-    
+public class Player : Controller
+{
+
     // A virer test de pos respawn lier a l'ile
     private Ile myIle;
+
+    #region IA
+
+    [SerializeField] [Range(1, 3)] private int _shipLevel = 1;
+    [SerializeField] private List<GameObject> _structuresPerLevel;
+
+    [SerializeField] public int _maxXp = 10000; // max XP
+    [SerializeField] public int _maxPlank = 10000; // max XP
+    [SerializeField] public int _maxMoney = 10000; // max XP
+
+    [SerializeField] public int _xpLostByDeath = 10;
+    [SerializeField] public float _goldRatiolostByDeath = 0.1f;
+    [SerializeField] Transform _respawnPoint;
+
+    int idBoatOnServer;
+    #endregion
 
     [SerializeField]
     GameObject _boatPrefab = null;
@@ -37,7 +54,7 @@ public class Player : Controller {
 
     bool _isDataReady = false;
 
-    public bool isDataReady { get { return _isDataReady; }set { _isDataReady = value; } }
+    public bool isDataReady { get { return _isDataReady; } set { _isDataReady = value; } }
 
     //DEBUG SEB
     private float _debugLogDisplayTimer = 0;
@@ -47,28 +64,13 @@ public class Player : Controller {
 
     private HUD_Script _myhUD = null;
 
-    #region IA
-
-    [SerializeField] [Range(1, 3)] private int _shipLevel = 1;
-    [SerializeField] private List<GameObject> _structuresPerLevel;
-
-    [SerializeField] public int _maxXp = 10000; // max XP
-    [SerializeField] public int _maxPlank = 10000; // max XP
-    [SerializeField] public int _maxMoney = 10000; // max XP
-
-    [SerializeField] public int _xpLostByDeath = 10;
-    [SerializeField] public float _goldRatiolostByDeath = 0.1f;
-    [SerializeField] Transform _respawnPoint;
-
-    int idBoatOnServer;
-    #endregion
+    float _currentTime = 0f;
+    float _timeToReloadData = 0.5f;
 
     public bool asBoatSpawned
     {
         get { return _asBoatSpawned; }
     }
-
-
 
     public Data_Player _data
     {
@@ -86,35 +88,36 @@ public class Player : Controller {
         DontDestroyOnLoad(this);
     }
 
-
     public override void OnStartClient()
     {
-        if(isServer)
-        Debug.Log("TargetRpc Call form server ");
+        if (isServer)
+            Debug.Log("TargetRpc Call form server ");
         else
-        Debug.Log("TargetRpc Call form client ");
+            Debug.Log("TargetRpc Call form client ");
 
         InitPlayer();
     }
 
     private void Update()
     {
-    
-        timeSinceLastSetData = Time.time - timeLastSetData;
-        if (isLocalPlayer)
+        if (!isLocalPlayer)
         {
-            if (timeSinceLastSetData >= 1)
-            {
-                timeLastSetData = Time.time;
-                //Debug.Log("Launch Set DATA COMMAND");
-                //_isSetData = false;
-                CmdLoadDataEveryTime();
-            }
+            return;
         }
+
+
+        //_currentTime += Time.deltaTime;
+        //if(_currentTime >= _timeToReloadData)
+        //{
+        //    CmdUpdateDataGold(this.data.Ressource.Golds);
+        //    CmdSendLife(this.data.Boat.Stats.Life);
+        //    _currentTime = 0;
+        //}
+
 
         if (!_asBoatSpawned && isLocalPlayer)
         {
-            if(SceneManager.GetActiveScene().name == "Game")
+            if (SceneManager.GetActiveScene().name == "Game")
             {
                 //Debug.LogError("IN SPAWN BOAT");
                 _asBoatSpawned = true;
@@ -123,7 +126,7 @@ public class Player : Controller {
                 _myhUD = FindObjectOfType<HUD_Script>();
                 _myhUD.SetPlayerReference(this.gameObject);
                 //END TEST
-                myIle = FindObjectOfType<Ile>();               
+                myIle = FindObjectOfType<Ile>();
             }
         }
 
@@ -146,19 +149,20 @@ public class Player : Controller {
         }
 
         ///DEBUG SEB 0401
-        if(isLocalPlayer)
+        if (isLocalPlayer)
         {
             if (Input.GetKeyDown(KeyCode.F10))
-            {             
-                CmdUpdateDataGold();
+            {
+                this.data.Ressource.Golds += 10;
+                CmdUpdateDataGold(this.data.Ressource.Golds);
             }
 
             _debugLogDisplayTimer += Time.deltaTime;
 
-            if(_debugLogDisplayTimer > 2.0f)
+            if (_debugLogDisplayTimer > 2.0f)
             {
                 _debugLogDisplayTimer = 0;
-                CmdSendDebug(_data.dRessource.Golds);
+                CmdSendDebug(_data.Ressource.Golds);
             }
         }
         ///FIN DEBUG
@@ -167,21 +171,78 @@ public class Player : Controller {
 
     ///DEBUG SEB 0401
     [Command]
-    public void CmdUpdateDataGold()
+    public void CmdUpdateDataGold(int gold)
     {
-        _data.dRessource.Golds += 10;
-        RpcUpdateDataGold();
+        _data.Ressource.Golds = gold;
+        RpcUpdateDataGold(gold);
     }
     [ClientRpc]
-    public void RpcUpdateDataGold()
+    public void RpcUpdateDataGold(int gold)
     {
-        _data.dRessource.Golds += 10;
+        _data.Ressource.Golds = gold;
+    }
+
+
+    #region Command And Fonction cmd et rpc pour envoyer les datas BOAT
+    [ClientRpc]
+    public void RpcSendLife(int p_life)
+    {
+        this._data.Boat.Stats.Life = p_life;
+    }
+    //[ClientRpc]
+    //public void RpcSendDanageReceived(Dictionary<int, int> p_damageReceived)
+    //{
+    //    this._data.Boat.Stats.DamageReceived = p_damageReceived;
+    //}
+    [ClientRpc]
+    public void RpcSendMaxCanonPerSide(int p_maxCanonPerSide)
+    {
+        this._data.Boat.MaxCanonPerSide = p_maxCanonPerSide;
+    }
+    [ClientRpc]
+    public void RpcSendCurrentCanonLeft(int p_currentCanonLeft)
+    {
+        this._data.Boat.CurrentCanonLeft = p_currentCanonLeft;
+    }
+    [ClientRpc]
+    public void RpcSendCurrentCanonRight(int p_currentCanonRight)
+    {
+        this._data.Boat.CurrentCanonRight = p_currentCanonRight;
     }
 
     [Command]
+    public void CmdSendLife(int p_life)
+    {
+        this._data.Boat.Stats.Life = p_life;
+        RpcSendLife(p_life);
+    }
+    //[Command]
+    //public void CmdSendDamageReceived()
+    //{
+    //    RpcSendDanageReceived(this._data.Boat.Stats.DamageReceived);
+    //}
+    [Command]
+    public void CmdSendMaxCanonPerSide()
+    {
+        RpcSendMaxCanonPerSide(this._data.Boat.MaxCanonPerSide);
+    }
+    [Command]
+    public void CmdSendCurrentCanonLeft(int number)
+    {
+        this._data.Boat.CurrentCanonLeft = number;
+        RpcSendCurrentCanonLeft(number);
+    }
+    [Command]
+    public void CmdSendCurrentCanonRight(int number)
+    {
+        this._data.Boat.CurrentCanonRight = number;
+        RpcSendCurrentCanonRight(number);
+    }
+    #endregion
+    [Command]
     public void CmdSendDebug(int goldValue)
     {
-        Debug.LogError("Gold : " + goldValue);
+        //Debug.LogError("Gold : " + goldValue);
     }
 
     [TargetRpc]
@@ -191,7 +252,7 @@ public class Player : Controller {
     }
 
     ///FIN DEBUG
-    
+
 
     // Player Data
     /// <summary>
@@ -273,7 +334,7 @@ public class Player : Controller {
         //SetDataBoat(boatInstance.GetComponent<BoatCharacter>());
 
         //Set reference to the player from client side
-        TargetSetPlayerReference(this.connectionToClient, this.gameObject, boatInstance);
+        RpcSetPlayerReference(boatInstance);
     }
 
     /// <summary>
@@ -283,14 +344,45 @@ public class Player : Controller {
     /// <param name="playerReference"></param>
     /// <param name="obj"></param>
     [TargetRpc]
-    public void TargetSetPlayerReference(NetworkConnection target, GameObject playerReference, GameObject obj)
+    public void TargetSetPlayerReference(NetworkConnection Target, GameObject obj)
     {
-        obj.GetComponent<BoatController>().player = playerReference.GetComponent<Player>();
-        obj.GetComponent<Character>().player = playerReference.GetComponent<Player>();
+        if (obj.GetComponentInChildren<BoatController>() == null)
+        {
+            Debug.LogError("BOAT CONTROLLER NUll");
+            Debug.Break();
+        }
+        if (obj.GetComponentInChildren<Character>() == null)
+        {
+            Debug.LogError("CHARACTER NUll");
+            Debug.Break();
+        }
+
+        obj.GetComponentInChildren<BoatController>().player = this.GetComponent<Player>();
+        obj.GetComponentInChildren<Character>().player = this.GetComponent<Player>();
+        //SetDataBoat(obj.GetComponent<BoatCharacter>());
+
+        if (obj.GetComponentInChildren<Character>().player == null)
+        {
+            Debug.LogWarning("PLAYER SET NULL");
+            Debug.Break();
+        }
+        else
+            Debug.Log("PLAYER SET OK");
+    }
+
+    [ClientRpc]
+    public void RpcSetPlayerReference(GameObject obj)
+    {
+        obj.GetComponent<BoatController>().player = this.GetComponent<Player>();
+        obj.GetComponent<Character>().player = this.GetComponent<Player>();
+        if (obj.GetComponent<Character>().player == null)
+        {
+            Debug.LogWarning("PLAYER SET NULL");
+            Debug.Break();
+        }
         //SetDataBoat(obj.GetComponent<BoatCharacter>());
 
     }
-
 
 
     [Command]
@@ -406,65 +498,65 @@ public class Player : Controller {
 
     public virtual void GainXP(int pEarnedXP)
     {
-        data.dRessource.Reputation += pEarnedXP;
-        if (data.dRessource.Reputation > _maxXp)
+        data.Ressource.Reputation += pEarnedXP;
+        if (data.Ressource.Reputation > _maxXp)
         {
-            data.dRessource.Reputation = _maxXp;
+            data.Ressource.Reputation = _maxXp;
         }
     }
 
     public virtual void GainPlank(int pGainedPlank)
     {
-        data.dRessource.WoodBoard += pGainedPlank;
-        if (data.dRessource.WoodBoard > _maxPlank)
+        data.Ressource.WoodBoard += pGainedPlank;
+        if (data.Ressource.WoodBoard > _maxPlank)
         {
-            data.dRessource.WoodBoard = _maxPlank;
+            data.Ressource.WoodBoard = _maxPlank;
         }
     }
 
     public virtual void GainMoney(int pGainedMoney)
     {
-        data.dRessource.Golds += pGainedMoney;
-        if (data.dRessource.Golds > _maxMoney)
+        data.Ressource.Golds += pGainedMoney;
+        if (data.Ressource.Golds > _maxMoney)
         {
-            data.dRessource.Golds = _maxMoney;
+            data.Ressource.Golds = _maxMoney;
         }
     }
 
     public virtual void LoseXP(int pLostXP)
     {
-        data.dRessource.Reputation -= pLostXP;
-        if (data.dRessource.Reputation < 0)
+        data.Ressource.Reputation -= pLostXP;
+        if (data.Ressource.Reputation < 0)
         {
-            data.dRessource.Reputation = 0;
+            data.Ressource.Reputation = 0;
         }
     }
 
     public virtual void LosePlank(int pLostPlank)
     {
-        data.dRessource.WoodBoard += pLostPlank;
-        if (data.dRessource.WoodBoard < 0)
+        data.Ressource.WoodBoard += pLostPlank;
+        if (data.Ressource.WoodBoard < 0)
         {
-            data.dRessource.WoodBoard = 0;
+            data.Ressource.WoodBoard = 0;
         }
     }
 
     public virtual void LoseMoney(int pLostMoney)
     {
-        data.dRessource.Golds += pLostMoney;
-        if (data.dRessource.Golds < 0)
+        data.Ressource.Golds += pLostMoney;
+        if (data.Ressource.Golds < 0)
         {
-            data.dRessource.Golds = 0;
+            data.Ressource.Golds = 0;
         }
     }
 
     public override void Death()
     {
         LoseXP(_xpLostByDeath);
-        int lostMoney = (int)(data.dRessource.Golds * _goldRatiolostByDeath);
+        int lostMoney = (int)(data.Ressource.Golds * _goldRatiolostByDeath);
 
         LoseMoney(lostMoney);
-        LosePlank(data.dRessource.WoodBoard);
+        LosePlank(data.Ressource.WoodBoard);
     }
 
     [Command]
@@ -472,9 +564,9 @@ public class Player : Controller {
     {
         List<BoatController> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().boatList;
 
-        for(int i = 0; i < tempList.Count; i++)
+        for (int i = 0; i < tempList.Count; i++)
         {
-            if(this.connectionToClient == tempList[i].connectionToClient)
+            if (this.connectionToClient == tempList[i].connectionToClient)
             {
                 GameObject boatInstance = tempList[i].gameObject;
             }
@@ -492,8 +584,31 @@ public class Player : Controller {
         this.GetComponent<BoatCharacter>()._isDying = false;
     }
 
+    [ClientRpc]
+    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed)
+    {
+        this.data.Ressource.Golds = gold;
+        this.data.Boat.Stats.Life = life;
+        this.data.Boat.CurrentCanonLeft = cannonLeft;
+        this.data.Boat.CurrentCanonRight = cannonRight;
+        this.data.Boat.MaxCanonPerSide = maxCannons;
+        this.data.Boat.Stats.Speed = speed;
+
+    }
+    [TargetRpc]
+    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed)
+    {
+        this.data.Ressource.Golds = gold;
+        this.data.Boat.Stats.Life = life;
+        this.data.Boat.CurrentCanonLeft = cannonLeft;
+        this.data.Boat.CurrentCanonRight = cannonRight;
+        this.data.Boat.MaxCanonPerSide = maxCannons;
+        this.data.Boat.Stats.Speed = speed;
+
+    }
+
     public override void Disappear()
-    {        
+    {
         CmdCallDisappear();
     }
 }

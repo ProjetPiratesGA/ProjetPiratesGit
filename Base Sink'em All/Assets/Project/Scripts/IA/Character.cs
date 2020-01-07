@@ -7,6 +7,8 @@ namespace ProjetPirate.IA
 {
     public class Character : NetworkBehaviour
     {
+
+
         protected ProjetPirate.Data.Data_StatsCharacters _data = new Data.Data_StatsCharacters();
         private Player _player;
         public Player player { get { return _player; } set { _player = value; } }

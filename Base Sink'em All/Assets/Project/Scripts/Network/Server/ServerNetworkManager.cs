@@ -139,7 +139,25 @@ namespace Project.Network
 
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
         {
+            Debug.Log("Server Add player connection " + conn.connectionId);
             Player playerInstance = Instantiate(playerPrefab.GetComponent<Player>());
+
+            for (int i = 0; i < _boatList.Count; i++)
+            {
+                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetParent(conn, _boatList[i].player.gameObject);
+            }
+            for (int i = 0; i < playerList.Count; i++)
+            {
+                Debug.Log("Player: " + playerList[i]._username + "  Conexion: " + conn.connectionId);
+                playerList[i].TargetSetPlayerReference(conn, playerList[i].gameObject);
+
+                _playerList[i].TargetSetStartData(conn, _playerList[i]._data.Boat.Stats.Life, _playerList[i]._data.Ressource.Golds, _playerList[i]._data.Boat.CurrentCanonLeft
+                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.MaxCanonPerSide, _playerList[i]._data.Boat.Stats.Speed);
+            }
+            for (int i = 0; i < _boatList.Count; i++)
+            {     
+                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetUpdateActiveCannons(conn);
+            }
             _playerList.Add(playerInstance);
 
             _playerList[_playerList.Count - 1].InitPlayer();
@@ -156,13 +174,16 @@ namespace Project.Network
 
             NetworkServer.AddPlayerForConnection(conn, _playerList[_playerList.Count - 1].gameObject, playerControllerId);
 
-            //Rafraichissement des liens de parenté ainsi que des paramétres des clients déja spawn pour le nouveau client
-            for (int i = 0; i < _boatList.Count; i++)
-            {
-                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetParent(conn, _boatList[i].player.gameObject);
+            ////Rafraichissement des liens de parenté ainsi que des paramétres des clients déja spawn pour le nouveau client
+            //for (int i = 0; i < _boatList.Count; i++)
+            //{
+            //    _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetSetParent(conn, _boatList[i].player.gameObject);
 
-                _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetUpdateActiveCannons(conn);
-            }
+            //    _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetUpdateActiveCannons(conn);
+
+
+            //}
+
 
         }
 
@@ -476,6 +497,8 @@ namespace Project.Network
                         if (data.ClientRegistered[j].Username == _playerList[i]._username)
                         {
                             _playerList[i]._data = data.ClientRegistered[j].Player;
+                            _playerList[i].RpcSetStartData(_playerList[i]._data.Boat.Stats.Life, _playerList[i]._data.Ressource.Golds, _playerList[i]._data.Boat.CurrentCanonLeft
+                                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.MaxCanonPerSide, _playerList[i]._data.Boat.Stats.Speed);
                             _playerList[i].isDataReady = true;
                             _playerList[i].TargetSetDataOk(_conn);
                             _playerList[i]._isEnteringGame = true;
@@ -565,7 +588,7 @@ namespace Project.Network
                         if (_playerList[i].isDataReady)
                         {
                             data.ClientRegistered[j].Player = _playerList[i]._data;
-                            Debug.LogError("Player data : " + _playerList[i]._username + " , Gold : " + _playerList[i]._data.dRessource.Golds);
+                            //Debug.LogError("Player data : " + _playerList[i]._username + " , Gold : " + _playerList[i]._data.Ressource.Golds);
                         }
                     }
                 }

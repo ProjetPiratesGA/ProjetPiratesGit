@@ -28,7 +28,7 @@ namespace ProjetPirate.Data
         private Data_Resources resources = new Data_Resources();
         Data_Boat _boat = new Data_Boat();
 
-        public Data_Resources dRessource { get { return resources; } set { resources = value; } }
+        public Data_Resources Ressource { get { return resources; } set { resources = value; } }
         public Data_Boat Boat { get { return _boat; } set { _boat = value; } }
     }
 }

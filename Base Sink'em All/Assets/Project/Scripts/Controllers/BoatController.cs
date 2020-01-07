@@ -18,7 +18,7 @@ namespace ProjetPirate.Boat
         private GameObject _buttonShootLeft;
         private GameObject _buttonShootRight;
 
-        private Player _player = null;
+        private Player _player;
 
         private BoatCharacter _boatCharacter = null;
         private Transform _cameraPivot = null;

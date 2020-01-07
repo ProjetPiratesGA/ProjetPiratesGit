@@ -343,11 +343,25 @@ namespace ProjetPirate.Boat
                 if (Input.GetKeyDown(KeyCode.F5))
                 {
                     this.CmdAddCannons(true, false);
+                    if ((player._data.Boat.CurrentCanonLeft < player._data.Boat.MaxCanonPerSide))
+                    {
+                        player._data.Boat.CurrentCanonLeft++;
+                    }
+
+                    player.CmdSendCurrentCanonLeft(player._data.Boat.CurrentCanonLeft);
+
                     this.CmdUpdateActiveCanons();
+
                 }
                 if (Input.GetKeyDown(KeyCode.F6))
                 {
-                    this.CmdAddCannons(false, true);
+                    if ((player._data.Boat.CurrentCanonRight < player._data.Boat.MaxCanonPerSide))
+                    {
+                        player._data.Boat.CurrentCanonRight++;
+                    }
+
+                    player.CmdSendCurrentCanonRight(player._data.Boat.CurrentCanonRight);
+
                     this.CmdUpdateActiveCanons();
                 }
             }
@@ -378,6 +392,7 @@ namespace ProjetPirate.Boat
         public override void Death()
         {
             player._data.Boat.Stats.Life = _maxLifePoint;
+            player.CmdSendLife(player._data.Boat.Stats.Life);
 
             isDying = true;
 
@@ -506,6 +521,30 @@ namespace ProjetPirate.Boat
 
         public void SetActiveCannons()
         {
+            if(player == null)
+            {
+                Debug.Log("PLAYER NULL");
+                Debug.Break();
+            }
+            else
+                Debug.Log("PLAYER OK");
+
+            if (player._data == null)
+            {
+                Debug.Log("DATA NULL");
+                Debug.Break();
+            }
+            else
+                Debug.Log("DATA OK");
+
+            if (player._data.Boat == null)
+            {
+                Debug.Log("DATA_BOAT NULL");
+                Debug.Break();
+            }
+            else
+                Debug.Log("DATA_BOAT OK");
+
             for (int i = 0; i < _larboardCannons.Count; i++)
             {
                 if (i <  player._data.Boat.CurrentCanonLeft)
@@ -581,6 +620,7 @@ namespace ProjetPirate.Boat
         {
             #region MANAGE BOAT MOVEMENT STATE
 
+
             //use the input to define the state of the boat
             if ( player._data.Boat.Stats.Speed == 0)
             {
@@ -606,10 +646,6 @@ namespace ProjetPirate.Boat
                     _boatMovementState = BoatMovementState.CRUISE_SPEED;
                 }
             }
-
-
-
-
             #endregion MANAGE BOAT MOVEMENT STATE
         }
 
@@ -887,7 +923,7 @@ namespace ProjetPirate.Boat
         {
             if (this.GetComponent<BoatController>().player != null)
             {
-                return (int)this.GetComponent<BoatController>().player._data.dRessource.Reputation;
+                return (int)this.GetComponent<BoatController>().player._data.Ressource.Reputation;
             }
             else
             {
@@ -949,6 +985,7 @@ namespace ProjetPirate.Boat
                 }*/
 
                 player._data.Boat.Stats.Life -= _damage;
+                player.CmdSendLife(player._data.Boat.Stats.Life);
                 if (player._data.Boat.Stats.Life <= 0)
                 {
                     Death();
