@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using ProjetPirate.Boat;
+using Project.Network;
 
 public class PlankOnSea : NetworkBehaviour {
 
@@ -51,10 +53,34 @@ public class PlankOnSea : NetworkBehaviour {
 
 	void OnTriggerEnter(Collider other)
     {
-		if(other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player")
         {
-            other.GetComponent<Player>().GainPlank(1);
-            Destroy(this.gameObject);
+            if (other.gameObject.GetComponent<BoatCharacter>()._isDying == false)
+            {
+                other.gameObject.GetComponent<BoatController>().player.GainPlank(1);
+                Destroy(this.gameObject);
+                // CmdDestroyPlank();
+            }
         }
+    }
+
+    [Command]
+    void CmdDestroyPlank()
+    {
+        List<PlankOnSea> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().plankList;
+
+        tempList.Remove(this.gameObject.GetComponent<PlankOnSea>());
+        Debug.LogError("Plank remove to list server");
+        Destroy(this.gameObject);
+        Debug.LogError("Plank destroy on server");
+
+        RpcDestroyPlankClient();
+    }
+
+    [ClientRpc]
+    void RpcDestroyPlankClient()
+    {
+        Destroy(this.gameObject);
+        Debug.LogError("Plank destroy on client");
     }
 }

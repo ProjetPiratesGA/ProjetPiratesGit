@@ -65,6 +65,8 @@ namespace ProjetPirate.Boat
         private bool _isMovingForward = false;
         private float _stoppingDistance;
 
+        private bool isDying = false;
+
         [SerializeField] public int _plankDroppedByDeath;
         [SerializeField] public int _moneyDroppedByDeath;
 
@@ -188,6 +190,12 @@ namespace ProjetPirate.Boat
 
         public bool Safe = false;
 
+        public bool _isDying
+        {
+            get { return isDying; }
+            set { isDying = value; }
+        }
+
         public ShipType ShipType
         {
             get { return _shipType; }
@@ -261,26 +269,6 @@ namespace ProjetPirate.Boat
 
             _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
             _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
-            
-            CmdcreateListPlankOnClient();
-        }
-
-        [Command]
-        private void CmdcreateListPlankOnClient()
-        {
-            List<PlankOnSea> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().plankList;
-            
-            for(int i = 0; i < tempList.Count; i++)
-            {
-                TargetcreateListPlankOnClient(this.connectionToClient, tempList[i].gameObject);
-            }
-        }
-
-        [TargetRpc]
-        private void TargetcreateListPlankOnClient(NetworkConnection _conn ,GameObject _templist)
-        {
-            Debug.Log("Spawn Plank on client");
-            NetworkServer.SpawnWithClientAuthority(_templist, _conn);            
         }
 
 
@@ -377,7 +365,6 @@ namespace ProjetPirate.Boat
         [Command]
         private void CmdAddPlank(int nbPlank, Vector3 _position)
         {
-
             //NetworkServer.SpawnWithClientAuthority(plank.gameObject, this.connectionToClient);
 
             List<PlankOnSea> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().plankList;
@@ -393,23 +380,17 @@ namespace ProjetPirate.Boat
 
                 //TargetSpawnPlank(this.connectionToClient, plank.gameObject);
                 NetworkServer.Spawn(plank);
-
-                RpcSpawnPlank(plank);
             }
-        }
-
-        [ClientRpc]
-        private void RpcSpawnPlank(GameObject _plank)
-        {
-            NetworkServer.Spawn(_plank);
         }
         
         public override void Death()
         {
             _data.Life = _maxLifePoint;
 
-            this.GetComponentInParent<Player>().Death();
+            isDying = true;
+
             this.GetComponent<BoxCollider>().enabled = false;
+            this.GetComponentInParent<Player>().Death();
 
             // Chest.SpawnChest(_boat.DroppedChest, _boat.transform.position, lostMoney, _currentPlank);
 

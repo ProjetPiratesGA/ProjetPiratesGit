@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 114351558807588076}
   - component: {fileID: 114853501735718772}
   - component: {fileID: 114620163501071184}
+  - component: {fileID: 114854384836226602}
   m_Layer: 0
   m_Name: Plank
   m_TagString: Untagged
@@ -180,3 +181,14 @@ MonoBehaviour:
     i15: 44
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
+--- !u!114 &114854384836226602
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1494260278651724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7160175313066c14db5c7115cc55d814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

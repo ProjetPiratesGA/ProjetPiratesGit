@@ -476,6 +476,8 @@ public class Player : Controller {
     {
         _myBoat.transform.position = myIle._posRespawnBoat.position;
         _myBoat.transform.rotation = myIle._posRespawnBoat.rotation;
+
+        this.GetComponent<BoatCharacter>()._isDying = false;
     }
 
     public override void Disappear()
