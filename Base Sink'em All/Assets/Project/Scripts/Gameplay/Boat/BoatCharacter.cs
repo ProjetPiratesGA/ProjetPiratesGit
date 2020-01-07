@@ -53,9 +53,6 @@ namespace ProjetPirate.Boat
     [RequireComponent(typeof(AttractObject))]
     public class BoatCharacter : ProjetPirate.IA.Character
     {
-
-
-
         [SerializeField] private ShipType _shipType;
 
         //Components
@@ -366,6 +363,15 @@ namespace ProjetPirate.Boat
                 }
             }
             // END TEST
+        }
+
+        [Command]
+        public void CmdDestroyPlank(GameObject _plank)
+        {
+            List<PlankOnSea> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().plankList;
+
+            tempList.Remove(_plank.GetComponent<PlankOnSea>());
+            Destroy(_plank);
         }
 
         [Command]
