@@ -29,9 +29,12 @@ public class Chest : MonoBehaviour {
     {
 		if(other.gameObject.tag == "Player")
         {
-            other.GetComponent<ProjetPirate.Boat.BoatCharacter>().Controller.GetComponent<Player>().GainMoney(_containedMoney);
-            other.GetComponent<ProjetPirate.Boat.BoatCharacter>().GoldFx(this.transform.position, _containedMoney);
-            Destroy(this.gameObject);
+            if (other.GetComponent<ProjetPirate.Boat.BoatCharacter>().getCurrentLife() > 0)
+            {
+                other.GetComponent<ProjetPirate.Boat.BoatCharacter>().Controller.GetComponent<Player>().GainMoney(_containedMoney);
+                other.GetComponent<ProjetPirate.Boat.BoatCharacter>().GoldFx(this.transform.position, _containedMoney);
+                Destroy(this.gameObject);
+            }
         }
     }
 }
