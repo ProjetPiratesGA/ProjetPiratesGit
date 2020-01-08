@@ -103,7 +103,9 @@
      <Compile Include="Assets\Project\Scripts\Gameplay\Chest.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Controller.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Dock.cs" />
+     <Compile Include="Assets\Project\Scripts\Gameplay\DockZone.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\PlankOnSea.cs" />
+     <Compile Include="Assets\Project\Scripts\Gameplay\SafeZone.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Sea.cs" />
      <Compile Include="Assets\Project\Scripts\IA\Character.cs" />
      <Compile Include="Assets\Project\Scripts\IA\Detector.cs" />

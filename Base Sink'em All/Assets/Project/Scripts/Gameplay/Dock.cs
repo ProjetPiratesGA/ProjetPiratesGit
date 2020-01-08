@@ -5,6 +5,7 @@ using UnityEngine;
 public class Dock : MonoBehaviour {
 
     [SerializeField] public List<Transform> _dockCheckpoints;
+    public bool _isAvailable = false;
 
 	// Use this for initialization
 	void Start () {
@@ -13,6 +14,6 @@ public class Dock : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        
 	}
 }
