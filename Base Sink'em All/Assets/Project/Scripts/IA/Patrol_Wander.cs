@@ -7,8 +7,8 @@ namespace ProjetPirate.IA
     public class Patrol_Wander : IA_Patrol
     {
         [Header("Wandering Area")]
-        [SerializeField] private Transform _center;
-        [SerializeField] private Transform _destination;
+        [SerializeField] public Transform _center;
+        [SerializeField] public Transform _destination;
         [SerializeField] private float _radius;
 
         [Header("Patrol Wander")]
@@ -29,12 +29,6 @@ namespace ProjetPirate.IA
             //Check if a IA_Character class is associated to that Script and what type it is.
             base.SetUpCharacter();
             _destination.position = _center.position;
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
 
         public override Vector3 Patrol()

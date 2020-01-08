@@ -102,7 +102,7 @@ public class CannonBall : NetworkBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        Debug.Log("Hit someone");
+        //Debug.Log("Hit someone");
 
         if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>() != null)
         {
@@ -119,15 +119,21 @@ public class CannonBall : NetworkBehaviour
                 Destroy(this.gameObject);
             }
         }
-       /* else if (collision.gameobject.tag == "enemy" & collision.gameobject != _owner)
+        if (collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>())
         {
-            if (collision.gameobject.getcomponent<projetpirate.ia.shark_character>() != null)
-            {
-                _owner.controller.getcomponent<player>().gainxp(collision.gameobject.getcomponent<projetpirate.ia.shark_character>().damage(_damage));
-                collision.gameobject.getcomponent<projetpirate.ia.shark_controller>().alertfromshoot(_owner.gameobject);
-            }
-            destroy(this.gameobject);
-        }*/
+            Debug.Log("Hit Shark");
+            collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>().Damage(_damage, this.transform);
+            Destroy(this.gameObject);
+        }
+        /* else if (collision.gameobject.tag == "enemy" & collision.gameobject != _owner)
+         {
+             if (collision.gameobject.getcomponent<projetpirate.ia.shark_character>() != null)
+             {
+                 _owner.controller.getcomponent<player>().gainxp(collision.gameobject.getcomponent<projetpirate.ia.shark_character>().damage(_damage));
+                 collision.gameobject.getcomponent<projetpirate.ia.shark_controller>().alertfromshoot(_owner.gameobject);
+             }
+             destroy(this.gameobject);
+         }*/
     }
 
     [Command]

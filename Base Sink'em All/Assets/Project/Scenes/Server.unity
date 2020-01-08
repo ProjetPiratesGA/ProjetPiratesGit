@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -90,7 +90,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -550,6 +550,50 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 61199364}
   m_Mesh: {fileID: 4300086, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
+--- !u!1 &95601980
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 95601981}
+  - component: {fileID: 95601982}
+  m_Layer: 0
+  m_Name: SpawnEnemySharks
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &95601981
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 95601980}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -18.563667, y: 20.91705, z: -2.201538}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1155500677}
+  - {fileID: 1465335416}
+  - {fileID: 1616999995}
+  - {fileID: 502261071}
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &95601982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 95601980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7160175313066c14db5c7115cc55d814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &96321739
 GameObject:
   m_ObjectHideFlags: 0
@@ -789,6 +833,7 @@ GameObject:
   - component: {fileID: 108050924}
   - component: {fileID: 108050926}
   - component: {fileID: 108050923}
+  - component: {fileID: 108050927}
   - component: {fileID: 108050922}
   m_Layer: 0
   m_Name: NetworkManager
@@ -854,6 +899,9 @@ MonoBehaviour:
   - {fileID: 1903713359931088, guid: 6c50550295f44244bb644ab0b17a6f71, type: 2}
   - {fileID: 1494260278651724, guid: dea7ae8bb1288c546a076e94838a9f2c, type: 2}
   - {fileID: 1967134703231096, guid: 37b4b39dd211ae14992664de9dce6d64, type: 2}
+  - {fileID: 1917337126408870, guid: 4bf7249cbca6e4041a132da0a1b8311f, type: 2}
+  - {fileID: 1430476371408612, guid: 0e2bb0253a4428940a27dd0d288788e5, type: 2}
+  - {fileID: 1496857070248168, guid: 41a0eb8ace2b0b24ab8deb7f3e922e20, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -935,6 +983,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae7faf8250a78645ae5e4f74e0b6557, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &108050927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 108050921}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49e5c9a9b9a799a47a656ded043e16fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  merchantEnemy: {fileID: 1917337126408870, guid: 4bf7249cbca6e4041a132da0a1b8311f,
+    type: 2}
+  militaryEnemy: {fileID: 1430476371408612, guid: 0e2bb0253a4428940a27dd0d288788e5,
+    type: 2}
+  sharkEnemy: {fileID: 1496857070248168, guid: 41a0eb8ace2b0b24ab8deb7f3e922e20, type: 2}
+  sharkPatrol: {fileID: 1693917444031812, guid: 54514e2702ddfbf4196d0c54b9a611bf,
+    type: 2}
+  patrolWander: {fileID: 1939418543956912, guid: 2c134d15421c1c74cba11d25165f3337,
+    type: 2}
+  krakenHeadEnemy: {fileID: 0}
+  krakenTentaclesEnemy: []
+  posEnemyBoat: []
+  spawnEnemyShark:
+  - posSpawnEnemyShark: {fileID: 1155500677}
+  - posSpawnEnemyShark: {fileID: 1465335416}
+  - posSpawnEnemyShark: {fileID: 1616999995}
+  - posSpawnEnemyShark: {fileID: 502261071}
+  spawnEnemyKraken:
+    posSpawnEnemyKrakenHead: {fileID: 0}
+    posSpawnEnemyKrakenTentacles: []
 --- !u!1 &111284760
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,6 +1506,46 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 203335276}
   m_Mesh: {fileID: 4300098, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
+--- !u!1 &208548778
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 208548779}
+  - component: {fileID: 208548780}
+  m_Layer: 0
+  m_Name: SpawnEnemyKrakens
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &208548779
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 208548778}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -18.563667, y: 20.91705, z: -2.201538}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &208548780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 208548778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7160175313066c14db5c7115cc55d814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &210738960
 GameObject:
   m_ObjectHideFlags: 0
@@ -3357,6 +3476,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 480824198}
   m_Mesh: {fileID: 4300256, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
+--- !u!1 &502261070
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 502261071}
+  m_Layer: 0
+  m_Name: SpawnEnemyShark4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &502261071
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 502261070}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 55.7, y: 0, z: 36.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 95601981}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &504138923
 GameObject:
   m_ObjectHideFlags: 0
@@ -7065,6 +7212,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1146823400}
   m_Mesh: {fileID: 4300020, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
+--- !u!1 &1155500676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1155500677}
+  m_Layer: 0
+  m_Name: SpawnEnemyShark1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1155500677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1155500676}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 95601981}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1157135361
 GameObject:
   m_ObjectHideFlags: 0
@@ -9756,6 +9931,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1463299788}
   m_Mesh: {fileID: 4300230, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
+--- !u!1 &1465335415
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1465335416}
+  m_Layer: 0
+  m_Name: SpawnEnemyShark2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1465335416
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1465335415}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -73.1, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 95601981}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1469565744
 GameObject:
   m_ObjectHideFlags: 0
@@ -10744,6 +10947,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1607826304}
   m_Mesh: {fileID: 4300118, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
+--- !u!1 &1616999994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1616999995}
+  m_Layer: 0
+  m_Name: SpawnEnemyShark3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1616999995
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1616999994}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -17.1, y: 0, z: 52.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 95601981}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1620925202
 GameObject:
   m_ObjectHideFlags: 0
@@ -14001,6 +14232,46 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2069229479}
   m_Mesh: {fileID: 4300136, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
+--- !u!1 &2083087620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2083087621}
+  - component: {fileID: 2083087622}
+  m_Layer: 0
+  m_Name: SpawnEnemyBoats
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2083087621
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2083087620}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -18.563667, y: 20.91705, z: -2.201538}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2083087622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2083087620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7160175313066c14db5c7115cc55d814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2114059105
 GameObject:
   m_ObjectHideFlags: 0

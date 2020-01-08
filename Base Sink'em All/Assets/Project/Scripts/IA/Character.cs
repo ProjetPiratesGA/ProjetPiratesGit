@@ -85,6 +85,7 @@ namespace ProjetPirate.IA
         // Use this for initialization
         void Start()
         {
+            
             player._data.Boat.Stats.Life = _maxLifePoint;
             _directionLocator = Instantiate(new GameObject()).transform;
             _directionLocator.SetParent(this.transform);
