@@ -442,6 +442,22 @@ namespace ProjetPirate.Boat
             // END TEST
         }
 
+        //SEB 08
+        [Command]
+        public void CmdUpdatePosition(GameObject boat)
+        {
+            player._data.Boat.UpdateTransform(boat);
+            RpcUpdatePosition(boat);
+        }
+
+        [ClientRpc]
+        public void RpcUpdatePosition(GameObject boat)
+        {
+            player._data.Boat.UpdateTransform(boat);
+        }
+        //FIN SEB 08
+
+
         public void GoldFx(Vector3 pChestLocation, int pContainedMoney)
         {
             if (_goldFX != null)

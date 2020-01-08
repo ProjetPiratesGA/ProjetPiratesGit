@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base Sink'em All", "Assembly-CSharp.csproj", "{B304F0DE-869E-7842-43CA-06BEB96A751C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base Sink'em All", "Assembly-CSharp-Editor.csproj", "{72E40567-7087-842E-31BB-0A13F9446023}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{B304F0DE-869E-7842-43CA-06BEB96A751C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B304F0DE-869E-7842-43CA-06BEB96A751C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B304F0DE-869E-7842-43CA-06BEB96A751C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72E40567-7087-842E-31BB-0A13F9446023}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72E40567-7087-842E-31BB-0A13F9446023}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72E40567-7087-842E-31BB-0A13F9446023}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72E40567-7087-842E-31BB-0A13F9446023}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

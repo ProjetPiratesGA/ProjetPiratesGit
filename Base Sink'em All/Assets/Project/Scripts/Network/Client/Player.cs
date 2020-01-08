@@ -327,9 +327,12 @@ public class Player : Controller
         //Debug.LogError("IN SERVER SPAWN BOAT");
 
         //Get spawn point from network manager
-        Transform spawnTransform = NetworkManager.singleton.GetStartPosition();
+        //SEB 08
+        boatInstance = Instantiate(_boatPrefab);
+
+        _data.Boat.LoadTransform(boatInstance);
+        //FIN SEB 08
         //instanciate a new boat
-        boatInstance = Instantiate(_boatPrefab, spawnTransform.position, spawnTransform.rotation);
         //Set the new instance as chil of player (server side only)
         boatInstance.transform.SetParent(this.gameObject.transform);
         //Set the reference to the player for the new boat (server side only)
@@ -395,6 +398,8 @@ public class Player : Controller
             Debug.LogWarning("PLAYER SET NULL");
             Debug.Break();
         }
+
+        _data.Boat.LoadTransform(obj);//SEB 08
         //SetDataBoat(obj.GetComponent<BoatCharacter>());
 
     }
@@ -579,7 +584,7 @@ public class Player : Controller
     }
 
     [ClientRpc]
-    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed)
+    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed, Vector3 position, Vector4 rotation)
     {
         this.data.Ressource.Golds = gold;
         this.data.Boat.Stats.Life = life;
@@ -587,10 +592,24 @@ public class Player : Controller
         this.data.Boat.CurrentCanonRight = cannonRight;
         this.data.Boat.MaxCanonPerSide = maxCannons;
         this.data.Boat.Stats.Speed = speed;
+        //SEB 08
+        myVector3 pos = new myVector3();
+        pos.x = position.x;
+        pos.y = position.y;
+        pos.z = position.z;
+        this.data.Boat.Transform.Position = pos;
+
+        myVector4 rot = new myVector4();
+        rot.x = 0;
+        rot.y = rotation.y;
+        rot.z = 0;
+        rot.w = 0;
+        this.data.Boat.Transform.Rotation = rot;
+        //FIN SEB 08
 
     }
     [TargetRpc]
-    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed)
+    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed, Vector3 position, Vector4 rotation)
     {
         this.data.Ressource.Golds = gold;
         this.data.Boat.Stats.Life = life;
@@ -599,6 +618,20 @@ public class Player : Controller
         this.data.Boat.MaxCanonPerSide = maxCannons;
         this.data.Boat.Stats.Speed = speed;
 
+        //SEB 08
+        myVector3 pos = new myVector3();
+        pos.x = position.x;
+        pos.y = position.y;
+        pos.z = position.z;
+        this.data.Boat.Transform.Position = pos;
+
+        myVector4 rot = new myVector4();
+        rot.x = 0;
+        rot.y = rotation.y;
+        rot.z = 0;
+        rot.w = 0;
+        this.data.Boat.Transform.Rotation = rot;
+        //FIN SEB 08
     }
 
     [Command]

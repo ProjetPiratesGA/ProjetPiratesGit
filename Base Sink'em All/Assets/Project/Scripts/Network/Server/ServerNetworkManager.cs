@@ -157,8 +157,18 @@ namespace Project.Network
                 Debug.Log("Player: " + playerList[i]._username + "  Conexion: " + conn.connectionId);
                 playerList[i].TargetSetPlayerReference(conn, playerList[i].gameObject);
 
+                //SEB 08
+                Vector3 tempPos = Vector3.zero;
+                tempPos.x = _playerList[i]._data.Boat.Transform.Position.x;
+                tempPos.y = _playerList[i]._data.Boat.Transform.Position.y;
+                tempPos.z = _playerList[i]._data.Boat.Transform.Position.z;
+
+                Vector4 tmpRot = new Vector4();
+                tmpRot.y = _playerList[i]._data.Boat.Transform.Rotation.y;
+
                 _playerList[i].TargetSetStartData(conn, _playerList[i]._data.Boat.Stats.Life, _playerList[i]._data.Ressource.Golds, _playerList[i]._data.Boat.CurrentCanonLeft
-                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.MaxCanonPerSide, _playerList[i]._data.Boat.Stats.Speed);
+                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.MaxCanonPerSide, _playerList[i]._data.Boat.Stats.Speed, tempPos, tmpRot);
+                //FIN SEB 08
             }
             for (int i = 0; i < _boatList.Count; i++)
             {     
@@ -503,8 +513,21 @@ namespace Project.Network
                         if (data.ClientRegistered[j].Username == _playerList[i]._username)
                         {
                             _playerList[i]._data = data.ClientRegistered[j].Player;
+
+                            //SEB 08
+                            Vector3 tempPos = Vector3.zero;
+                            tempPos.x = _playerList[i]._data.Boat.Transform.Position.x;
+                            tempPos.y = _playerList[i]._data.Boat.Transform.Position.y;
+                            tempPos.z = _playerList[i]._data.Boat.Transform.Position.z;
+
+                            Vector4 tmpRot = new Vector4();
+                            tmpRot.y = _playerList[i]._data.Boat.Transform.Rotation.y;
+
+
                             _playerList[i].RpcSetStartData(_playerList[i]._data.Boat.Stats.Life, _playerList[i]._data.Ressource.Golds, _playerList[i]._data.Boat.CurrentCanonLeft
-                                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.MaxCanonPerSide, _playerList[i]._data.Boat.Stats.Speed);
+                                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.MaxCanonPerSide, _playerList[i]._data.Boat.Stats.Speed, tempPos, tmpRot);
+                            //FIN SEB 08
+
                             _playerList[i].isDataReady = true;
                             _playerList[i].TargetSetDataOk(_conn);
                             _playerList[i]._isEnteringGame = true;
