@@ -17,6 +17,8 @@ public class AudioManager : MonoBehaviour
     static private Dictionary<string, AudioClip> _clipFromString = new Dictionary<string, AudioClip>();
 
 
+    
+
     // Use this for initialization
     void Start()
     {
@@ -42,7 +44,6 @@ public class AudioManager : MonoBehaviour
         {
             Debug.Log("Sound " + pAudioClipName);
             pSource.clip = _clipFromString[pAudioClipName];
-            pSource.loop = false;
 
             pSource.PlayOneShot(pSource.clip);
         }
@@ -84,7 +85,6 @@ public class AudioManager : MonoBehaviour
 
         Debug.Log("Sound " + pAudioClipName);
         pSource.clip = _clipFromString[pAudioClipName];
-        pSource.loop = false;
 
         pSource.PlayOneShot(pSource.clip);
     }
@@ -95,9 +95,9 @@ public class AudioManager : MonoBehaviour
         {
             Debug.Log("Sound " + pAudioClipName);
             pSource.clip = _clipFromString[pAudioClipName];
-            pSource.loop = true;
 
             pSource.PlayOneShot(pSource.clip);
+            pSource.PlayScheduled(AudioSettings.dspTime + pSource.clip.length);
         }
     }
 

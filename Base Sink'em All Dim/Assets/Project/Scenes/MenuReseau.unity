@@ -308,7 +308,7 @@ MonoBehaviour:
   m_NetworkPort: 7777
   m_ServerBindToIP: 0
   m_ServerBindAddress: 
-  m_NetworkAddress: 192.168.1.162
+  m_NetworkAddress: localhost
   m_DontDestroyOnLoad: 1
   m_RunInBackground: 1
   m_ScriptCRCCheck: 1
@@ -715,6 +715,12 @@ MonoBehaviour:
     value: {fileID: 8300000, guid: 5c8e376df3627b64196d2c01cef4c092, type: 3}
   - key: OpenChest
     value: {fileID: 8300000, guid: 795cfcabfbc71554f90caeeec0610515, type: 3}
+  - key: Ambiance_Music
+    value: {fileID: 8300000, guid: cd07aa9320c2b7946b86bf9872fde97f, type: 3}
+  - key: Ambiance_Ship
+    value: {fileID: 8300000, guid: f52116e98ad195944ba8ee344bcec875, type: 3}
+  - key: Ambiance_Ocean
+    value: {fileID: 8300000, guid: 713a84ab92e586d489fdf12414cff280, type: 3}
 --- !u!4 &1926758707
 Transform:
   m_ObjectHideFlags: 0
