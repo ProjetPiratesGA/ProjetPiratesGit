@@ -77,6 +77,7 @@ namespace ProjetPirate.Boat
         [SerializeField] private GameObject _larboardCannonPrefab;
         [SerializeField] private GameObject _starboardCannonPrefab;
         [SerializeField] private GameObject _prowCannonHarpoonPrefab;
+        public bool _haveCannonHarpoon = false;
 
         [SerializeField] private List<Transform> _larboardCannonPositions;
         [SerializeField] private List<Transform> _starboardCannonPositions;
@@ -184,6 +185,7 @@ namespace ProjetPirate.Boat
         private AttractObject _attractObject;
 
         public bool Safe = false;
+        public bool isInSafeZone = false;
         [SerializeField] bool _isDocking = false;
         [SerializeField] bool _isPushedByIsland = false;
         [SerializeField] List<InvisibleWallPoint> _leftPoints;
@@ -349,7 +351,7 @@ namespace ProjetPirate.Boat
 
             if (Input.GetKeyDown(KeyCode.Keypad0))
             {
-                //Death();
+                Death();
             }
 
             if (_deathAnimationIsPlaying)
@@ -415,6 +417,7 @@ namespace ProjetPirate.Boat
                 for (int i = 0; i < _larboardCannons.Count; i++)
                 {
                     _larboardCannons[i]._FireCannon();
+                    _larboardCannons[i].haveShooted = true;
                 }
                 _larboardCannonInCooldown = true;
             }
@@ -433,6 +436,7 @@ namespace ProjetPirate.Boat
                 for (int i = 0; i < _starboardCannons.Count; i++)
                 {
                     _starboardCannons[i]._FireCannon();
+                    _starboardCannons[i].haveShooted = true;
                 }
                 _starboardCannonInCooldown = true;
             }
@@ -764,6 +768,7 @@ namespace ProjetPirate.Boat
                 cannonHarpoon.gameObject.transform.localPosition = Vector3.zero;
                 cannonHarpoon.SetOwner(this);
                 _prowCannonHarpoon = cannonHarpoon;
+                _haveCannonHarpoon = true;
             }
             _controller = _player;
         }

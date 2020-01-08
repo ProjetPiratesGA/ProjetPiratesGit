@@ -118,7 +118,7 @@ namespace ProjetPirate.UI.HUD
             {
                 if (_player != null)
                 {
-                    // _goldValueText.text = accesseur gold player;
+                    _goldValueText.text = _player.GetComponentInParent<Player>()._currentMoney.ToString();
                 }
                 else
                 {
@@ -150,8 +150,8 @@ namespace ProjetPirate.UI.HUD
             {
                 if (_player != null)
                 {
-                    _NumberWoodenBoardValue.text = "Plank Temp";
-                    //_NumberWoodenBoardValue.text = _player.GetComponent<Player>()._currentPlank.ToString();
+                    //_NumberWoodenBoardValue.text = "Plank Temp";
+                    _NumberWoodenBoardValue.text = _player.GetComponentInParent<Player>()._currentPlank.ToString();
                 }
                 else
                 {
@@ -190,6 +190,7 @@ namespace ProjetPirate.UI.HUD
             //Fonction pour rendre des pv au joueurs
             //Actualisation du nombre de planches du joueurs
             //_NumberWoodenBoardValue.text = ;
+            _player.GetComponentInParent<Player>().Repair();
         }
 
         public void CheckClickOnBoat()

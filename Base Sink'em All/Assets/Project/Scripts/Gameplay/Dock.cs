@@ -5,7 +5,7 @@ using UnityEngine;
 public class Dock : MonoBehaviour {
 
     [SerializeField] public List<Transform> _dockCheckpoints;
-    public bool _isAvailable = false;
+    public bool _isAvailable = true;
 
 	// Use this for initialization
 	void Start () {

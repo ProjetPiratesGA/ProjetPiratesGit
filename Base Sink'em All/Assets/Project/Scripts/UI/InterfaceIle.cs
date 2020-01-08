@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using ProjetPirate.Data;
 using ProjetPirate.Boat;
+using ProjetPirate.Gameplay;
 
 namespace ProjetPirate.UI
 {
@@ -29,12 +30,16 @@ namespace ProjetPirate.UI
         public Text _goldValueUpgradeText;
         public Text _XpValueUpgradeText;
 
+        [Header("TEST")]
+        public GameObject test;
 
         GameObject _player;
 
         Data_Dock _dataDock;
 
-        bool thereIsAQuest = true;
+        Data_Quests quest;
+
+        bool thereIsAQuest = false;
 
 
         bool blockInput = false;
@@ -44,7 +49,7 @@ namespace ProjetPirate.UI
 
         //currentValue
         int currentGold = 15000;
-        int currentXp = 1000;
+        float currentXp = 1000;
         int currentLvL = 1;
         int currentNumberCanon = 2;
         int currentCanonProue = 0;
@@ -64,12 +69,19 @@ namespace ProjetPirate.UI
 
         bool canUpgradeCheck = false;
 
+
         // Use this for initialization
         void Start()
         {
             // faire la gestion en fonction de si on a une quete ou non
             _player = GameObject.FindGameObjectWithTag("Player");
             _dataDock = new Data_Dock();
+
+            if(test.GetComponent<QuestScript>().isQuestAvailable)
+            {
+                thereIsAQuest = true;
+                quest = test.GetComponent<QuestScript>().GenerateQuest(6500);
+            }
 
             //Set thereIsAQuest grâce au data Dock            
             if (thereIsAQuest)
@@ -82,7 +94,6 @@ namespace ProjetPirate.UI
                 _questUI.SetActive(false);
                 _marchandUI.SetActive(true);
             }
-
 
             UpdateCurrentValue();
         }
@@ -114,7 +125,7 @@ namespace ProjetPirate.UI
 
             if (_dataDock != null)
             {
-                _textQuest.text = _dataDock.Pnj.DialogueQuete;
+                _textQuest.text = quest.TextQuest;
             }
 
             UpdateGoldValue();
@@ -160,6 +171,12 @@ namespace ProjetPirate.UI
         {
             Debug.LogError("Quest Accept");
             //Fonction Pour Accepter la quest
+            //A MODIFIER
+            test.GetComponent<QuestScript>().QuestIsAccepted();
+            _player.GetComponentInParent<Player>().data_quest = quest;
+            _player.GetComponentInParent<Player>().data_quest.IsAccepted = true;
+            _player.GetComponentInParent<Player>().haveAQuest = true;
+            Debug.Log(_player.GetComponentInParent<Player>().data_quest.ID);
             _questUI.SetActive(false);
             _marchandUI.SetActive(true);
         }
@@ -243,8 +260,8 @@ namespace ProjetPirate.UI
 
         void UpdateCurrentValue()
         {
-            //currentGold = accesseurGoldPlayer;
-            //currentXp = accesseurXpPlayer;
+            //currentGold =_playerScript._data.Ressource.Golds;
+            //currentXp = _playerScript._data.Ressource.Reputation;
             //currentLvL = accesseurLvLPlayer;
             //currentNumberCanon = accesseurCanonPlayer;
             //currentCanonProue = accesseurCanonProuePlayer;
@@ -380,6 +397,11 @@ namespace ProjetPirate.UI
             {
                 canUpgradeCheck = true;
             }
+        }
+
+        public void SetPlayer(GameObject pPlayer)
+        {
+            _player = pPlayer;
         }
     }
 }

@@ -34,10 +34,11 @@ namespace ProjetPirate.Controllers
         {
             if (isDragging)
             {
-#if UNITY_EDITOR
-                _screenPoint = Input.mousePosition;
-#elif UNITY_ANDROID
+
+#if UNITY_ANDROID
                 _screenPoint = Input.GetTouch(0).position;
+#else
+                _screenPoint = Input.mousePosition;
 #endif
                 if (RectTransformUtility.ScreenPointToLocalPointInRectangle(this.GetComponent<RectTransform>(), _screenPoint, null, out _positionJoystick))
                 {

@@ -21,7 +21,21 @@ namespace ProjetPirate.Data
         public float z { get; set; }
     }
 
-
+    [Serializable]
+    public struct myVector4
+    {
+        public myVector4(float _x, float _y, float _z, float _w)
+        {
+            x = _x;
+            y = _y;
+            z = _z;
+            w = _w;
+        }
+        public float x { get; set; }
+        public float y { get; set; }
+        public float z { get; set; }
+        public float w { get; set; }
+    }
 
     public static class Data_Tools
     {
@@ -74,7 +88,7 @@ namespace ProjetPirate.Data
 
         public static Data_Quests DecryptingQuest(int IDquest)
         {
-            Data_Quests quest = new Data_Quests();
+            Data_Quests quest = null;
             string path = MonoData_Tools.pathHDDQuestes + IDquest ;
             if (File.Exists(path))
             {

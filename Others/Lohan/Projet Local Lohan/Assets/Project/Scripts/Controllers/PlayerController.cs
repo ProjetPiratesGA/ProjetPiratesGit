@@ -131,10 +131,8 @@ namespace ProjetPirate.Controllers
             //Debug.Log("ShootRight / canReloadRight : " + canReloadRight);
             if (!_player.GetComponentInChildren<BoatCharacter>().Safe)
             {
-
                 if (!canReloadRight)
                 {
-
                     _player.GetComponentInChildren<BoatCharacter>().ShootStarboard();
                     reloadingTime = _player.GetComponentInChildren<BoatCharacter>().getShootCoolDown();
                     _buttonShootRight.GetComponent<Image>().fillAmount = 0;

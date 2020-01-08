@@ -50,7 +50,13 @@ namespace ProjetPirate.Data
             _initPositionVector.x = boat.transform.position.x;
             _initPositionVector.y = boat.transform.position.y;
             _initPositionVector.z = boat.transform.position.z;
+            myVector4 tmpRot = new myVector4();
+            tmpRot.x = boat.transform.rotation.x;
+            tmpRot.y = boat.transform.rotation.y;
+            tmpRot.z = boat.transform.rotation.z;
+            tmpRot.w = boat.transform.rotation.w;
 
+            transform.Rotation = tmpRot;
             transform.Position = _initPositionVector;
         }
 
@@ -60,12 +66,21 @@ namespace ProjetPirate.Data
             _initPositionVector.y = boat.transform.position.y;
             _initPositionVector.z = boat.transform.position.z;
 
+            myVector4 tmpRot = new myVector4();
+            tmpRot.y = boat.transform.rotation.y;
+
+            transform.Rotation = tmpRot;
             transform.Position = _initPositionVector;
         }
 
         public void LoadTransform(GameObject boat)
         {
             boat.transform.position = new Vector3(transform.Position.x, transform.Position.y, transform.Position.z);
+            Quaternion tmpQuat = new Quaternion();
+
+            tmpQuat = boat.transform.rotation;
+            tmpQuat.y = transform.Position.y;
+            boat.transform.rotation = tmpQuat;
         }
 
         public void UpdateTransform(GameObject boat)
@@ -73,6 +88,14 @@ namespace ProjetPirate.Data
             _initPositionVector.x = boat.transform.position.x;
             _initPositionVector.y = boat.transform.position.y;
             _initPositionVector.z = boat.transform.position.z;
+
+            myVector4 tmpRot = new myVector4();
+            tmpRot.x = boat.transform.rotation.x;
+            tmpRot.y = boat.transform.rotation.y;
+            tmpRot.z = boat.transform.rotation.z;
+            tmpRot.w = boat.transform.rotation.w;
+
+            transform.Rotation = tmpRot;
 
             transform.Position = _initPositionVector;
         }

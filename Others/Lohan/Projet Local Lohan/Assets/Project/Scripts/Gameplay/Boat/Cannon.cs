@@ -68,6 +68,7 @@ public class Cannon : MonoBehaviour
             {
                 _smokeFX.Play();
             }
+            haveShooted = false;
             //Debug.Log("_listCannonBall.Count : " + _listCannonBall.Count);
         }
         else

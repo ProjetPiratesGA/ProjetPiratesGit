@@ -67,8 +67,10 @@ public class Player : Controller
     float _currentTime = 0f;
     float _timeToReloadData = 0.5f;
 
-    private Data_Quests data_quest = new Data_Quests();
+    public Data_Quests data_quest = null;
     private bool haveFinishedOwnQuest = false;
+
+    public bool haveAQuest = false;
 
     public bool asBoatSpawned
     {
@@ -103,6 +105,7 @@ public class Player : Controller
 
     private void Update()
     {
+
         if (!isLocalPlayer)
         {
             return;
@@ -327,9 +330,12 @@ public class Player : Controller
         //Debug.LogError("IN SERVER SPAWN BOAT");
 
         //Get spawn point from network manager
-        Transform spawnTransform = NetworkManager.singleton.GetStartPosition();
+        //SEB 08
+        boatInstance = Instantiate(_boatPrefab);
+
+        _data.Boat.LoadTransform(boatInstance);
+        //FIN SEB 08
         //instanciate a new boat
-        boatInstance = Instantiate(_boatPrefab, spawnTransform.position, spawnTransform.rotation);
         //Set the new instance as chil of player (server side only)
         boatInstance.transform.SetParent(this.gameObject.transform);
         //Set the reference to the player for the new boat (server side only)
@@ -395,6 +401,8 @@ public class Player : Controller
             Debug.LogWarning("PLAYER SET NULL");
             Debug.Break();
         }
+
+        _data.Boat.LoadTransform(obj);//SEB 08
         //SetDataBoat(obj.GetComponent<BoatCharacter>());
 
     }
@@ -579,7 +587,7 @@ public class Player : Controller
     }
 
     [ClientRpc]
-    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed)
+    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed, Vector3 position, Vector4 rotation)
     {
         this.data.Ressource.Golds = gold;
         this.data.Boat.Stats.Life = life;
@@ -587,10 +595,24 @@ public class Player : Controller
         this.data.Boat.CurrentCanonRight = cannonRight;
         this.data.Boat.MaxCanonPerSide = maxCannons;
         this.data.Boat.Stats.Speed = speed;
+        //SEB 08
+        myVector3 pos = new myVector3();
+        pos.x = position.x;
+        pos.y = position.y;
+        pos.z = position.z;
+        this.data.Boat.Transform.Position = pos;
+
+        myVector4 rot = new myVector4();
+        rot.x = 0;
+        rot.y = rotation.y;
+        rot.z = 0;
+        rot.w = 0;
+        this.data.Boat.Transform.Rotation = rot;
+        //FIN SEB 08
 
     }
     [TargetRpc]
-    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed)
+    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed, Vector3 position, Vector4 rotation)
     {
         this.data.Ressource.Golds = gold;
         this.data.Boat.Stats.Life = life;
@@ -599,6 +621,20 @@ public class Player : Controller
         this.data.Boat.MaxCanonPerSide = maxCannons;
         this.data.Boat.Stats.Speed = speed;
 
+        //SEB 08
+        myVector3 pos = new myVector3();
+        pos.x = position.x;
+        pos.y = position.y;
+        pos.z = position.z;
+        this.data.Boat.Transform.Position = pos;
+
+        myVector4 rot = new myVector4();
+        rot.x = 0;
+        rot.y = rotation.y;
+        rot.z = 0;
+        rot.w = 0;
+        this.data.Boat.Transform.Rotation = rot;
+        //FIN SEB 08
     }
 
     [Command]
@@ -641,28 +677,35 @@ public class Player : Controller
 
     public void Repair()
     {
-        if (data.Ressource.WoodBoard > 0 & boatInstance.GetComponent<BoatCharacter>().CurrentLifePoint < boatInstance.GetComponent<BoatCharacter>().MaxLifePoint)
+        if (data.Ressource.WoodBoard > 0 & this.GetComponentInChildren<BoatCharacter>().CurrentLifePoint < this.GetComponentInChildren<BoatCharacter>().MaxLifePoint)
         {
             data.Ressource.WoodBoard -= 1;
-            boatInstance.GetComponent<BoatCharacter>().Repair();
+            this.GetComponentInChildren<BoatCharacter>().Repair();
         }
     }
-
     public void CheckQuest()
     {
+
         if (data_quest.ItemCount >= data_quest.ItemCountNeeded && haveFinishedOwnQuest == false && data_quest.IsAccepted == true)
         {
             Debug.Log("quete remplie");
             haveFinishedOwnQuest = true;
+            this.GainMoney((int)data_quest.Reward.x);
+            this.GainXP((int)data_quest.Reward.y);
+            data_quest = null;
+            haveAQuest = false;
+
         }
     }
-
     public void CheckCurrentCountQuest(int _addAmount, int _ID)
     {
-        if (data_quest.ID == _ID)
+        if (haveAQuest)
         {
-            data_quest.ItemCount += _addAmount;
-            Debug.Log("quete : " + data_quest.ItemCount + " / " + data_quest.ItemCountNeeded);
+            if (data_quest.ID == _ID)
+            {
+                data_quest.ItemCount += _addAmount;
+                Debug.Log("quete : " + data_quest.ItemCount + " / " + data_quest.ItemCountNeeded);
+            }
         }
     }
 }

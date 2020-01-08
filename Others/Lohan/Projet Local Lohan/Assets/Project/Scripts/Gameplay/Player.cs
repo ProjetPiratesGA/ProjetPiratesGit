@@ -19,7 +19,7 @@ public class Player : Controller {
     [SerializeField] public int _maxPlank = 10000; // max XP
     [SerializeField] public int _currentPlank;
     [SerializeField] public int _maxMoney = 10000; // max XP
-    public int _currentMoney;
+    public int _currentMoney = 10;
 
     [SerializeField] public int _xpLostByDeath = 10;
     [SerializeField] public float _goldRatiolostByDeath = 0.1f;
@@ -31,6 +31,9 @@ public class Player : Controller {
 
     private Data_Quests data_quest = new Data_Quests();
     private bool haveFinishedOwnQuest = false;
+
+    public float _RepairCooldown = 4f;
+    public bool _RepairInCooldown = false;
     // Use this for initialization
     void Start() {
         Instance = this.gameObject;
@@ -41,7 +44,6 @@ public class Player : Controller {
     // Update is called once per frame
     void Update() {
         
-
         data_player.dRessource.WoodBoard = _currentPlank;
         data_player.dRessource.Golds = _currentMoney;
         data_player.dRessource.Reputation = _currentXp;
@@ -52,28 +54,34 @@ public class Player : Controller {
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.Log("repair1");
             Repair();
         }
         if(Input.GetKeyDown(KeyCode.K))
         {
             _currentPlank += 10;
-            Debug.Log("planchesss");
+            Debug.Log("+ 10 planches");
         }
-        if (Input.GetKeyDown(KeyCode.Keypad0))
+        if (Input.GetKeyDown(KeyCode.Keypad1))
         {
             Data_Dock data_dock = new Data_Dock();
             Debug.Log("quete id : " + data_dock.Pnj.Quete.ID);
             Debug.Log("quete nb voulu : " + data_dock.Pnj.Quete.ItemCountNeeded);
             data_quest = data_dock.Pnj.Quete;
-            //data_quest.Type = 0;
-            //data_quest.ID = 0;
-            //data_quest.ItemCount = 0;
-            //data_quest.IsAccepted = true;
-            //data_quest.TextQuest = "Tirer 6 fois";
-            //data_quest.ItemNecessary = 6;
+            data_quest.IsAccepted = true;
         }
         CheckQuest();
+
+        if (_RepairCooldown <= 0 && _RepairInCooldown == true)
+        {
+            _RepairInCooldown = false;
+            _RepairCooldown = 5f;
+            _boat.Repair();
+            Debug.Log("finished repair");
+        }
+        else if(_RepairCooldown > 0 && _RepairInCooldown == true)
+        {
+            _RepairCooldown -= Time.deltaTime;
+        }
     }
 
     public void SetUpData(Data_Player pNewData)
@@ -183,8 +191,6 @@ public class Player : Controller {
         Chest.SpawnChest(_boat.DroppedChest, _boat.transform.position, lostMoney, _currentPlank);
         LoseMoney(lostMoney);
         LosePlank(_currentPlank);
-        
-
     }
 
     public override void Disappear()
@@ -195,20 +201,21 @@ public class Player : Controller {
 
     public override void Repair()
     {
-        if(_currentPlank > 0 & _boat.CurrentLifePoint < _boat.MaxLifePoint)
+        if(_currentPlank > 0 & _boat.CurrentLifePoint < _boat.MaxLifePoint && _RepairInCooldown == false)
         {
             _currentPlank -= 1;
-            _boat.Repair();
+            _RepairInCooldown = true;
+            Debug.Log("bateau joueur en train de reparer");
         }
     }
 
     public void CheckQuest()
     {
-        if(data_quest.ID == 1) //quete test tirer 3 fois
+        if(data_quest.ID == 1 && data_quest.IsAccepted == true) //quete test tirer 3 fois
         {
-            for(int i = 0; i < _boat._starboardCannons.Count; i++)
+            for (int i = 0; i < _boat._starboardCannons.Count; i++)
             {
-                if(_boat._starboardCannons[i].haveShooted == true)
+                if (_boat._starboardCannons[i].haveShooted == true)
                 {
                     data_quest.ItemCount += 1;
                     Debug.Log(data_quest.ItemCount);
@@ -225,10 +232,11 @@ public class Player : Controller {
                 }
             }
         }
-        if (data_quest.ItemCount >= data_quest.ItemCountNeeded && haveFinishedOwnQuest == false)
+        if (data_quest.ItemCount >= data_quest.ItemCountNeeded && haveFinishedOwnQuest == false && data_quest.IsAccepted == true)
         {
             Debug.Log("quete remplie");
             haveFinishedOwnQuest = true;
+            data_quest.IsAccepted = false;
         }
     }
 }

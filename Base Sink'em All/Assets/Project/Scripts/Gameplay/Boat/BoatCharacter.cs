@@ -204,13 +204,15 @@ namespace ProjetPirate.Boat
         private float _goldFXCurrentTime = 0;
 
         public bool Safe = false;
-        [SerializeField] private Dock _dock;
+        [SerializeField] public Dock _dock;
         private int _nextDockingCheckpointId;
 
 
         [SerializeField] bool _isDocking = false;
         [SerializeField] bool _isDocked = false;
         [SerializeField] bool _isLeavingDock = false;
+        private float _dockingAngularSpeed = 90;
+
 
         public bool _isDying
         {
@@ -287,6 +289,18 @@ namespace ProjetPirate.Boat
             }
             _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
             _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
+
+            _directionLocator = Instantiate(new GameObject()).transform;
+            _directionLocator.gameObject.name = "DirectionLocator";
+            _directionLocator.SetParent(this.transform);
+            _directionLocator.localPosition = Vector3.zero;
+            Vector3 vec = _directionLocator.position;
+            vec.y = 0;
+            _directionLocator.position = vec;
+            vec = this.transform.position;
+            vec.y = 0;
+            this.transform.position = vec;
+            
         }
 
 
@@ -298,6 +312,19 @@ namespace ProjetPirate.Boat
             if (Input.GetKeyDown(KeyCode.Keypad0))
             {
                 Death();
+            }
+            else if (Input.GetKeyDown(KeyCode.Keypad4))
+            {
+                if (!_isDocked & !_isDocking)
+                {
+                    StartDocking();
+
+                }
+                else if (_isDocked)
+                {
+                    _isDocked = false;
+                    _isLeavingDock = true;
+                }
             }
 
             if (_deathAnimationIsPlaying)
@@ -415,6 +442,22 @@ namespace ProjetPirate.Boat
             // END TEST
         }
 
+        //SEB 08
+        [Command]
+        public void CmdUpdatePosition(GameObject boat)
+        {
+            player._data.Boat.UpdateTransform(boat);
+            RpcUpdatePosition(boat);
+        }
+
+        [ClientRpc]
+        public void RpcUpdatePosition(GameObject boat)
+        {
+            player._data.Boat.UpdateTransform(boat);
+        }
+        //FIN SEB 08
+
+
         public void GoldFx(Vector3 pChestLocation, int pContainedMoney)
         {
             if (_goldFX != null)
@@ -471,7 +514,7 @@ namespace ProjetPirate.Boat
 
             this.GetComponent<BoxCollider>().enabled = false;
             this.GetComponentInParent<Player>().Death();
-  
+
 
             /*ProjetPirate.IA.Ship_Controller[] enemies = FindObjectsOfType<ProjetPirate.IA.Ship_Controller>();
             for (int i = 0; i < enemies.Length; i++)
@@ -521,7 +564,7 @@ namespace ProjetPirate.Boat
                 this.GetComponentInParent<Player>().Disappear();
                 this.GetComponent<BoxCollider>().enabled = true;
 
-                _currentMovingSpeed = _maxMovingSpeed;
+                player._data.Boat.Stats.Speed = _maxMovingSpeed;
                 _respawninfAnimationIsPlaying = true;
             }
         }
@@ -537,10 +580,14 @@ namespace ProjetPirate.Boat
             }
         }
 
-        public void StartDocking(Dock pDock)
+        public void StartDocking()
         {
-            _dock = pDock;
-            _isDocking = true;
+            if (_dock != null)
+            {
+                _dock._isAvailable = false;
+                _isDocking = true;
+            }
+            
         }
         public void Docking()
         {
@@ -548,7 +595,7 @@ namespace ProjetPirate.Boat
             // Wait a bit at each checkpoint
             {
                 // If the entity reached the checkpoint
-                if (Vector3.Distance(this.transform.position, _dock._dockCheckpoints[_nextDockingCheckpointId].position) < _currentMovingSpeed * Time.deltaTime)
+                if (Vector3.Distance(this.transform.position, _dock._dockCheckpoints[_nextDockingCheckpointId].position) < _maxMovingSpeed/* * Time.deltaTime*/)
                 {
                     {
                         _nextDockingCheckpointId++;
@@ -561,7 +608,7 @@ namespace ProjetPirate.Boat
                         _nextDockingCheckpointId--;
                         _isDocking = false;
                         _isDocked = true;
-                        _currentMovingSpeed = 0;
+                        player._data.Boat.Stats.Speed = 0;
                     }
                 }
 
@@ -572,10 +619,10 @@ namespace ProjetPirate.Boat
 
                 }
                 GoToDestination(_dock._dockCheckpoints[_nextDockingCheckpointId].position, willWait);
-                if (_currentMovingSpeed > _maxMovingSpeed / 4)
+                if (player._data.Boat.Stats.Speed > _maxMovingSpeed / 4)
                 {
-                    _currentMovingSpeed = _maxMovingSpeed / 4;
-                    _stoppingDistance = ((_currentMovingSpeed / 10) * (_currentMovingSpeed / 10)) * 50 / _decelerationSpeedForward;
+                    player._data.Boat.Stats.Speed = _maxMovingSpeed / 4;
+                    _stoppingDistance = ((player._data.Boat.Stats.Speed / 10) * (player._data.Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
                 }
             }
         }
@@ -585,7 +632,7 @@ namespace ProjetPirate.Boat
             // Wait a bit at each checkpoint
             {
                 // If the entity reached the checkpoint
-                if (Vector3.Distance(this.transform.position, _dock._dockCheckpoints[_nextDockingCheckpointId].position) < _currentMovingSpeed * Time.deltaTime)
+                if (Vector3.Distance(this.transform.position, _dock._dockCheckpoints[_nextDockingCheckpointId].position) < _maxMovingSpeed)
                 {
                     {
                         _nextDockingCheckpointId--;
@@ -597,14 +644,15 @@ namespace ProjetPirate.Boat
                     {
                         _nextDockingCheckpointId = 0;
                         _isLeavingDock = false;
+                        _dock._isAvailable = true;
                     }
                 }
 
                 GoToDestination(_dock._dockCheckpoints[_nextDockingCheckpointId].position);
-                if (_currentMovingSpeed > _maxMovingSpeed / 4)
+                if (player._data.Boat.Stats.Speed > _maxMovingSpeed / 4)
                 {
-                    _currentMovingSpeed = _maxMovingSpeed / 4;
-                    _stoppingDistance = ((_currentMovingSpeed / 10) * (_currentMovingSpeed / 10)) * 50 / _decelerationSpeedForward;
+                    player._data.Boat.Stats.Speed = _maxMovingSpeed / 4;
+                    _stoppingDistance = ((player._data.Boat.Stats.Speed / 10) * (player._data.Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
                 }
 
             }
@@ -650,20 +698,20 @@ namespace ProjetPirate.Boat
         [ClientRpc]
         public void RpcAddCannons(bool left, bool right)
         {
-            if (( player._data.Boat.CurrentCanonLeft <  player._data.Boat.MaxCanonPerSide) && left == true)
+            if ((player._data.Boat.CurrentCanonLeft < player._data.Boat.MaxCanonPerSide) && left == true)
             {
-                 player._data.Boat.CurrentCanonLeft++;
+                player._data.Boat.CurrentCanonLeft++;
             }
-            if (( player._data.Boat.CurrentCanonRight <  player._data.Boat.MaxCanonPerSide) && right == true)
+            if ((player._data.Boat.CurrentCanonRight < player._data.Boat.MaxCanonPerSide) && right == true)
             {
-                 player._data.Boat.CurrentCanonRight++;
+                player._data.Boat.CurrentCanonRight++;
             }
         }
 
 
         public void SetActiveCannons()
         {
-            if(player == null)
+            if (player == null)
             {
                 Debug.Log("PLAYER NULL");
                 Debug.Break();
@@ -689,7 +737,7 @@ namespace ProjetPirate.Boat
 
             for (int i = 0; i < _larboardCannons.Count; i++)
             {
-                if (i <  player._data.Boat.CurrentCanonLeft)
+                if (i < player._data.Boat.CurrentCanonLeft)
                 {
                     _larboardCannons[i].gameObject.SetActive(true);
                 }
@@ -701,7 +749,7 @@ namespace ProjetPirate.Boat
 
             for (int i = 0; i < _starboardCannons.Count; i++)
             {
-                if (i <  player._data.Boat.CurrentCanonRight)
+                if (i < player._data.Boat.CurrentCanonRight)
                 {
                     _starboardCannons[i].gameObject.SetActive(true);
                 }
@@ -764,7 +812,7 @@ namespace ProjetPirate.Boat
 
 
             //use the input to define the state of the boat
-            if ( player._data.Boat.Stats.Speed == 0)
+            if (player._data.Boat.Stats.Speed == 0)
             {
                 _boatMovementState = BoatMovementState.IDLE;
             }
@@ -772,18 +820,18 @@ namespace ProjetPirate.Boat
             {
                 //acceleration
                 //if (_currentSpeedForward > 0 && (_zInputMovement != 0 || _xInputMovement != 0))
-                if ( player._data.Boat.Stats.Speed > 0 && _ControllerIsMoving == true)
+                if (player._data.Boat.Stats.Speed > 0 && _ControllerIsMoving == true)
                 {
                     _boatMovementState = BoatMovementState.ACCELERATE;
                 }
                 //deceleration
                 //else if (_currentSpeedForward > 0 && (_zInputMovement == 0 && _xInputMovement == 0))
-                else if ( player._data.Boat.Stats.Speed > 0 && _ControllerIsMoving == false)
+                else if (player._data.Boat.Stats.Speed > 0 && _ControllerIsMoving == false)
                 {
                     _boatMovementState = BoatMovementState.DECELERATE;
                 }
                 //cruise_speed
-                if ( player._data.Boat.Stats.Speed >= _maxMovingSpeed)
+                if (player._data.Boat.Stats.Speed >= _maxMovingSpeed)
                 {
                     _boatMovementState = BoatMovementState.CRUISE_SPEED;
                 }
@@ -900,6 +948,7 @@ namespace ProjetPirate.Boat
             pos += this.transform.forward * player._data.Boat.Stats.Speed * Time.deltaTime;
             //pos.y = 0;
             this.transform.position = pos;
+            _isMovingForward = true;
         }
 
         public void Accelerate()
@@ -910,7 +959,7 @@ namespace ProjetPirate.Boat
             {
                 player._data.Boat.Stats.Speed = _maxMovingSpeed;
             }
-            //Debug.Log(this.name + " --> Acclerate /  player._data.Boat.dStats.Speed : " +  player._data.Boat.dStats.Speed + " _accelerationSpeedForward : " + _accelerationSpeedForward
+            //Debug.Log(this.name + " --> Acclerate /  player._data.Boat.Stats.Speed : " +  player._data.Boat.Stats.Speed + " _accelerationSpeedForward : " + _accelerationSpeedForward
             //+ " Time.deltaTime : " + Time.deltaTime);
             _stoppingDistance = ((player._data.Boat.Stats.Speed / 10) * (player._data.Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
         }
@@ -1042,7 +1091,7 @@ namespace ProjetPirate.Boat
             //if (_attractObject._isFalling == false)
             //{
             MoveForward();
-                //this.transform.position += _currentVelocity_MovementDirection;
+            //this.transform.position += _currentVelocity_MovementDirection;
             //}
 
             //ROTATION
@@ -1127,7 +1176,7 @@ namespace ProjetPirate.Boat
 
         public float getSpeedForward()
         {
-            return  player._data.Boat.Stats.Speed;
+            return player._data.Boat.Stats.Speed;
         }
 
         public float getMaxSpeedForward()
@@ -1218,6 +1267,7 @@ namespace ProjetPirate.Boat
 
         public void GoToDestination(Vector3 _destination, bool pMustStopToDestination = false, float _turningAngle = 0)
         {
+
             // Make the DirectionLocator faces the destination
             DirectionLocator.LookAt(_destination);
             DirectionLocator.Rotate(0, _turningAngle, 0);
@@ -1232,6 +1282,7 @@ namespace ProjetPirate.Boat
                 //If the destination is too far, move forward
                 GetComponent<BoatCharacter>().setControllerIsMoving(true);
                 Accelerate();
+
                 MoveForward();
             }
             else if (Vector3.Distance(this.transform.position, _destination) < StoppingDistance)
@@ -1257,6 +1308,7 @@ namespace ProjetPirate.Boat
                 {
                     if (Vector3.Distance(this.transform.position, _destination) > getMaxSpeedForward() * Time.deltaTime)
                     {
+                        Debug.Log("Accelerate");
                         setControllerIsMoving(true);
                         Accelerate();
                         MoveForward();
@@ -1281,12 +1333,21 @@ namespace ProjetPirate.Boat
             else if ((DirectionLocator.eulerAngles.y - transform.eulerAngles.y < 0 & DirectionLocator.eulerAngles.y - transform.eulerAngles.y > -180) | DirectionLocator.eulerAngles.y - transform.eulerAngles.y > 180)
             {
                 //If the destination si to the left, turn left.
-                TurnLarboard();
+                //TurnLarboard();
+                //player._data.Boat.Stats.Speed = 0;
+                if (_isMovingForward)
+                {
+                    this.transform.Rotate(0, -_dockingAngularSpeed * Time.deltaTime, 0);
+                }
             }
             else
             {
                 //If the destination si to the right, turn right.
-                TurnStarboard();
+                if (_isMovingForward)
+                {
+                    this.transform.Rotate(0, +_dockingAngularSpeed * Time.deltaTime, 0);
+                }
+                //player._data.Boat.Stats.Speed = 0;
             }
         }
     }
