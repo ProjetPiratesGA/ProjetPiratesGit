@@ -128,10 +128,9 @@ namespace ProjetPirate.UI.HUD
             {
                 if (!_interfaceQuest.activeSelf)
                 {
-                    _IntituleQuete.text = _player.GetComponentInParent<Player>().data_quest.TextQuest;
                     _interfaceQuest.SetActive(true);
                 }
-
+                _IntituleQuete.text = _player.GetComponentInParent<Player>().data_quest.TextQuest;
                 _suivieText.text = _player.GetComponentInParent<Player>().data_quest.ItemCount + " / " + _player.GetComponentInParent<Player>().data_quest.ItemCountNeeded;
             }
             else

@@ -51,18 +51,49 @@ namespace ProjetPirate.UI.HUD
 
         void UpdateXpOtherPlayer()
         {
-            //Remplacer par un accesseur aux gold du joueur
-            _XpValueText.text = "test";
-            //_XpValueText.text = _player.getGlod();
+            if (_XpValueText != null)
+            {
+                if (_player != null)
+                {
+                    _XpValueText.text = _player.GetComponent<Player>()._data.Ressource.Reputation.ToString();
+                }
+                else
+                {
+                    _XpValueText.text = "Joueur NULL";
+
+                }
+            }
+
         }
 
         public void UpdateLifeBar()
         {
             if (_player != null)
             {
-                //Remplacer par un accesseur aux HP du joueur
-                //if (_player.GetComponent<BoatCharacter>().getCurrentLife() >= 0 && _player.GetComponent<BoatCharacter>().getCurrentLife() <= _player.GetComponent<BoatCharacter>().getMaxLife())
-                //    lifeBar.GetComponent<RectTransform>().sizeDelta = new Vector2((maxLifeBarSize / _player.GetComponent<BoatCharacter>().getMaxLife()) * _player.GetComponent<BoatCharacter>().getCurrentLife(), lifeBar.GetComponent<RectTransform>().sizeDelta.y);
+                BoatCharacter boatChar = _player.GetComponentInChildren<BoatCharacter>();
+                if (boatChar == null)
+                {
+                    Debug.LogError("Boatchar is null");
+                    Debug.Break();
+                }
+                //if (boatChar.getCurrentLife() == null)
+                //{
+                //    Debug.LogError("Boatchar is null");
+                //    Debug.Break();
+                //}
+                //if (boatChar.getMaxLife() == null)
+                //{
+                //    Debug.LogError("Boatchar is null");
+                //    Debug.Break();
+                //}
+                if (boatChar.getCurrentLife() >= 0 && boatChar.getCurrentLife() <= boatChar.getMaxLife())
+                {
+                    //Debug.LogError("Life : " + boatChar.getCurrentLife());
+                    //Debug.LogError("before : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
+                    lifeBar.GetComponent<RectTransform>().sizeDelta = new Vector2((maxLifeBarSize / boatChar.getMaxLife()) * boatChar.getCurrentLife(), lifeBar.GetComponent<RectTransform>().sizeDelta.y);
+                    //Debug.LogError("after : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
+                    //Debug.Break();
+                }
             }
             else
             {
@@ -75,7 +106,7 @@ namespace ProjetPirate.UI.HUD
         void UpdatePlayerName()
         {
             //Remplacer par un accesseur au pseudo du joeueur
-            _playerName.text = _player.gameObject.ToString();
+            _playerName.text = _player.GetComponent<Player>()._username;
         }
     }
 }

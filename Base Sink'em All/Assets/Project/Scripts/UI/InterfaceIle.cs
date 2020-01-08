@@ -154,11 +154,11 @@ namespace ProjetPirate.UI
 
             //if(currentLvL > 1 || accesseur bateau possede canon proue == false)
             //{
-            //    _buttonBuyCanonProue.SetActive(true);
+            //_buttonBuyCanonProue.GetComponent<Button>().interactable = true;
             //}
             //else
             //{
-            //    _buttonBuyCanonProue.SetActive(false);
+            //_buttonBuyCanonProue.GetComponent<Button>().interactable = false;
             //}
 
             if (_marchandUI.activeSelf)
@@ -181,6 +181,7 @@ namespace ProjetPirate.UI
             Debug.Log(_player.GetComponentInParent<Player>().data_quest.ID);
             _questUI.SetActive(false);
             _marchandUI.SetActive(true);
+            thereIsAQuest = false;
         }
 
         public void RefuseQuest()
