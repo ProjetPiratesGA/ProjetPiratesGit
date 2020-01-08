@@ -88,7 +88,7 @@ namespace ProjetPirate.Data
 
         public static Data_Quests DecryptingQuest(int IDquest)
         {
-            Data_Quests quest = new Data_Quests();
+            Data_Quests quest = null;
             string path = MonoData_Tools.pathHDDQuestes + IDquest ;
             if (File.Exists(path))
             {
