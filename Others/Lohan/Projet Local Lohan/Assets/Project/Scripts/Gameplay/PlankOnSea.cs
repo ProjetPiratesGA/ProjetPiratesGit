@@ -62,7 +62,7 @@ public class PlankOnSea : MonoBehaviour {
     {
 		if(other.gameObject.tag == "Player")
         {
-            other.GetComponent<Player>().GainPlank(1);
+            other.GetComponentInParent<Player>().GainPlank(1);
             Destroy(this.gameObject);
         }
     }
