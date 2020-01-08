@@ -100,10 +100,12 @@
      <Compile Include="Assets\Project\Scripts\Gameplay\Boat\CannonBall.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Boat\CannonHarpoon.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Boat\HarpoonArrow.cs" />
+     <Compile Include="Assets\Project\Scripts\Gameplay\Boat\InvisibleWallPoint.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Chest.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Controller.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\Dock.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\DockZone.cs" />
+     <Compile Include="Assets\Project\Scripts\Gameplay\ParticleSystem\TestSmokeDeath.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\PlankOnSea.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\QuestScript.cs" />
      <Compile Include="Assets\Project\Scripts\Gameplay\SafeZone.cs" />
