@@ -101,7 +101,8 @@ namespace ProjetPirate.Boat
         private Vector3 _fallAnimationPositionOffset = new Vector3(0, -150, -100);
         private float _fallAnimationRotationOffset = 100;
 
-        private bool _respawninfAnimationIsPlaying = false;
+        public bool _respawnUI = false;
+        public bool _respawningAnimationIsPlaying = false;
         private float _respawnAnimationCurrentTime = 0;
         private float _respawnAnimationTime = 1.5f;
 
@@ -331,7 +332,7 @@ namespace ProjetPirate.Boat
             {
                 DeathAnimation();
             }
-            else if (_respawninfAnimationIsPlaying)
+            else if (_respawningAnimationIsPlaying)
             {
                 RespawnAnimation();
             }
@@ -565,7 +566,8 @@ namespace ProjetPirate.Boat
                 this.GetComponent<BoxCollider>().enabled = true;
 
                 player._data.Boat.Stats.Speed = _maxMovingSpeed;
-                _respawninfAnimationIsPlaying = true;
+                _respawnUI = true;
+                //_respawningAnimationIsPlaying = true;
             }
         }
 
@@ -575,7 +577,7 @@ namespace ProjetPirate.Boat
             MoveForward();
             if (_respawnAnimationCurrentTime >= _respawnAnimationTime)
             {
-                _respawninfAnimationIsPlaying = false;
+                _respawningAnimationIsPlaying = false;
                 _respawnAnimationCurrentTime = 0;
             }
         }
