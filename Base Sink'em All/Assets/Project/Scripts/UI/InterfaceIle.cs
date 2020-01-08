@@ -98,6 +98,11 @@ namespace ProjetPirate.UI
 
         private void OnEnable()
         {
+            if (_player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().isQuestAvailable)
+            {
+                thereIsAQuest = true;
+                quest = _player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().GetComponent<QuestScript>().GenerateQuest(6500);
+            }
             //Set thereIsAQuest grâce au data Dock 
             if (thereIsAQuest)
             {
@@ -169,7 +174,6 @@ namespace ProjetPirate.UI
         {
             Debug.LogError("Quest Accept");
             //Fonction Pour Accepter la quest
-            //A MODIFIER
             _player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().GetComponent<QuestScript>().QuestIsAccepted();
             _player.GetComponentInParent<Player>().data_quest = quest;
             _player.GetComponentInParent<Player>().data_quest.IsAccepted = true;

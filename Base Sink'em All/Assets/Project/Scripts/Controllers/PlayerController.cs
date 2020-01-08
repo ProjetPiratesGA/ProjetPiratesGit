@@ -109,7 +109,6 @@ namespace ProjetPirate.Controllers
                 if (_buttonRepa.GetComponent<Image>().fillAmount >= 1)
                 {
                     currentReloadTimeRepa = 0;
-                    _boatCharacter.GetComponentInParent<Player>().Repair();
                     canReloadRepa = false;
                 }
             }
@@ -177,6 +176,7 @@ namespace ProjetPirate.Controllers
             {
                 if (_boatCharacter.CurrentLifePoint < _boatCharacter.MaxLifePoint)
                 {
+                    _boatCharacter.GetComponentInParent<Player>().Repair();
                     reloadingTime = reloadingTimeRepa;
                     _buttonRepa.GetComponent<Image>().fillAmount = 0;
                     canReloadRepa = true;
