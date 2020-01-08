@@ -90,7 +90,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -7414,7 +7414,7 @@ Transform:
   m_Children:
   - {fileID: 267704499}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1238234821
 GameObject:
@@ -7691,7 +7691,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4148241879105070, guid: 9fe83205ce56cc942a5a6f608763a1c5, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 114747807403556192, guid: 9fe83205ce56cc942a5a6f608763a1c5,
         type: 2}
