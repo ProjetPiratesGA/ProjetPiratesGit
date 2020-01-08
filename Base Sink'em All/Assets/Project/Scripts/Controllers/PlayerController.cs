@@ -137,15 +137,16 @@ namespace ProjetPirate.Controllers
         ///// <summary>
         ///// Fonction Tir Proue
         ///// </summary>
-        //public void ShootUp()
-        //{
-        //    if (!canReloadUp)
-        //    {
-        //        reloadingTime = _player.GetComponent<BoatCharacter>().getShootCoolDown();
-        //        _buttonShootUp.GetComponent<Image>().fillAmount = 0;
-        //        canReloadUp = true;
-        //    }
-        //}
+        public void ShootUp()
+        {
+            if (!canReloadUp)
+            {
+                _boatCharacter.ShootProwHarpoon();
+                 reloadingTime = _boatCharacter.getShootCoolDown();
+                _buttonShootUp.GetComponent<Image>().fillAmount = 0;
+                canReloadUp = true;
+            }
+        }
 
 
         ///Ajout seb

@@ -39,7 +39,7 @@ namespace ProjetPirate.IA
 
         public int CurrentLifePoint
         {
-            get { return player._data.Boat.Stats.Life; }
+            get { return player._data.Boat.Stats.Life; } set { player._data.Boat.Stats.Life = value; }
         }
 
         public int AttackDamage
@@ -170,6 +170,18 @@ namespace ProjetPirate.IA
         public virtual void Death()
         {
             Destroy(this.gameObject);
+        }
+
+        public virtual void Repair()
+        {
+            if (CurrentLifePoint < MaxLifePoint - MaxLifePoint / 10)
+            {
+                CurrentLifePoint += MaxLifePoint / 10;
+            }
+            else
+            {
+                CurrentLifePoint = MaxLifePoint;
+            }
         }
     }
 }

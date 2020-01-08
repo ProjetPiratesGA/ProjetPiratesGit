@@ -7626,11 +7626,11 @@ Prefab:
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1251974935}
+      objectReference: {fileID: 1251974934}
     - target: {fileID: 114747807403556192, guid: 9fe83205ce56cc942a5a6f608763a1c5,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
+      value: ShootUp
       objectReference: {fileID: 0}
     - target: {fileID: 114320959603450260, guid: 9fe83205ce56cc942a5a6f608763a1c5,
         type: 2}
@@ -7676,11 +7676,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1251974933}
   m_Script: {fileID: 11500000, guid: b2582f3fe16116049a0c848cda4ae136, type: 3}
---- !u!1 &1251974935 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1176457593608912, guid: 9fe83205ce56cc942a5a6f608763a1c5,
-    type: 2}
-  m_PrefabInternal: {fileID: 1251974933}
 --- !u!1 &1266985578
 GameObject:
   m_ObjectHideFlags: 0

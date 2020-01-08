@@ -67,6 +67,9 @@ public class Player : Controller
     float _currentTime = 0f;
     float _timeToReloadData = 0.5f;
 
+    private Data_Quests data_quest = new Data_Quests();
+    private bool haveFinishedOwnQuest = false;
+
     public bool asBoatSpawned
     {
         get { return _asBoatSpawned; }
@@ -166,6 +169,18 @@ public class Player : Controller
             }
         }
         ///FIN DEBUG
+        CheckQuest();
+
+        if (Input.GetKeyDown(KeyCode.Keypad8))
+        {
+            haveFinishedOwnQuest = false;
+            Data_Dock data_dock = new Data_Dock();
+            Debug.Log("quete id : " + data_dock.Pnj.Quete.ID);
+            Debug.Log("quete nb voulu : " + data_dock.Pnj.Quete.ItemCountNeeded);
+            data_quest = data_dock.Pnj.Quete;
+            data_quest.IsAccepted = true;
+            data_quest.ID = 6;
+        }
     }
 
 
@@ -512,6 +527,7 @@ public class Player : Controller
         {
             data.Ressource.WoodBoard = _maxPlank;
         }
+        CheckCurrentCountQuest(10, 5);
     }
 
     public virtual void GainMoney(int pGainedMoney)
@@ -521,6 +537,7 @@ public class Player : Controller
         {
             data.Ressource.Golds = _maxMoney;
         }
+        CheckCurrentCountQuest(100, 6);
     }
 
     public virtual void LoseXP(int pLostXP)
@@ -620,5 +637,32 @@ public class Player : Controller
         boatInstance.transform.rotation = myIle._posRespawnBoat.rotation;
 
         boatInstance.GetComponent<BoatCharacter>()._isDying = false;
+    }
+
+    public void Repair()
+    {
+        if (data.Ressource.WoodBoard > 0 & boatInstance.GetComponent<BoatCharacter>().CurrentLifePoint < boatInstance.GetComponent<BoatCharacter>().MaxLifePoint)
+        {
+            data.Ressource.WoodBoard -= 1;
+            boatInstance.GetComponent<BoatCharacter>().Repair();
+        }
+    }
+
+    public void CheckQuest()
+    {
+        if (data_quest.ItemCount >= data_quest.ItemCountNeeded && haveFinishedOwnQuest == false && data_quest.IsAccepted == true)
+        {
+            Debug.Log("quete remplie");
+            haveFinishedOwnQuest = true;
+        }
+    }
+
+    public void CheckCurrentCountQuest(int _addAmount, int _ID)
+    {
+        if (data_quest.ID == _ID)
+        {
+            data_quest.ItemCount += _addAmount;
+            Debug.Log("quete : " + data_quest.ItemCount + " / " + data_quest.ItemCountNeeded);
+        }
     }
 }

@@ -146,6 +146,7 @@ namespace ProjetPirate.Boat
         [Header("CANNONS")]
         [SerializeField] private List<Cannon> _larboardCannons;
         [SerializeField] private List<Cannon> _starboardCannons;
+        [SerializeField] public CannonHarpoon _prowCannonHarpoon;
 
         /// <summary>
         /// TEST SEB
@@ -158,9 +159,11 @@ namespace ProjetPirate.Boat
         // END TEST SEB //
         [SerializeField] private List<Transform> _larboardCannonPositions;
         [SerializeField] private List<Transform> _starboardCannonPositions;
+        [SerializeField] private Transform _prowCannonHarpoonPosition;
 
         [SerializeField] private GameObject _larboardCannonPrefab;
         [SerializeField] private GameObject _starboardCannonPrefab;
+        [SerializeField] private GameObject _prowCannonHarpoonPrefab;
 
         [SerializeField] private float _shootCooldown;
 
@@ -170,6 +173,8 @@ namespace ProjetPirate.Boat
         private bool _starboardCannonInCooldown = false;
         private float _currentLarboardShootCooldownTime = 0;
         private float _currentStarboardShootCooldownTime = 0;
+        private bool _prowdCannonHarpoonInCooldown = false;
+        private float _prowCannonHarpoonShootCooldownTime = 0;
 
 
         [SerializeField]
@@ -307,6 +312,7 @@ namespace ProjetPirate.Boat
             //}
             _currentLarboardShootCooldownTime += Time.deltaTime;
             _currentStarboardShootCooldownTime += Time.deltaTime;
+            _prowCannonHarpoonShootCooldownTime += Time.deltaTime;
             if (_currentLarboardShootCooldownTime > _shootCooldown)
             {
                 _larboardCannonInCooldown = false;
@@ -316,6 +322,11 @@ namespace ProjetPirate.Boat
             {
                 _starboardCannonInCooldown = false;
                 _currentStarboardShootCooldownTime = 0;
+            }
+            if (_prowCannonHarpoonShootCooldownTime > _shootCooldown)
+            {
+                _prowdCannonHarpoonInCooldown = false;
+                _prowCannonHarpoonShootCooldownTime = 0;
             }
 
             //if (!_isDocking)
@@ -731,6 +742,15 @@ namespace ProjetPirate.Boat
             }
         }
 
+        //Shoot at Prow (Proue)
+        public void ShootProwHarpoon()
+        {
+            if (!_prowdCannonHarpoonInCooldown & !Safe)
+            {
+                _prowCannonHarpoon._FireCannonHarpoon();
+                _prowdCannonHarpoonInCooldown = true;
+            }
+        }
 
         // Move forward based on _movingSpeed
         public override void MoveForward()
@@ -744,7 +764,7 @@ namespace ProjetPirate.Boat
 
         public void Accelerate()
         {
-            Debug.Log(this.name + "je suis dans le accelerate");
+            //Debug.Log(this.name + "je suis dans le accelerate");
              player._data.Boat.Stats.Speed += _accelerationSpeedForward * Time.deltaTime;
             if ( player._data.Boat.Stats.Speed > _maxMovingSpeed)
             {
@@ -775,7 +795,7 @@ namespace ProjetPirate.Boat
             //Debug.Log(this.name + " --> UpdateSpeedForwardForDirection / _ControllerIsMoving" + _ControllerIsMoving);
             if (_ControllerIsMoving == true)
             {
-                Debug.Log(this.name + "je suis passere");
+                //Debug.Log(this.name + "je suis passere");
                 Accelerate();
             }
             //deceleration speed
