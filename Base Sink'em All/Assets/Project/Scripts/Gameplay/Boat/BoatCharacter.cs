@@ -193,6 +193,13 @@ namespace ProjetPirate.Boat
         private float _goldFXCurrentTime = 0;
 
         public bool Safe = false;
+        [SerializeField] private Dock _dock;
+        private int _nextDockingCheckpointId;
+
+
+        [SerializeField] bool _isDocking = false;
+        [SerializeField] bool _isDocked = false;
+        [SerializeField] bool _isLeavingDock = false;
 
         public bool _isDying
         {
@@ -285,6 +292,18 @@ namespace ProjetPirate.Boat
             else if (_respawninfAnimationIsPlaying)
             {
                 RespawnAnimation();
+            }
+            else if (_isDocking)
+            {
+                Docking();
+            }
+            else if (_isDocked)
+            {
+
+            }
+            else if (_isLeavingDock)
+            {
+                LeaveDock();
             }
             else
             {
@@ -496,6 +515,79 @@ namespace ProjetPirate.Boat
             {
                 _respawninfAnimationIsPlaying = false;
                 _respawnAnimationCurrentTime = 0;
+            }
+        }
+
+        public void StartDocking(Dock pDock)
+        {
+            _dock = pDock;
+            _isDocking = true;
+        }
+        public void Docking()
+        {
+            bool willWait = false;
+            // Wait a bit at each checkpoint
+            {
+                // If the entity reached the checkpoint
+                if (Vector3.Distance(this.transform.position, _dock._dockCheckpoints[_nextDockingCheckpointId].position) < _currentMovingSpeed * Time.deltaTime)
+                {
+                    {
+                        _nextDockingCheckpointId++;
+                    }
+
+                    // Check if the last checkpoint has been reached
+
+                    if (_nextDockingCheckpointId == _dock._dockCheckpoints.Count)
+                    {
+                        _nextDockingCheckpointId--;
+                        _isDocking = false;
+                        _isDocked = true;
+                        _currentMovingSpeed = 0;
+                    }
+                }
+
+                if (_nextDockingCheckpointId == _dock._dockCheckpoints.Count - 1)
+                {
+
+                    willWait = true;
+
+                }
+                GoToDestination(_dock._dockCheckpoints[_nextDockingCheckpointId].position, willWait);
+                if (_currentMovingSpeed > _maxMovingSpeed / 4)
+                {
+                    _currentMovingSpeed = _maxMovingSpeed / 4;
+                    _stoppingDistance = ((_currentMovingSpeed / 10) * (_currentMovingSpeed / 10)) * 50 / _decelerationSpeedForward;
+                }
+            }
+        }
+
+        public void LeaveDock()
+        {
+            // Wait a bit at each checkpoint
+            {
+                // If the entity reached the checkpoint
+                if (Vector3.Distance(this.transform.position, _dock._dockCheckpoints[_nextDockingCheckpointId].position) < _currentMovingSpeed * Time.deltaTime)
+                {
+                    {
+                        _nextDockingCheckpointId--;
+                    }
+
+                    // Check if the last checkpoint has been reached
+
+                    if (_nextDockingCheckpointId == -1)
+                    {
+                        _nextDockingCheckpointId = 0;
+                        _isLeavingDock = false;
+                    }
+                }
+
+                GoToDestination(_dock._dockCheckpoints[_nextDockingCheckpointId].position);
+                if (_currentMovingSpeed > _maxMovingSpeed / 4)
+                {
+                    _currentMovingSpeed = _maxMovingSpeed / 4;
+                    _stoppingDistance = ((_currentMovingSpeed / 10) * (_currentMovingSpeed / 10)) * 50 / _decelerationSpeedForward;
+                }
+
             }
         }
 
@@ -1033,6 +1125,80 @@ namespace ProjetPirate.Boat
                 }
             }
             return 0;
+        }
+
+        public void GoToDestination(Vector3 _destination, bool pMustStopToDestination = false, float _turningAngle = 0)
+        {
+            // Make the DirectionLocator faces the destination
+            DirectionLocator.LookAt(_destination);
+            DirectionLocator.Rotate(0, _turningAngle, 0);
+            Vector3 rotation = DirectionLocator.eulerAngles;
+            rotation.x = Mathf.Abs(rotation.x);
+            rotation.y = Mathf.Abs(rotation.y);
+            rotation.z = Mathf.Abs(rotation.z);
+            DirectionLocator.eulerAngles = rotation;
+            //Check the distance to the destination
+            if (Vector3.Distance(this.transform.position, _destination) > StoppingDistance)
+            {
+                //If the destination is too far, move forward
+                GetComponent<BoatCharacter>().setControllerIsMoving(true);
+                Accelerate();
+                MoveForward();
+            }
+            else if (Vector3.Distance(this.transform.position, _destination) < StoppingDistance)
+            {
+                Debug.Log("StoppingDistance");
+                if (pMustStopToDestination)
+                {
+                    Debug.Log("MustStop");
+                    if (Vector3.Distance(this.transform.position, _destination) > Deceleration * Time.deltaTime)
+                    {
+                        Debug.Log("Decelerate");
+                        setControllerIsMoving(false);
+                        Decelerate();
+                        MoveForward();
+                    }
+                    else
+                    {
+                        Debug.Log("Stop");
+                        this.transform.position = _destination;
+                    }
+                }
+                else
+                {
+                    if (Vector3.Distance(this.transform.position, _destination) > getMaxSpeedForward() * Time.deltaTime)
+                    {
+                        setControllerIsMoving(true);
+                        Accelerate();
+                        MoveForward();
+                    }
+                    else
+                    {
+                        this.transform.position = _destination;
+                    }
+                }
+            }
+            else
+            {
+                //If the destination is close enough, the character take the destination's position
+            }
+
+            //Check in which direction is the destination
+            if (Mathf.Abs(DirectionLocator.eulerAngles.y - transform.eulerAngles.y) <= GetComponent<BoatCharacter>().getRotateSpeed() * Time.deltaTime)
+            {
+                //If the direction is close enough, take the exact rotation to face the destination
+                this.transform.eulerAngles = DirectionLocator.eulerAngles;
+            }
+            else if ((DirectionLocator.eulerAngles.y - transform.eulerAngles.y < 0 & DirectionLocator.eulerAngles.y - transform.eulerAngles.y > -180) | DirectionLocator.eulerAngles.y - transform.eulerAngles.y > 180)
+            {
+                //If the destination si to the left, turn left.
+                TurnLarboard();
+            }
+            else
+            {
+                //If the destination si to the right, turn right.
+                TurnStarboard();
+            }
         }
     }
 }
