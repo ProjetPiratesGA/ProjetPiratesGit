@@ -67,8 +67,10 @@ public class Player : Controller
     float _currentTime = 0f;
     float _timeToReloadData = 0.5f;
 
-    private Data_Quests data_quest = new Data_Quests();
+    public Data_Quests data_quest = null;
     private bool haveFinishedOwnQuest = false;
+
+    public bool haveAQuest = false;
 
     public bool asBoatSpawned
     {
@@ -650,19 +652,28 @@ public class Player : Controller
 
     public void CheckQuest()
     {
+        
         if (data_quest.ItemCount >= data_quest.ItemCountNeeded && haveFinishedOwnQuest == false && data_quest.IsAccepted == true)
         {
             Debug.Log("quete remplie");
             haveFinishedOwnQuest = true;
+            this.GainMoney((int)data_quest.Reward.x);
+            this.GainXP((int)data_quest.Reward.y);
+            data_quest = null;
+            haveAQuest = false;
+
         }
     }
 
     public void CheckCurrentCountQuest(int _addAmount, int _ID)
     {
-        if (data_quest.ID == _ID)
+        if (haveAQuest)
         {
-            data_quest.ItemCount += _addAmount;
-            Debug.Log("quete : " + data_quest.ItemCount + " / " + data_quest.ItemCountNeeded);
+            if (data_quest.ID == _ID)
+            {
+                data_quest.ItemCount += _addAmount;
+                Debug.Log("quete : " + data_quest.ItemCount + " / " + data_quest.ItemCountNeeded);
+            }
         }
     }
 }

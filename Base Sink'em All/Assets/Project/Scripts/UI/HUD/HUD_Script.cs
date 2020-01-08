@@ -15,6 +15,8 @@ namespace ProjetPirate.UI.HUD
         public Text _XpValueText;
         public Text _NumberWoodenBoardValue;
         public Text _playerName;
+        public Text _IntituleQuete;
+        public Text _suivieText;
 
         [Header("Canvas")]
         public GameObject _menuInGameCanvas;
@@ -32,6 +34,7 @@ namespace ProjetPirate.UI.HUD
         public GameObject _confirmQuitGroup;
         public GameObject _playerInformations;
         public GameObject _otherPlayerInformations;
+        public GameObject _interfaceQuest;
 
         [Header("Var Test au cas où certains accesseur sont indisponibles")]
         public int hp = 50;
@@ -65,6 +68,7 @@ namespace ProjetPirate.UI.HUD
             _playerInformations.SetActive(false);
             _otherPlayerInformations.SetActive(false);
             _confirmQuitGroup.SetActive(false);
+            _interfaceQuest.SetActive(false);
 
             maxLifeBarSize = lifeBar.GetComponent<RectTransform>().sizeDelta.x;
 
@@ -76,6 +80,7 @@ namespace ProjetPirate.UI.HUD
             
             _player = player;
             _playerScript = _player.GetComponent<Player>();
+            _interactionIle.GetComponent<InterfaceIle>().SetPlayer(_player);
         }
 
         // Update is called once per frame
@@ -120,6 +125,25 @@ namespace ProjetPirate.UI.HUD
             if (_player.GetComponentInChildren<BoatCharacter>())
             {
                 UpdateLifeBar();
+            }
+
+            if(_player.GetComponentInParent<Player>().haveAQuest)
+            {
+                if (!_interfaceQuest.activeSelf)
+                {
+                    _IntituleQuete.text = _player.GetComponentInParent<Player>().data_quest.TextQuest;
+                    _interfaceQuest.SetActive(true);
+                }
+
+                _suivieText.text = _player.GetComponentInParent<Player>().data_quest.ItemCount + " / " + _player.GetComponentInParent<Player>().data_quest.ItemCountNeeded;
+            }
+            else
+            {
+                if (_interfaceQuest.activeSelf)
+                {
+                    _interfaceQuest.SetActive(false);
+                }
+
             }
 
             //CheckIfPlayerDocked();

@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DockZone : MonoBehaviour {
+public class DockZone : MonoBehaviour
+{
 
     [SerializeField] private List<Dock> _docks;
 
     // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     private void OnTriggerStay(Collider other)
     {
@@ -24,3 +27,4 @@ public class DockZone : MonoBehaviour {
             //other.GetComponent<ProjetPirate.Boat.BoatCharacter>().Dock = false;
         }
     }
+}
