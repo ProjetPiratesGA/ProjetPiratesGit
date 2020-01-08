@@ -35,6 +35,7 @@ namespace ProjetPirate.UI.HUD
         public GameObject _playerInformations;
         public GameObject _otherPlayerInformations;
         public GameObject _interfaceQuest;
+        public GameObject _buttonDock;
 
         [Header("Var Test au cas où certains accesseur sont indisponibles")]
         public int hp = 50;
@@ -69,7 +70,7 @@ namespace ProjetPirate.UI.HUD
             _otherPlayerInformations.SetActive(false);
             _confirmQuitGroup.SetActive(false);
             _interfaceQuest.SetActive(false);
-
+            _buttonDock.SetActive(false);
             maxLifeBarSize = lifeBar.GetComponent<RectTransform>().sizeDelta.x;
 
         }
@@ -142,10 +143,24 @@ namespace ProjetPirate.UI.HUD
 
             }
 
-            //CheckIfPlayerDocked();
+            CheckIfPlayerDocked();
 
             if (_player == null)
                 Debug.LogError("Player NULL");
+
+            if(_player.GetComponentInChildren<BoatCharacter>()._canDock)
+            {
+                _buttonDock.SetActive(true);
+            }
+            else
+            {
+                _buttonDock.SetActive(false);
+            }
+        }
+
+        public void ActivateDocking()
+        {
+            _player.GetComponentInChildren<BoatCharacter>().StartDocking();
         }
 
         void UpdateGoldValue()
@@ -431,19 +446,19 @@ namespace ProjetPirate.UI.HUD
         {
             //Remplacer par l'accesseur afin de savoir si le joueur est dans un dock
 
-            //if(Player.isDocked == true)
-            //{
-            //    if(!_interactionIle.activeSelf)
-            //     {
-            //      _interactionIle.SetActive(true);
-            //On set le dock sur lequel le player est avec  _interactionIle.GetComponent<InterfaceIle>().SetDataDock(player.Dock);
-            //      }
-            //}
-            //else
-            //{
-            //    if (_interactionIle.activeSelf)
-            //        _interactionIle.SetActive(false);
-            //}
+            if (_player.GetComponentInChildren<BoatCharacter>()._isDocked)
+            {
+                if (!_interactionIle.activeSelf)
+                {
+                    _interactionIle.SetActive(true);
+                    //On set le dock sur lequel le player est avec  _interactionIle.GetComponent<InterfaceIle>().SetDataDock(player.Dock);
+                }
+            }
+            else
+            {
+                if (_interactionIle.activeSelf)
+                    _interactionIle.SetActive(false);
+            }
         }
 
         /// <summary>

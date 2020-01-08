@@ -30,8 +30,6 @@ namespace ProjetPirate.UI
         public Text _goldValueUpgradeText;
         public Text _XpValueUpgradeText;
 
-        [Header("TEST")]
-        public GameObject test;
 
         GameObject _player;
 
@@ -77,10 +75,10 @@ namespace ProjetPirate.UI
             _player = GameObject.FindGameObjectWithTag("Player");
             _dataDock = new Data_Dock();
 
-            if(test.GetComponent<QuestScript>().isQuestAvailable)
+            if(_player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().isQuestAvailable)
             {
                 thereIsAQuest = true;
-                quest = test.GetComponent<QuestScript>().GenerateQuest(6500);
+                quest = _player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().GetComponent<QuestScript>().GenerateQuest(6500);
             }
 
             //Set thereIsAQuest grâce au data Dock            
@@ -172,7 +170,7 @@ namespace ProjetPirate.UI
             Debug.LogError("Quest Accept");
             //Fonction Pour Accepter la quest
             //A MODIFIER
-            test.GetComponent<QuestScript>().QuestIsAccepted();
+            _player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().GetComponent<QuestScript>().QuestIsAccepted();
             _player.GetComponentInParent<Player>().data_quest = quest;
             _player.GetComponentInParent<Player>().data_quest.IsAccepted = true;
             _player.GetComponentInParent<Player>().haveAQuest = true;
@@ -229,6 +227,7 @@ namespace ProjetPirate.UI
             _questUI.SetActive(true);
             _marchandUI.SetActive(false);
             this.gameObject.SetActive(false);
+            _player.GetComponentInChildren<BoatCharacter>().StartDocking();
         }
 
         void UpdateShopTextValue()

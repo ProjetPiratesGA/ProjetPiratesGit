@@ -206,10 +206,10 @@ namespace ProjetPirate.Boat
         public bool Safe = false;
         [SerializeField] public Dock _dock;
         private int _nextDockingCheckpointId;
-
+        public bool _canDock = false;
 
         [SerializeField] bool _isDocking = false;
-        [SerializeField] bool _isDocked = false;
+        [SerializeField] public bool _isDocked = false;
         [SerializeField] bool _isLeavingDock = false;
         private float _dockingAngularSpeed = 90;
 
@@ -584,8 +584,16 @@ namespace ProjetPirate.Boat
         {
             if (_dock != null)
             {
-                _dock._isAvailable = false;
-                _isDocking = true;
+                if (!_isDocked & !_isDocking)
+                {
+                    _dock._isAvailable = false;
+                    _isDocking = true;
+                }
+                else if (_isDocked)
+                {
+                    _isDocked = false;
+                    _isLeavingDock = true;
+                }
             }
             
         }

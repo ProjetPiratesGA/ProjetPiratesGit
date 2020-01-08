@@ -40,6 +40,7 @@ namespace ProjetPirate.Gameplay
 
         public Data.Data_Quests GenerateQuest(float _reputation)
         {
+            Debug.Log("Je crée une quete");
             //reset var
             strDialogue = "";
             iObjectif = 0;

@@ -32,6 +32,8 @@ public class DockZone : MonoBehaviour
                         if (_docks[i]._isAvailable)
                         {
                             other.GetComponent<ProjetPirate.Boat.BoatCharacter>()._dock = _docks[i];
+                            other.GetComponent<ProjetPirate.Boat.BoatCharacter>()._canDock = true;
+
                             break;
                         }
                     }
@@ -44,11 +46,18 @@ public class DockZone : MonoBehaviour
                     if (_docks[i]._isAvailable)
                     {
                         other.GetComponent<ProjetPirate.Boat.BoatCharacter>()._dock = _docks[i];
+                        other.GetComponent<ProjetPirate.Boat.BoatCharacter>()._canDock = true;
                         break;
                     }
                 }
             }
-            
+
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        other.GetComponent<ProjetPirate.Boat.BoatCharacter>()._dock = null;
+        other.GetComponent<ProjetPirate.Boat.BoatCharacter>()._canDock = false;
     }
 }
