@@ -50,11 +50,16 @@ public class Cannon : MonoBehaviour
 
 
         _listCannonBall = new List<GameObject>();
+        
+        DontDestroyOnLoad(this);
+    }
+
+    void OnEnable()
+    {
         if (_smokeFX != null)
         {
             _smokeFX.Stop();
         }
-        DontDestroyOnLoad(this);
     }
 
     // Update is called once per frame

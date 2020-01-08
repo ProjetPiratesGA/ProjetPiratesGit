@@ -85,7 +85,7 @@ namespace ProjetPirate.Boat
         private Vector3 _deathAnimationStartPosition;
         private Vector3 _deathAnimationEndPosition;
         private Vector3 _deathAnimationPositionOffset = new Vector3(0, -10, 0);
-        private Vector3 _deathAnimationRotationOffset = new Vector3(-80, 0, 0);
+        private Vector3 _deathAnimationRotationOffset = new Vector3(0, 0, -80);
 
         private bool _fallAnimationIsPlaying = false;
         private float _fallAnimationCurrentRotationTime = 0;
@@ -101,7 +101,8 @@ namespace ProjetPirate.Boat
         private Vector3 _fallAnimationPositionOffset = new Vector3(0, -150, -100);
         private float _fallAnimationRotationOffset = 100;
 
-        private bool _respawninfAnimationIsPlaying = false;
+        public bool _respawnUI = false;
+        public bool _respawningAnimationIsPlaying = false;
         private float _respawnAnimationCurrentTime = 0;
         private float _respawnAnimationTime = 1.5f;
 
@@ -196,7 +197,6 @@ namespace ProjetPirate.Boat
 
         [SerializeField] public GameObject _droppedPlank;
         [SerializeField] public GameObject _droppedChest;
-        [SerializeField] private ParticleSystem _goldFX;
 
         private bool _goldFXIsPlaying = false;
         private Vector3 _goldFXStartPosition;
@@ -213,6 +213,16 @@ namespace ProjetPirate.Boat
         [SerializeField] bool _isLeavingDock = false;
         private float _dockingAngularSpeed = 90;
 
+        [SerializeField] bool _isPushedByIsland = false;
+        [SerializeField] List<InvisibleWallPoint> _leftPoints;
+        [SerializeField] List<InvisibleWallPoint> _rightPoints;
+
+        [SerializeField] List<ParticleSystem> _waterTrails;
+        [SerializeField] ParticleSystem _damageFX;
+        [SerializeField] Material _damageFXColor;
+        [SerializeField] private ParticleSystem _goldFX;
+        [SerializeField] private TestSmokeDeath _smokeDeathFX;
+        [SerializeField] private ParticleSystem _explosionFX;
 
         public bool _isDying
         {
@@ -287,6 +297,8 @@ namespace ProjetPirate.Boat
             {
                 Debug.LogError("JoystickController Not Assigned");
             }
+
+
             _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
             _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
 
@@ -300,11 +312,33 @@ namespace ProjetPirate.Boat
             vec = this.transform.position;
             vec.y = 0;
             this.transform.position = vec;
-            
+
         }
 
 
         bool _asUpdateDatas = false;
+        private bool _hasExploded;
+
+        void OnEnable()
+        {
+            if (_damageFX != null)
+            {
+                _damageFX.Stop();
+                ParticleSystem.MainModule main = _damageFX.main;
+                if (_damageFXColor != null)
+                {
+                    main.startColor = _damageFXColor.color;
+                }
+            }
+            if (_goldFX != null)
+            {
+                _goldFX.Stop();
+            }
+            if (_explosionFX)
+            {
+                _explosionFX.Stop();
+            }
+        }
 
         void Update()
         {
@@ -331,9 +365,13 @@ namespace ProjetPirate.Boat
             {
                 DeathAnimation();
             }
-            else if (_respawninfAnimationIsPlaying)
+            else if (_respawningAnimationIsPlaying)
             {
                 RespawnAnimation();
+            }
+            else if (_fallAnimationIsPlaying)
+            {
+                FallAnimation();
             }
             else if (_isDocking)
             {
@@ -359,7 +397,7 @@ namespace ProjetPirate.Boat
 
             }
 
-            //GoldFxAnimation();
+            GoldFxAnimation();
             //verify death falling character
             //FallDeath();
 
@@ -394,14 +432,19 @@ namespace ProjetPirate.Boat
                 _prowCannonHarpoonShootCooldownTime = 0;
             }
 
-            //if (!_isDocking)
-            //{
-            //    if (!CheckLeftInvisibleWall())
-            //    {
-            //        CheckRightInvisibleWall();
-            //    }
-            //}
+            if (!_isDocking)
+            {
+                if (!CheckLeftInvisibleWall())
+                {
+                    CheckRightInvisibleWall();
+                }
+            }
 
+            for (int i = 0; i < _waterTrails.Count; i++)
+            {
+                ParticleSystem.MainModule main = _waterTrails[i].main;
+                main.startLifetime = player._data.Boat.Stats.Speed / _maxMovingSpeed;
+            }
 
             //for (int i = 0; i < _waterTrails.Count; i++)
             //{
@@ -473,6 +516,16 @@ namespace ProjetPirate.Boat
             }
         }
 
+        public void GoldFxAnimation()
+        {
+            if (_goldFXIsPlaying)
+            {
+                _goldFXCurrentTime += Time.deltaTime;
+                _goldFXEndPosition = this.transform.position;
+                _goldFX.transform.position = Vector3.Lerp(_goldFXStartPosition, _goldFXEndPosition, _goldFXCurrentTime);
+            }
+        }
+
         [Command]
         public void CmdDestroyPlank(GameObject _plank)
         {
@@ -530,6 +583,11 @@ namespace ProjetPirate.Boat
             _deathAnimationEndPosition = _deathAnimationStartPosition + (_deathAnimationPositionOffset.x * this.transform.right) + (_deathAnimationPositionOffset.y * this.transform.up) + (_deathAnimationPositionOffset.z * this.transform.forward);
             _deathAnimationEndRotation = _deathAnimationStartRotation + _deathAnimationRotationOffset;
             _deathAnimationIsPlaying = true;
+
+            if (_smokeDeathFX != null)
+            {
+                _smokeDeathFX.Play();
+            }
         }
 
         public void DeathAnimation()
@@ -555,6 +613,16 @@ namespace ProjetPirate.Boat
 
             }
 
+            if (_deathAnimationCurrentMovementTime > 0.8f & !_hasExploded)
+            {
+                if (_explosionFX != null)
+                {
+                    _explosionFX.transform.position = this.transform.position;
+                    _explosionFX.Play();
+                }
+                _hasExploded = true;
+            }
+
             if (_deathAnimationCurrentRotationTime >= 1 & _deathAnimationCurrentMovementTime >= 1)
             {
                 _deathAnimationIsPlaying = false;
@@ -565,7 +633,131 @@ namespace ProjetPirate.Boat
                 this.GetComponent<BoxCollider>().enabled = true;
 
                 player._data.Boat.Stats.Speed = _maxMovingSpeed;
-                _respawninfAnimationIsPlaying = true;
+                _respawnUI = true;
+                //_respawningAnimationIsPlaying = true;
+                _hasExploded = false;
+            }
+        }
+
+        public void Fall()
+        {
+            Debug.Log("Start");
+            this.GetComponent<BoxCollider>().enabled = false;
+            player.Death();
+            ProjetPirate.IA.Ship_Controller[] enemies = FindObjectsOfType<ProjetPirate.IA.Ship_Controller>();
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if (enemies[i].Target == this.gameObject)
+                {
+                    enemies[i].RemoveAlert();
+                }
+            }
+            _fallAnimationStartPosition = this.transform.position;
+            _fallAnimationStartRotation = player.transform.eulerAngles;
+            _fallAnimationEndPosition = _fallAnimationStartPosition + (_fallAnimationPositionOffset.x * this.transform.right) + (_fallAnimationPositionOffset.y * this.transform.up) + (_fallAnimationPositionOffset.z * player.transform.forward);
+            float angle = Mathf.Abs(player.transform.eulerAngles.y);
+            float offsetX = 0;
+            float offsetZ = 0;
+            if (angle > 270 | angle < 90)
+            {
+                float tempAngle = angle;
+                if (tempAngle > 270)
+                {
+                    tempAngle -= 270;
+                    tempAngle = -90 + tempAngle;
+                }
+                offsetX = Mathf.Abs(0 - tempAngle);
+                Debug.Log("Down : " + offsetX);
+                offsetX = 90 - offsetX;
+                Debug.Log("Down : " + offsetX);
+                offsetX /= 90;
+                Debug.Log("Down : " + offsetX);
+                offsetX *= -_fallAnimationRotationOffset;
+                Debug.Log("Down : " + offsetX);
+            }
+            if (angle > 0 & angle < 180)
+            {
+                offsetZ = Mathf.Abs(90 - angle);
+                Debug.Log("Left : " + offsetZ);
+                offsetZ = 90 - offsetZ;
+                Debug.Log("Left : " + offsetZ);
+                offsetZ /= 90;
+                Debug.Log("Left : " + offsetZ);
+                offsetZ *= -_fallAnimationRotationOffset;
+                //offsetZ = -80 * (angle / ((90 - (Mathf.Abs(90 - angle))) / 90));
+                Debug.Log("Left : " + offsetZ);
+            }
+            if (angle > 90 & angle < 270)
+            {
+                offsetX = Mathf.Abs(180 - angle);
+                Debug.Log("Up : " + offsetX);
+                offsetX = 90 - offsetX;
+                Debug.Log("Up : " + offsetX);
+                offsetX /= 90;
+                Debug.Log("Up : " + offsetX);
+                offsetX *= _fallAnimationRotationOffset;
+                Debug.Log("Up : " + offsetX);
+            }
+            if (angle > 180 & angle < 360)
+            {
+                offsetZ = Mathf.Abs(270 - angle);
+                Debug.Log("Right : " + offsetZ);
+                offsetZ = 90 - offsetZ;
+                Debug.Log("Right : " + offsetZ);
+                offsetZ /= 90;
+                Debug.Log("Right : " + offsetZ);
+                offsetZ *= _fallAnimationRotationOffset;
+                Debug.Log("Right : " + offsetZ);
+            }
+            Debug.Log(new Vector2(offsetX, offsetZ));
+            //Z Left Right
+            //X Up Down
+            _fallAnimationEndRotation = _fallAnimationStartRotation + (offsetX * player.transform.right) + (offsetZ * player.transform.forward);
+            _fallAnimationIsPlaying = true;
+            Debug.Log("End");
+        }
+
+        public void FallAnimation()
+        {
+            Debug.Log("Anim");
+            _fallAnimationCurrentRotationTime += Time.deltaTime / _fallAnimationRotationTime;
+            _fallAnimationCurrentMovementTime += Time.deltaTime / _fallAnimationMovementTime;
+
+            if (_fallAnimationCurrentRotationTime > 0 & _fallAnimationCurrentRotationTime < 1)
+            {
+                //Vector3 offset = DirectionLocator.eulerAngles;
+                player.transform.eulerAngles = Vector3.Lerp(_fallAnimationStartRotation, _fallAnimationEndRotation, _fallAnimationCurrentRotationTime);
+                //offset = DirectionLocator.eulerAngles - offset;
+                //this.transform.Rotate(offset);
+                //DirectionLocator.Rotate(-offset);
+            }
+            if (_fallAnimationCurrentMovementTime > 0 & _fallAnimationCurrentMovementTime < 1)
+            {
+                this.transform.position = Vector3.Lerp(_fallAnimationStartPosition, _fallAnimationEndPosition, _fallAnimationCurrentMovementTime);
+            }
+            else if (_fallAnimationCurrentMovementTime < 0)
+            {
+                this.transform.position = _fallAnimationStartPosition;
+            }
+            else
+            {
+                this.transform.position = _fallAnimationEndPosition;
+
+            }
+
+            if (_fallAnimationCurrentRotationTime >= 1 & _fallAnimationCurrentMovementTime >= 1)
+            {
+                _fallAnimationIsPlaying = false;
+                _fallAnimationCurrentRotationTime = -_fallAnimationRotationDelay / _fallAnimationRotationTime;
+                _fallAnimationCurrentMovementTime = -_fallAnimationMovementDelay / _fallAnimationMovementTime;
+                player.transform.eulerAngles = Vector3.zero;
+                this.transform.eulerAngles = Vector3.zero;
+                player.Disappear();
+                this.GetComponent<BoxCollider>().enabled = true;
+                _currentMovingSpeed = _maxMovingSpeed;
+                _respawnUI = true;
+                this.GetComponent<AttractObject>()._isFalling = false;
+                player._data.Boat.Stats.Life = _maxLifePoint;
             }
         }
 
@@ -575,7 +767,7 @@ namespace ProjetPirate.Boat
             MoveForward();
             if (_respawnAnimationCurrentTime >= _respawnAnimationTime)
             {
-                _respawninfAnimationIsPlaying = false;
+                _respawningAnimationIsPlaying = false;
                 _respawnAnimationCurrentTime = 0;
             }
         }
@@ -586,6 +778,7 @@ namespace ProjetPirate.Boat
             {
                 if (!_isDocked & !_isDocking)
                 {
+                    this.gameObject.layer = 9;
                     _dock._isAvailable = false;
                     _isDocking = true;
                 }
@@ -595,7 +788,7 @@ namespace ProjetPirate.Boat
                     _isLeavingDock = true;
                 }
             }
-            
+
         }
         public void Docking()
         {
@@ -653,6 +846,7 @@ namespace ProjetPirate.Boat
                         _nextDockingCheckpointId = 0;
                         _isLeavingDock = false;
                         _dock._isAvailable = true;
+                        this.gameObject.layer = 0;
                     }
                 }
 
@@ -664,6 +858,39 @@ namespace ProjetPirate.Boat
                 }
 
             }
+        }
+
+        private bool CheckLeftInvisibleWall()
+        {
+            //Debug.Log("Peach");
+            for (int i = 0; i < _leftPoints.Count; i++)
+            {
+                //Debug.Log(i);
+                if (_leftPoints[i].InvisibleWallIsOn())
+                {
+                    Debug.Log("Touch it");
+                    TurnStarboard();
+                    _isPushedByIsland = true;
+                    return true;
+                }
+            }
+            _isPushedByIsland = false;
+            return false;
+        }
+
+        private bool CheckRightInvisibleWall()
+        {
+            for (int i = 0; i < _rightPoints.Count; i++)
+            {
+                if (_rightPoints[i].InvisibleWallIsOn())
+                {
+                    TurnLarboard();
+                    _isPushedByIsland = true;
+                    return true;
+                }
+            }
+            _isPushedByIsland = false;
+            return false;
         }
 
         [Command]
@@ -1121,12 +1348,19 @@ namespace ProjetPirate.Boat
             //turn left
             else if (_angleToDestination < 0 && _angleToDestination > -180)
             {
-                this.TurnLarboard();
+                if (!_isPushedByIsland)
+                {
+                    this.TurnLarboard();
+                }
             }
             //turn right
             else if (_angleToDestination > 0 && _angleToDestination < 180)
             {
-                this.TurnStarboard();
+                if (!_isPushedByIsland)
+                {
+                    this.TurnStarboard();
+                }
+                
             }
 
         }
@@ -1251,7 +1485,7 @@ namespace ProjetPirate.Boat
         {
             if (!Safe)
             {
-                /*if (_damageFX != null)
+                if (_damageFX != null)
                 {
                     Vector3 vec = pDamageLocation.eulerAngles;
                     vec.y += 180;
@@ -1260,7 +1494,7 @@ namespace ProjetPirate.Boat
                     vec += pDamageLocation.forward * 0.112f;
                     _damageFX.transform.position = vec;
                     _damageFX.Play();
-                }*/
+                }
 
                 player._data.Boat.Stats.Life -= _damage;
                 player.CmdSendLife(player._data.Boat.Stats.Life);

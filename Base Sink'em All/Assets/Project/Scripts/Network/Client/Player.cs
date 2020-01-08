@@ -72,6 +72,11 @@ public class Player : Controller
 
     public bool haveAQuest = false;
 
+    public int ShipLevel
+    {
+        get { return _shipLevel; }
+    }
+
     public bool asBoatSpawned
     {
         get { return _asBoatSpawned; }
