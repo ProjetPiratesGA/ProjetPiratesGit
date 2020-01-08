@@ -1,0 +1,10 @@
+Boat 1;
+Snail 2;
+Canon 3;
+Flag 4;
+Bullet 5;
+Gold 6;
+WoodenBoard 7;
+StoreBoat 8;
+Kraken 9;
+MilitaryBoat 10;
