@@ -48,23 +48,17 @@ namespace ProjetPirate.UI
         private GameObject _player;
 
         // Use this for initialization
-        void Start()
-        {
 
-            _player = GameObject.FindGameObjectWithTag("Player");
-
-
-            //On Récupère les value grace aux accesseur du boat Player
-            SetBoatValueBeforeDeath(12, 1, 3); //Il faudra remplacer par les accesseurs;
-
-            UpdateGoldPlayerValue();
-
-        }
 
         private void OnEnable()
         {
             //On Récupère les value grace aux accesseur du boat Player
-            SetBoatValueBeforeDeath(12, 1, 3); //Il faudra remplacer par les accesseurs;
+            int hasHarpoon = 1;
+            if (_player.GetComponentInChildren<Boat.BoatCharacter>()._prowCannonHarpoon == null)
+            {
+                hasHarpoon = 0;
+            }
+            SetBoatValueBeforeDeath(_player.GetComponentInChildren<Boat.BoatCharacter>().larboardCannons.Count + _player.GetComponentInChildren<Boat.BoatCharacter>().starboardCannons.Count, hasHarpoon, _player.GetComponent<Player>().ShipLevel);
 
 
             UpdateGoldPlayerValue();
@@ -73,11 +67,18 @@ namespace ProjetPirate.UI
         void Update()
         {
 
-            if (_player == null)
+        }
+
+        public void SetPlayer(GameObject pPlayer)
+        {
+            _player = pPlayer;
+            int hasHarpoon = 1;
+            if (pPlayer.GetComponentInChildren<Boat.BoatCharacter>()._prowCannonHarpoon == null)
             {
-                _player = GameObject.FindGameObjectWithTag("Player");
-                UpdateGoldPlayerValue();
+                hasHarpoon = 0;
             }
+            SetBoatValueBeforeDeath(_player.GetComponentInChildren<Boat.BoatCharacter>().larboardCannons.Count + _player.GetComponentInChildren<Boat.BoatCharacter>().starboardCannons.Count, hasHarpoon, _player.GetComponent<Player>().ShipLevel);
+            UpdateGoldPlayerValue();
         }
 
         void SetBoatValueBeforeDeath(int _numberCanon, int _numberCanonProue, int _lvl)
@@ -224,14 +225,21 @@ namespace ProjetPirate.UI
         public void ValidateBoatPurchase()
         {
             //On appel les fonction pour set les compasant du bateau grâce aux valeurs de current
+            if (currentBoatCost < _player.GetComponent<Player>()._data.Ressource.Golds)
+            {
+                _player.GetComponentInChildren<Boat.BoatCharacter>()._respawningAnimationIsPlaying = true;
+            }
+
 
             //On désactive l'interface
             this.gameObject.SetActive(false);
+            _player.GetComponentInChildren<Boat.BoatCharacter>()._respawnUI = false;
+
         }
 
         void UpdateGoldPlayerValue()
         {
-            //_playerGoldValue.text = accesseurPlayeur;
+            _playerGoldValue.text = _player.GetComponent<Player>()._data.Ressource.Golds.ToString();
         }
     }
 }

@@ -40,12 +40,12 @@ namespace ProjetPirate.Gameplay
                         {
                             Vector3 rotation = _attractObjects[i].GetComponent<ProjetPirate.Boat.BoatCharacter>().transform.eulerAngles;
                             Vector3 position = _attractObjects[i].GetComponent<ProjetPirate.Boat.BoatCharacter>().transform.position;
-                            _attractObjects[i].GetComponent<ProjetPirate.Boat.BoatCharacter>().Controller.transform.position = position;
-                            _attractObjects[i].GetComponent<ProjetPirate.Boat.BoatCharacter>().Controller.transform.LookAt(this.transform);
+                            _attractObjects[i].GetComponent<ProjetPirate.Boat.BoatCharacter>().player.transform.position = position;
+                            _attractObjects[i].GetComponent<ProjetPirate.Boat.BoatCharacter>().player.transform.LookAt(this.transform);
 
                             _attractObjects[i].GetComponent<ProjetPirate.Boat.BoatCharacter>().transform.eulerAngles = rotation;
                             _attractObjects[i].GetComponent<ProjetPirate.Boat.BoatCharacter>().transform.position = position;
-                            //_attractObjects[i].GetComponent<ProjetPirate.Boat.BoatCharacter>().Fall();
+                            _attractObjects[i].GetComponent<ProjetPirate.Boat.BoatCharacter>().Fall();
                         }
                     }
                 }

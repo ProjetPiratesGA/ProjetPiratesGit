@@ -61,6 +61,11 @@ namespace ProjetPirate.Physic
             ProjetPirate.Gameplay.Sea._attractObjects.Add(this);
         }
 
+        void OnDestry()
+        {
+            ProjetPirate.Gameplay.Sea._attractObjects.Remove(this);
+        }
+
         private void Update()
         {
 
@@ -101,12 +106,14 @@ namespace ProjetPirate.Physic
             _distToCenter = Vector3.Distance(_seaTransform.position, this.transform.position);
             _distToTheEdge = _seaRadius - _distToCenter;
 
+            float _distToEdge = _distToCenter - (_seaRadius - _seaZoneLimit);
+
             //if the object is near the edge the force is add to the boat
 
             //calcul direction force
             _directionToApplyForce = -_directionToCenterSea;
             _velocityForce = _directionToApplyForce * _attractForce * Time.fixedDeltaTime;
-            _velocityForce *= (_distToCenter * 0.01f);
+            _velocityForce *= (_distToEdge * 0.1f);
 
             if (_isFalling == false && _distToTheEdge < _seaZoneLimit)
             {
