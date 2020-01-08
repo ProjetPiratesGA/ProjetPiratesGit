@@ -7,7 +7,7 @@ namespace ProjetPirate.IA
     public class Detector : MonoBehaviour
     {
         [Header("Detector")]
-        [SerializeField] private List<IA_Controller> _enemies;
+        [SerializeField] public List<IA_Controller> _enemies;
         [SerializeField] private bool _removeAlertWhenOutOfView = true;
         [SerializeField] private bool _affectedBySafeZone = true;
 

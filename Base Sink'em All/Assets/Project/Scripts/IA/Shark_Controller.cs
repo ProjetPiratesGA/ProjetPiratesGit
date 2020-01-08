@@ -34,7 +34,11 @@ namespace ProjetPirate.IA
         {
             _character = this.GetComponent<Shark_Character>();
             Character.SetUpShark(this);
-                //Target = Player_Singleton.instance.Player;
+            if (isClient)
+            {
+                this.gameObject.GetComponent<ProjetPirate.IA.Patrol_Wander>().enabled = false;
+            }
+            //Target = Player_Singleton.instance.Player;
             //TargetTransform = Player_Singleton.instance.Player.transform;
             //TargetPosition = Target.transform.position;
         }
@@ -43,6 +47,13 @@ namespace ProjetPirate.IA
         {
             CheckIfTargetIsSafe();
             CheckResetHealth();
+
+            //Reset Alert when a player disconnect -> In this case, the target is juste missing and try to access it
+            if (_target == null)
+            {
+                RemoveAlert();
+            }
+
             if (!_isOnAlert)
             {
                 if (this.GetComponent<Patrol_Static>() != null)

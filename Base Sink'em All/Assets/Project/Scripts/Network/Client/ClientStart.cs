@@ -336,12 +336,19 @@ namespace ProjetPirate.Network
                 timeSinceLastAttemptReconnection = Time.time - timeLastAttemptReconnection;
                 if (timeSinceLastAttemptReconnection >= _timeBetweenAttemptReconnection)
                 {
-                    client.Disconnect();
-                    client.Shutdown();
-                    client = null;
-                    timeLastAttemptReconnection = Time.time;
-                    Debug.Log("Attempt to Reconnect to SERVER");
-                    StartClient();
+                    if (client != null)
+                    {
+                        client.Disconnect();
+                        client.Shutdown();
+                        client = null;
+                        timeLastAttemptReconnection = Time.time;
+                        Debug.Log("Attempt to Reconnect to SERVER");
+                        StartClient();
+                    }
+                    else if (client == null)
+                    {
+                        StartClient();
+                    }
                 }
             }
         }

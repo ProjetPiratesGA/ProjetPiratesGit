@@ -1,0 +1,5 @@
+PNJ:
+	Quete
+	Dialogue
+	Sprite
+

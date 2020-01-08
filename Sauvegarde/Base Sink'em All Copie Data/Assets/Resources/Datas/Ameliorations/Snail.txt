@@ -1,0 +1,17 @@
+Level 1
+price
+reput
+count
+speed
+
+Level 2
+price
+reput
+count
+speed
+
+Level 3
+price
+reput
+count
+speed

@@ -53,7 +53,6 @@ namespace ProjetPirate.IA
             {
                 pos += this.transform.forward * _battleSpeed * Time.deltaTime;
             }
-            pos.y = 0;
             this.transform.position = pos;
             _isMovingForward = true;
         }
@@ -137,6 +136,23 @@ namespace ProjetPirate.IA
             Gizmos.color = Color.red;
 
             Gizmos.DrawWireSphere(transform.position, Fow);
+        }
+
+        private void OnTriggerEnter(Collider collision)
+        {
+
+            if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>() != null)
+            {
+                if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().gameObject.tag == "myBoat")
+                {
+                    Debug.LogError("Hit boat with Shark");
+
+                    collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().Damage(20, this.transform);
+                 
+                }
+            }
+            
+        
         }
     }
 }
