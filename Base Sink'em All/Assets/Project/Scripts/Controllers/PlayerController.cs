@@ -17,10 +17,6 @@ namespace ProjetPirate.Controllers
         public GameObject _buttonShootLeft;
         public GameObject _buttonShootRight;
 
-        [Header("Repa")]
-        public GameObject _buttonRepa;
-
-
         private BoatCharacter _boatCharacter = null;
         private GameObject _player;//On récupère le player afin que le controller possede ses info 
 
@@ -28,19 +24,15 @@ namespace ProjetPirate.Controllers
         bool canReloadUp = false;
         bool canReloadLeft = false;
         bool canReloadRight = false;
-        bool canReloadRepa = false;
 
         //Temps de reload pour chaque canon (au cas ou il diffère selon le canon)
         float currentReloadTimeUp = 0;
         float currentReloadTimeLeft = 0;
         float currentReloadTimeRight = 0;
-        float currentReloadTimeRepa = 0;
 
         //Il faudra ajuster cette variable en fonction du reload des canons
         float reloadingTime = 2;
 
-        [SerializeField]
-        float reloadingTimeRepa = 5;
         // Use this for initialization
         //void Start()
         //{
@@ -101,18 +93,6 @@ namespace ProjetPirate.Controllers
                     canReloadRight = false;
                 }
             }
-
-            if (canReloadRepa)
-            {
-                currentReloadTimeRepa += Time.deltaTime / reloadingTime;
-                _buttonRepa.GetComponent<Image>().fillAmount = Mathf.Lerp(0, 1, currentReloadTimeRepa);
-                if (_buttonRepa.GetComponent<Image>().fillAmount >= 1)
-                {
-                    currentReloadTimeRepa = 0;
-                    _boatCharacter.GetComponentInParent<Player>().Repair();
-                    canReloadRepa = false;
-                }
-            }
         }
 
 
@@ -165,22 +145,6 @@ namespace ProjetPirate.Controllers
                  reloadingTime = _boatCharacter.getShootCoolDown();
                 _buttonShootUp.GetComponent<Image>().fillAmount = 0;
                 canReloadUp = true;
-            }
-        } 
-        
-        ///// <summary>
-        ///// Fonction Repa
-        ///// </summary>
-        public void Repa()
-        {
-            if (!canReloadRepa)
-            {
-                if (_boatCharacter.CurrentLifePoint < _boatCharacter.MaxLifePoint)
-                {
-                    reloadingTime = reloadingTimeRepa;
-                    _buttonRepa.GetComponent<Image>().fillAmount = 0;
-                    canReloadRepa = true;
-                }
             }
         }
 
