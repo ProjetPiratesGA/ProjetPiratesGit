@@ -129,9 +129,20 @@ namespace ProjetPirate.Boat
 
         [Header("ROTATION")]
         [SerializeField]
-        private JoystickController _joystickController;
-        //[SerializeField]
+        private float _accelerationSpeedRotation = 1;
+        [SerializeField]
+        private float _decelerationSpeedRotation = 1;
+        [SerializeField]
+        private JoystickController _joystickController; // je l'utilise pour obtenir la dead zone du joystick
+        [SerializeField]
         private float _angleToDestination;
+        [SerializeField]
+        private bool _isRotatingLarboard = false;
+        [SerializeField]
+        private bool _isRotatingStarboard = false;
+        [SerializeField]
+        private bool _isRotating = false;
+
 
         #endregion PERFORM MOVEMENT DIRECTION
 
@@ -193,6 +204,13 @@ namespace ProjetPirate.Boat
         private float _goldFXCurrentTime = 0;
 
         public bool Safe = false;
+        [SerializeField] private Dock _dock;
+        private int _nextDockingCheckpointId;
+
+
+        [SerializeField] bool _isDocking = false;
+        [SerializeField] bool _isDocked = false;
+        [SerializeField] bool _isLeavingDock = false;
 
         public bool _isDying
         {
@@ -262,6 +280,11 @@ namespace ProjetPirate.Boat
 
         void Start()
         {
+            _joystickController = FindObjectOfType<JoystickController>();
+            if (_joystickController == null)
+            {
+                Debug.LogError("JoystickController Not Assigned");
+            }
             _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
             _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
         }
@@ -271,7 +294,6 @@ namespace ProjetPirate.Boat
 
         void Update()
         {
-            _isMovingForward = false;
 
             if (Input.GetKeyDown(KeyCode.Keypad0))
             {
@@ -286,12 +308,28 @@ namespace ProjetPirate.Boat
             {
                 RespawnAnimation();
             }
+            else if (_isDocking)
+            {
+                Docking();
+            }
+            else if (_isDocked)
+            {
+
+            }
+            else if (_isLeavingDock)
+            {
+                LeaveDock();
+            }
             else
             {
                 //BOAT STATES
                 this.ManageBoatMovementState();
+                this.ManageBoatRotationState();
+
                 //UPDATE SPEED
                 this.UpdateSpeedForwardForDirection();
+                this.UpdateSpeedRotation();
+
             }
 
             //GoldFxAnimation();
@@ -499,6 +537,79 @@ namespace ProjetPirate.Boat
             }
         }
 
+        public void StartDocking(Dock pDock)
+        {
+            _dock = pDock;
+            _isDocking = true;
+        }
+        public void Docking()
+        {
+            bool willWait = false;
+            // Wait a bit at each checkpoint
+            {
+                // If the entity reached the checkpoint
+                if (Vector3.Distance(this.transform.position, _dock._dockCheckpoints[_nextDockingCheckpointId].position) < _currentMovingSpeed * Time.deltaTime)
+                {
+                    {
+                        _nextDockingCheckpointId++;
+                    }
+
+                    // Check if the last checkpoint has been reached
+
+                    if (_nextDockingCheckpointId == _dock._dockCheckpoints.Count)
+                    {
+                        _nextDockingCheckpointId--;
+                        _isDocking = false;
+                        _isDocked = true;
+                        _currentMovingSpeed = 0;
+                    }
+                }
+
+                if (_nextDockingCheckpointId == _dock._dockCheckpoints.Count - 1)
+                {
+
+                    willWait = true;
+
+                }
+                GoToDestination(_dock._dockCheckpoints[_nextDockingCheckpointId].position, willWait);
+                if (_currentMovingSpeed > _maxMovingSpeed / 4)
+                {
+                    _currentMovingSpeed = _maxMovingSpeed / 4;
+                    _stoppingDistance = ((_currentMovingSpeed / 10) * (_currentMovingSpeed / 10)) * 50 / _decelerationSpeedForward;
+                }
+            }
+        }
+
+        public void LeaveDock()
+        {
+            // Wait a bit at each checkpoint
+            {
+                // If the entity reached the checkpoint
+                if (Vector3.Distance(this.transform.position, _dock._dockCheckpoints[_nextDockingCheckpointId].position) < _currentMovingSpeed * Time.deltaTime)
+                {
+                    {
+                        _nextDockingCheckpointId--;
+                    }
+
+                    // Check if the last checkpoint has been reached
+
+                    if (_nextDockingCheckpointId == -1)
+                    {
+                        _nextDockingCheckpointId = 0;
+                        _isLeavingDock = false;
+                    }
+                }
+
+                GoToDestination(_dock._dockCheckpoints[_nextDockingCheckpointId].position);
+                if (_currentMovingSpeed > _maxMovingSpeed / 4)
+                {
+                    _currentMovingSpeed = _maxMovingSpeed / 4;
+                    _stoppingDistance = ((_currentMovingSpeed / 10) * (_currentMovingSpeed / 10)) * 50 / _decelerationSpeedForward;
+                }
+
+            }
+        }
+
         [Command]
         public void CmdSetUpBoat(GameObject player)
         {
@@ -680,6 +791,32 @@ namespace ProjetPirate.Boat
             #endregion MANAGE BOAT MOVEMENT STATE
         }
 
+        private void ManageBoatRotationState()
+        {
+            #region MANAGE BOAT ROTATION STATE 
+
+            //use the input to define the state of the boat
+            if (_isRotating)
+            {
+                if (_isRotatingLarboard)
+                {
+                    _boatRotationState = BoatRotationState.BABORD;
+                }
+                if (_isRotatingStarboard)
+                {
+                    _boatRotationState = BoatRotationState.TRIBORD;
+                }
+            }
+            else
+            {
+                _boatRotationState = BoatRotationState.FORWARD;
+            }
+
+
+
+            #endregion MANAGE BOAT ROTATION STATE 
+        }
+
         //Shoot at Larboard (Babord)
         public void ShootLarboard()
         {
@@ -752,37 +889,40 @@ namespace ProjetPirate.Boat
             }
         }
 
+
+
+        #region MOVEMENTS
+
         // Move forward based on _movingSpeed
         public override void MoveForward()
         {
             Vector3 pos = this.transform.position;
-            pos += this.transform.forward *  player._data.Boat.Stats.Speed * Time.deltaTime;
+            pos += this.transform.forward * player._data.Boat.Stats.Speed * Time.deltaTime;
             //pos.y = 0;
             this.transform.position = pos;
-            _isMovingForward = true;
         }
 
         public void Accelerate()
         {
             //Debug.Log(this.name + "je suis dans le accelerate");
-             player._data.Boat.Stats.Speed += _accelerationSpeedForward * Time.deltaTime;
-            if ( player._data.Boat.Stats.Speed > _maxMovingSpeed)
+            player._data.Boat.Stats.Speed += _accelerationSpeedForward * Time.deltaTime;
+            if (player._data.Boat.Stats.Speed > _maxMovingSpeed)
             {
-                 player._data.Boat.Stats.Speed = _maxMovingSpeed;
+                player._data.Boat.Stats.Speed = _maxMovingSpeed;
             }
             //Debug.Log(this.name + " --> Acclerate /  player._data.Boat.dStats.Speed : " +  player._data.Boat.dStats.Speed + " _accelerationSpeedForward : " + _accelerationSpeedForward
             //+ " Time.deltaTime : " + Time.deltaTime);
-            _stoppingDistance = (( player._data.Boat.Stats.Speed / 10) * ( player._data.Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
+            _stoppingDistance = ((player._data.Boat.Stats.Speed / 10) * (player._data.Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
         }
 
         public void Decelerate()
         {
-             player._data.Boat.Stats.Speed -= _decelerationSpeedForward * Time.deltaTime;
-            if ( player._data.Boat.Stats.Speed < 0)
+            player._data.Boat.Stats.Speed -= _decelerationSpeedForward * Time.deltaTime;
+            if (player._data.Boat.Stats.Speed < 0)
             {
-                 player._data.Boat.Stats.Speed = 0;
+                player._data.Boat.Stats.Speed = 0;
             }
-            _stoppingDistance = (( player._data.Boat.Stats.Speed / 10) * ( player._data.Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
+            _stoppingDistance = ((player._data.Boat.Stats.Speed / 10) * (player._data.Boat.Stats.Speed / 10)) * 50 / _decelerationSpeedForward;
         }
 
         /// <summary>
@@ -805,7 +945,7 @@ namespace ProjetPirate.Boat
                 Decelerate();
             }
 
-            if ( player._data.Boat.Stats.Speed > 0)
+            if (player._data.Boat.Stats.Speed > 0)
             {
                 _isMovingForward = true;
             }
@@ -815,59 +955,102 @@ namespace ProjetPirate.Boat
             }
         }
 
-        #region MOVEMENTS
+        /// <summary>
+        /// Update the CurrentAngularSpeed
+        /// - verify where the boat is rotating
+        /// /// </summary>
+        private void UpdateSpeedRotation()
+        {
+            //acceleration
+            if (_ControllerIsMoving == true)
+            {
+                AccelerateRotation();
+            }
+            //deceleration speed
+            //else if (this.gameObject.GetComponent<ProjetPirate.IA.Ship_Controller>() == null)
+            if (_ControllerIsMoving == false)
+            {
+                DecelerateRotation();
+            }
+
+            //Booleans rotation
+            if ((_angleToDestination < 0 && _angleToDestination > -180)
+                && _currentAngularSpeed > 0)
+            {
+                _isRotatingLarboard = true;
+            }
+            else
+                _isRotatingLarboard = false;
+            if ((_angleToDestination > 0 && _angleToDestination < 180)
+                 && _currentAngularSpeed > 0)
+            {
+                _isRotatingStarboard = true;
+            }
+            else
+                _isRotatingStarboard = false;
+
+            if (_isRotatingStarboard || _isRotatingLarboard)
+                _isRotating = true;
+            else
+                _isRotating = false;
+
+
+        }
+
+        private void AccelerateRotation()
+        {
+            _currentAngularSpeed += _accelerationSpeedRotation * Time.deltaTime;
+            //Debug.Log("AccelerateRotation : _currentAngularSpeed  " + _currentAngularSpeed + " _accelerationSpeedRotation : " + _accelerationSpeedRotation);
+            if (_currentAngularSpeed > _maxAngularSpeed)
+            {
+                _currentAngularSpeed = _maxAngularSpeed;
+            }
+            //_stoppingDistance = ((_currentAngularSpeed / 10) * (_currentAngularSpeed / 10)) * 50 / _decelerationAngularSpeed;
+        }
+
+        private void DecelerateRotation()
+        {
+            _currentAngularSpeed -= _decelerationSpeedRotation * Time.deltaTime;
+            if (_currentAngularSpeed < 0)
+            {
+                _currentAngularSpeed = 0;
+            }
+            //_stoppingDistance = ((_currentAngularSpeed / 10) * (_currentAngularSpeed / 10)) * 50 / _decelerationSpeedRotation;
+        }
 
         public void PerformMovement(float pInputVertical, float pInputHorizontal)
         {
-            //Debug.Log(this.name + " --> performMovement /  player._data.Boat.dStats.Speed : " +  player._data.Boat.dStats.Speed + " _currentAngularSpeed : " + _currentAngularSpeed + " this.transform.position : " + this.transform.position);
-            _joystickController = FindObjectOfType<JoystickController>();
-            if (_joystickController == null)
+            //define direction with the inputs
+            if (pInputHorizontal > _joystickController._joystickDeadZone || pInputHorizontal < -_joystickController._joystickDeadZone
+                        || pInputVertical > _joystickController._joystickDeadZone || pInputVertical < -_joystickController._joystickDeadZone)
             {
-                Debug.LogWarning("JoystickController Not Assigned");
+                //LA DIRECTION EST MAINTENANT SEULEMENT UTILISER POUR LA ROTATION CAR LE MOUVEMENT DU BATEAU SE FAIT TOUJOURS VERS L'AVANT
+                _normalizeTarget_MovementDirection = new Vector3(pInputHorizontal, 0, pInputVertical);
+                _targetPosition_MovementDirection = this.transform.position + _normalizeTarget_MovementDirection;
+                _direction_MovementDirection = _targetPosition_MovementDirection - this.transform.position;
+
+                //je set l'angle a la direction ici
+                _angleToDestination = Vector3.SignedAngle(this.transform.forward, _direction_MovementDirection, this.transform.up);
+
             }
             else
             {
-                //define direction with the inputs
-                if (pInputHorizontal > _joystickController._joystickDeadZone || pInputHorizontal < -_joystickController._joystickDeadZone
-                            || pInputVertical > _joystickController._joystickDeadZone || pInputVertical < -_joystickController._joystickDeadZone)
-                {
-                    _normalizeTarget_MovementDirection = new Vector3(pInputHorizontal, 0, pInputVertical);
-                    _targetPosition_MovementDirection = this.transform.position + _normalizeTarget_MovementDirection;
-                    _direction_MovementDirection = _targetPosition_MovementDirection - this.transform.position;
-                }
+                _angleToDestination = Vector3.SignedAngle(this.transform.forward, this.transform.forward, this.transform.up);
             }
-
             //VELOCITY
             //_currentVelocity_MovementDirection = this.transform.forward * _currentSpeedForward * Time.deltaTime;
-            //if(_attractObject != null)
+            //if (_attractObject._isFalling == false)
             //{
-            //    if (_attractObject._isFalling == false)
-            //    {
             MoveForward();
-            //this.transform.position += _currentVelocity_MovementDirection;
-            //    }
-            //}
-            //else
-            //{
-            //    if(this.GetComponent<AttractObject>() == null)
-            //    {
-            //        Debug.LogError(this.name + " --> _attractObject est null");
-            //    }
-            //    else
-            //    {
-            //        _attractObject = this.GetComponent<AttractObject>();
-            //        Debug.Log(this.name + " --> _attractObject is find");
-            //    }
+                //this.transform.position += _currentVelocity_MovementDirection;
             //}
 
             //ROTATION
             //check the direction of the destination (with angle)
-            _angleToDestination = Vector3.SignedAngle(this.transform.forward, _direction_MovementDirection, this.transform.up);
 
             //check if the forward direction of the boat is near the target direction
             if (Mathf.Abs(_angleToDestination) <= _maxAngularSpeed * Time.deltaTime)
             {
-                _boatRotationState = BoatRotationState.FORWARD;
                 if (_joystickController != null)
                 {
                     if (pInputHorizontal > _joystickController._joystickDeadZone || pInputHorizontal < -_joystickController._joystickDeadZone
@@ -882,13 +1065,11 @@ namespace ProjetPirate.Boat
             else if (_angleToDestination < 0 && _angleToDestination > -180)
             {
                 this.TurnLarboard();
-                _boatRotationState = BoatRotationState.BABORD;
             }
             //turn right
             else if (_angleToDestination > 0 && _angleToDestination < 180)
             {
                 this.TurnStarboard();
-                _boatRotationState = BoatRotationState.TRIBORD;
             }
 
         }
@@ -1033,6 +1214,80 @@ namespace ProjetPirate.Boat
                 }
             }
             return 0;
+        }
+
+        public void GoToDestination(Vector3 _destination, bool pMustStopToDestination = false, float _turningAngle = 0)
+        {
+            // Make the DirectionLocator faces the destination
+            DirectionLocator.LookAt(_destination);
+            DirectionLocator.Rotate(0, _turningAngle, 0);
+            Vector3 rotation = DirectionLocator.eulerAngles;
+            rotation.x = Mathf.Abs(rotation.x);
+            rotation.y = Mathf.Abs(rotation.y);
+            rotation.z = Mathf.Abs(rotation.z);
+            DirectionLocator.eulerAngles = rotation;
+            //Check the distance to the destination
+            if (Vector3.Distance(this.transform.position, _destination) > StoppingDistance)
+            {
+                //If the destination is too far, move forward
+                GetComponent<BoatCharacter>().setControllerIsMoving(true);
+                Accelerate();
+                MoveForward();
+            }
+            else if (Vector3.Distance(this.transform.position, _destination) < StoppingDistance)
+            {
+                Debug.Log("StoppingDistance");
+                if (pMustStopToDestination)
+                {
+                    Debug.Log("MustStop");
+                    if (Vector3.Distance(this.transform.position, _destination) > Deceleration * Time.deltaTime)
+                    {
+                        Debug.Log("Decelerate");
+                        setControllerIsMoving(false);
+                        Decelerate();
+                        MoveForward();
+                    }
+                    else
+                    {
+                        Debug.Log("Stop");
+                        this.transform.position = _destination;
+                    }
+                }
+                else
+                {
+                    if (Vector3.Distance(this.transform.position, _destination) > getMaxSpeedForward() * Time.deltaTime)
+                    {
+                        setControllerIsMoving(true);
+                        Accelerate();
+                        MoveForward();
+                    }
+                    else
+                    {
+                        this.transform.position = _destination;
+                    }
+                }
+            }
+            else
+            {
+                //If the destination is close enough, the character take the destination's position
+            }
+
+            //Check in which direction is the destination
+            if (Mathf.Abs(DirectionLocator.eulerAngles.y - transform.eulerAngles.y) <= GetComponent<BoatCharacter>().getRotateSpeed() * Time.deltaTime)
+            {
+                //If the direction is close enough, take the exact rotation to face the destination
+                this.transform.eulerAngles = DirectionLocator.eulerAngles;
+            }
+            else if ((DirectionLocator.eulerAngles.y - transform.eulerAngles.y < 0 & DirectionLocator.eulerAngles.y - transform.eulerAngles.y > -180) | DirectionLocator.eulerAngles.y - transform.eulerAngles.y > 180)
+            {
+                //If the destination si to the left, turn left.
+                TurnLarboard();
+            }
+            else
+            {
+                //If the destination si to the right, turn right.
+                TurnStarboard();
+            }
         }
     }
 }
