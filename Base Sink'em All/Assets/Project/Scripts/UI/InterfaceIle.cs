@@ -13,11 +13,12 @@ namespace ProjetPirate.UI
         public GameObject _questUI;
         public GameObject _marchandUI;
         public GameObject _buttonBuyCanonProue;
-        public GameObject _messageErreurRessources;    
-        public GameObject _messageErreurNbreCanonMax;    
-        public GameObject _messageErreurNbreCanonProueMax;    
-        public GameObject _messageErreurLvLMax;    
-        public GameObject _messageInfoCanUpgrade;    
+        public GameObject _messageErreurRessources;
+        public GameObject _messageErreurNbreCanonMax;
+        public GameObject _messageErreurNbreCanonProueMax;
+        public GameObject _messageErreurLvLMax;
+        public GameObject _messageInfoCanUpgrade;
+        public GameObject _messagePasAssezHL;
 
 
         [Header("TEXT")]
@@ -61,12 +62,13 @@ namespace ProjetPirate.UI
         //Cost Upgrade
         int costUpgradeLvLGold;
         int costUpgradeLvLXp;
-        int costCanon;
-        int costGoldCanonProue;
-        int costXpCanonProue;
+        int costCanon = 200;
+        int costGoldCanonProue = 500;
+        int costXpCanonProue = 500;
 
         bool canUpgradeCheck = false;
 
+        bool AddCanLarboard = true;
 
         // Use this for initialization
         void Start()
@@ -75,7 +77,7 @@ namespace ProjetPirate.UI
             _player = GameObject.FindGameObjectWithTag("Player");
             _dataDock = new Data_Dock();
 
-            if(_player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().isQuestAvailable)
+            if (_player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().isQuestAvailable)
             {
                 thereIsAQuest = true;
                 quest = _player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().GetComponent<QuestScript>().GenerateQuest(6500);
@@ -98,10 +100,13 @@ namespace ProjetPirate.UI
 
         private void OnEnable()
         {
-            if (_player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().isQuestAvailable)
+            if (_player.GetComponentInChildren<BoatCharacter>() != null)
             {
-                thereIsAQuest = true;
-                quest = _player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().GetComponent<QuestScript>().GenerateQuest(6500);
+                if (_player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().isQuestAvailable)
+                {
+                    thereIsAQuest = true;
+                    quest = _player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().GetComponent<QuestScript>().GenerateQuest(6500);
+                }
             }
             //Set thereIsAQuest grâce au data Dock 
             if (thereIsAQuest)
@@ -126,14 +131,10 @@ namespace ProjetPirate.UI
                 _player = GameObject.FindGameObjectWithTag("Player");
             }
 
-            if (_dataDock != null)
+            if (quest != null)
             {
                 _textQuest.text = quest.TextQuest;
             }
-
-            UpdateGoldValue();
-            UpdateXpValue();
-
 
             if (blockInput)
             {
@@ -145,6 +146,7 @@ namespace ProjetPirate.UI
                     _messageErreurNbreCanonProueMax.SetActive(false);
                     _messageErreurLvLMax.SetActive(false);
                     _messageInfoCanUpgrade.SetActive(false);
+                    _messagePasAssezHL.SetActive(false);
                     this.GetComponent<GraphicRaycaster>().enabled = true;
                     blockInput = false;
                 }
@@ -172,7 +174,7 @@ namespace ProjetPirate.UI
 
         public void AcceptQuest()
         {
-            Debug.Log("Quest Accept");
+            Debug.LogError("Quest Accept");
             //Fonction Pour Accepter la quest
             _player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().GetComponent<QuestScript>().QuestIsAccepted();
             _player.GetComponentInParent<Player>().data_quest = quest;
@@ -201,13 +203,14 @@ namespace ProjetPirate.UI
             {
                 if (_player != null)
                 {
-                    _goldValueInfoPlayerText.text = currentGold.ToString();
+                    _goldValueInfoPlayerText.text = _player.GetComponentInParent<Player>()._data.Ressource.Golds.ToString();
                 }
                 else
                 {
                     _goldValueInfoPlayerText.text = "Joueur NULL";
                 }
             }
+
         }
 
         void UpdateXpValue()
@@ -216,7 +219,7 @@ namespace ProjetPirate.UI
             {
                 if (_player != null)
                 {
-                    _XpValueInfoPlayerText.text = currentXp.ToString();
+                    _XpValueInfoPlayerText.text = _player.GetComponentInParent<Player>()._data.Ressource.Reputation.ToString();
                 }
                 else
                 {
@@ -228,7 +231,7 @@ namespace ProjetPirate.UI
 
         public void QuitCanvasIle()
         {
-            Debug.Log("QuitCanvas");
+            Debug.LogError("QuitCanvas");
             _questUI.SetActive(true);
             _marchandUI.SetActive(false);
             this.gameObject.SetActive(false);
@@ -260,15 +263,26 @@ namespace ProjetPirate.UI
 
             }
 
+            UpdateGoldValue();
+            UpdateXpValue();
         }
 
         void UpdateCurrentValue()
         {
-            //currentGold =_playerScript._data.Ressource.Golds;
-            //currentXp = _playerScript._data.Ressource.Reputation;
-            //currentLvL = accesseurLvLPlayer;
-            //currentNumberCanon = accesseurCanonPlayer;
-            //currentCanonProue = accesseurCanonProuePlayer;
+            currentGold = _player.GetComponentInParent<Player>()._data.Ressource.Golds;
+            currentXp = _player.GetComponentInParent<Player>()._data.Ressource.Reputation;
+            currentLvL = _player.GetComponentInParent<Player>().ShipLevel;
+            int countCanon = _player.GetComponentInParent<Player>()._data.Boat.CurrentCanonLeft + _player.GetComponentInParent<Player>()._data.Boat.CurrentCanonRight;
+            currentNumberCanon = countCanon;
+
+            int countCanonProue = 0;
+            if (_player.GetComponentInChildren<BoatCharacter>()._prowCannonHarpoon.gameObject.activeSelf)
+            {
+                countCanonProue = 1;
+            }
+            currentCanonProue = countCanonProue;
+
+            _player.GetComponentInParent<Player>().CmdUpdateDataGold(_player.GetComponentInParent<Player>()._data.Ressource.Golds);
         }
 
         public void BuyCanon()
@@ -280,15 +294,36 @@ namespace ProjetPirate.UI
             {
                 if (currentNumberCanon < ((maxCanon / maxLvL) * (currentLvL)))
                 {
-
-                    //Enlever le cout au current
-                    currentGold -= costCanon;
+                    Debug.Log("argent avant avoir enelve" + _player.GetComponentInParent<Player>()._data.Ressource.Golds);
+                    _player.GetComponentInParent<Player>().LoseMoney(costCanon);
+                    Debug.Log("argent apressss avoir enelve" + _player.GetComponentInParent<Player>()._data.Ressource.Golds);
 
                     //fonction ajout de canon
-                    currentNumberCanon += 1;
 
+                    if (AddCanLarboard)
+                    {
+                        if ((_player.GetComponentInParent<Player>()._data.Boat.CurrentCanonLeft < _player.GetComponentInChildren<BoatCharacter>()._maxCannonsPerSide))
+                        {
+                            _player.GetComponentInParent<Player>()._data.Boat.CurrentCanonLeft++;
+                        }
 
+                        _player.GetComponentInParent<Player>().CmdSendCurrentCanonLeft(_player.GetComponentInParent<Player>()._data.Boat.CurrentCanonLeft);
 
+                        _player.GetComponentInChildren<BoatCharacter>().CmdUpdateActiveCanons();
+                        AddCanLarboard = false;
+                    }
+                    else
+                    {
+                        if ((_player.GetComponentInParent<Player>()._data.Boat.CurrentCanonRight < _player.GetComponentInChildren<BoatCharacter>()._maxCannonsPerSide))
+                        {
+                            _player.GetComponentInParent<Player>()._data.Boat.CurrentCanonRight++;
+                        }
+
+                        _player.GetComponentInParent<Player>().CmdSendCurrentCanonRight(_player.GetComponentInParent<Player>()._data.Boat.CurrentCanonRight);
+
+                        _player.GetComponentInChildren<BoatCharacter>().CmdUpdateActiveCanons();
+                        AddCanLarboard = true;
+                    }
                     UpdateCurrentValue();
                 }
                 else
@@ -317,16 +352,12 @@ namespace ProjetPirate.UI
             {
                 if (currentCanonProue < maxCanonProue && currentLvL > 1)
                 {
-
-                    //Enlever le cout au current
-                    currentGold -= costGoldCanonProue;
-                    currentXp -= costXpCanonProue;
-
                     // Set le current Gold et Xp au joueur
-
+                    _player.GetComponentInParent<Player>().LoseMoney(costGoldCanonProue);
+                    _player.GetComponentInParent<Player>().LoseXP(costXpCanonProue);
 
                     //fonction ajout de canon proue
-                    currentCanonProue += 1;
+                    _player.GetComponentInChildren<BoatCharacter>()._prowCannonHarpoon.gameObject.SetActive(true);
                     UpdateCurrentValue();
                 }
                 else
@@ -339,12 +370,19 @@ namespace ProjetPirate.UI
             }
             else
             {
-                    _messageErreurRessources.SetActive(true);
-                    this.GetComponent<GraphicRaycaster>().enabled = false;
-                    timerBlockInput = 0;
-                    blockInput = true;
+                if (currentLvL < 2)
+                {
+                    _messagePasAssezHL.SetActive(true);
                 }
+                else
+                {
+                    _messageErreurRessources.SetActive(true);
+                }
+                this.GetComponent<GraphicRaycaster>().enabled = false;
+                timerBlockInput = 0;
+                blockInput = true;
             }
+        }
 
         public void UpgradeBoat()
         {
@@ -355,18 +393,14 @@ namespace ProjetPirate.UI
             {
                 if (currentLvL < maxLvL)
                 {
-                    //Enlever le cout au current
-                    currentGold -= costUpgradeLvLGold;
-                    currentXp -= costUpgradeLvLXp;
+                    // Set le current Gold et Xp au joueur
+                    _player.GetComponentInParent<Player>().LoseMoney(costUpgradeLvLGold);
+                    _player.GetComponentInParent<Player>().LoseXP(costUpgradeLvLXp);
 
-                    //Set le current Gold et Xp au joueur
+                    //fonctionChangement lvl bateau  this._data.Ressource.BoatLevel += 1;
+                    _player.GetComponentInParent<Player>().CmdSendBoatLevel(_player.GetComponentInParent<Player>()._data.Ressource.BoatLevel);
+                    _player.GetComponentInParent<Player>().CmdSpawnBoat();
 
-                    //Changement de LvL du bateau
-                    currentLvL += 1;
-                    //fonctionChangement lvl bateau
-
-
-                    //    fonction upgradeboat
                     UpdateCurrentValue();
                 }
                 else
@@ -388,9 +422,9 @@ namespace ProjetPirate.UI
 
         void CheckIfCanUpgradeBoat()
         {
-            if(currentGold > costUpgradeLvLGold && currentXp > costUpgradeLvLXp)
+            if (currentGold > costUpgradeLvLGold && currentXp > costUpgradeLvLXp)
             {
-                Debug.Log("On peut améliorer le beateau");
+                Debug.LogError("On peut améliorer le beateau");
                 canUpgradeCheck = true;
                 _messageInfoCanUpgrade.SetActive(true);
                 this.GetComponent<GraphicRaycaster>().enabled = false;

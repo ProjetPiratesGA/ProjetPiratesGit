@@ -618,7 +618,7 @@ public class Player : Controller
 
     public virtual void LosePlank(int pLostPlank)
     {
-        data.Ressource.WoodBoard += pLostPlank;
+        data.Ressource.WoodBoard -= pLostPlank;
         if (data.Ressource.WoodBoard < 0)
         {
             data.Ressource.WoodBoard = 0;
@@ -627,7 +627,7 @@ public class Player : Controller
 
     public virtual void LoseMoney(int pLostMoney)
     {
-        data.Ressource.Golds += pLostMoney;
+        data.Ressource.Golds -= pLostMoney;
         if (data.Ressource.Golds < 0)
         {
             data.Ressource.Golds = 0;
