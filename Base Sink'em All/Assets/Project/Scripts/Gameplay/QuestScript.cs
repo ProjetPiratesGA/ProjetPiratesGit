@@ -147,7 +147,7 @@ namespace ProjetPirate.Gameplay
                     strDialogue = "Pille " + iObjectif + " bateaux marchands.";
                     break;
                 case 2:
-                    strDialogue = "Attaque " + iObjectif + " bateaux millitaires.";
+                    strDialogue = "Attaque " + iObjectif + " bateaux militaires.";
                     break;
                 case 3:
                     strDialogue = "Elimine " + iObjectif + " requins.";
