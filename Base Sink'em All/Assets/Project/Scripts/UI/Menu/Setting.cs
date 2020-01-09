@@ -40,6 +40,11 @@ namespace ProjetPirate.UI.Menu
             graphisme.SetActive(false);
             sound.SetActive(true);
             compte.SetActive(false);
+
+
+            _MusicMixer.SetFloat("VolumeMusic", _volumeMusic);
+            _FXMixer.SetFloat("VolumeFX", _volumeFX);
+
         }
 
         private void OnEnable()
@@ -59,13 +64,7 @@ namespace ProjetPirate.UI.Menu
 
                 _antialiasingValue = dropDownAntialiasingSetting.GetComponent<Dropdown>().value;
                 SetAntialiasingSetting(_antialiasingValue);
-            }
-
-            if(!sound.activeSelf)
-            {
-                _MusicMixer.SetFloat("VolumeMusic", _volumeMusic);
-                _FXMixer.SetFloat("VolumeFX", _volumeFX);
-            }
+            }           
         }
 
         public void ChangeToSound()
