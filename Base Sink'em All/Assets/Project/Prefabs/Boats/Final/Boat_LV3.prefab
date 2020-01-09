@@ -7040,7 +7040,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnCannonHarpoon: {fileID: 4753842307329004}
-  _prefabHarpoonArrow: {fileID: 1606306115544612, guid: 5d363f28bfc53d9468b7086bcfdd22bb,
+  _prefabHarpoonArrow: {fileID: 1565520896415822, guid: fe68243ff0ecd624fa6a939507488354,
     type: 2}
   _owner: {fileID: 0}
 --- !u!114 &114774118150946826
