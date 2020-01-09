@@ -21,10 +21,13 @@ namespace ProjetPirate.Gameplay
 
         static public List<AttractObject> _attractObjects = new List<AttractObject>();
 
+        public Transform _respawnPoint;
+        static public Transform _staticRespawnPoint;
         // Use this for initialization
         void Start()
         {
             _seaTransform = this.transform;
+            _staticRespawnPoint = _respawnPoint;
         }
 
         // Update is called once per frame

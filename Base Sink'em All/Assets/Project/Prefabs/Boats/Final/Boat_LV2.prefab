@@ -5118,7 +5118,7 @@ MonoBehaviour:
   _spawnCannonHarpoon: {fileID: 4427748774252578}
   _prefabHarpoonArrow: {fileID: 1565520896415822, guid: fe68243ff0ecd624fa6a939507488354,
     type: 2}
-  _owner: {fileID: 0}
+  _owner: {fileID: 114498883646808266}
 --- !u!114 &114785742387416420
 MonoBehaviour:
   m_ObjectHideFlags: 1
