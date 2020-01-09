@@ -20,11 +20,9 @@ namespace ProjetPirate.Data
             boat_ID = _clientID;
         }
 
-        private int maxCanonPerSide = 2;
         private int currentCanonLeft = 1;
         private int currentCanonRight = 1;
 
-        public int MaxCanonPerSide { get { return maxCanonPerSide; } set { maxCanonPerSide = value; } }
         public int CurrentCanonLeft { get { return currentCanonLeft; } set { currentCanonLeft = value; } }
         public int CurrentCanonRight { get { return currentCanonRight; } set { currentCanonRight = value; } }
 

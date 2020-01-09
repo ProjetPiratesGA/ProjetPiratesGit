@@ -159,16 +159,8 @@ namespace ProjetPirate.Boat
         [SerializeField] private List<Cannon> _larboardCannons;
         [SerializeField] private List<Cannon> _starboardCannons;
         [SerializeField] public CannonHarpoon _prowCannonHarpoon;
+        [SerializeField] int _maxCannonsPerSide = 2;
 
-        /// <summary>
-        /// TEST SEB
-        /// </summary>
-        //int _maxCannonsPerSide = 2;
-        //int _startCannonsNumberLeft = 1;
-        //int _startCannonsNumberRight = 1;
-        //int _currentCannnonsNumberLeft = 1;
-        //int _currentCannnonsNumberRight = 1;
-        // END TEST SEB //
         [SerializeField] private List<Transform> _larboardCannonPositions;
         [SerializeField] private List<Transform> _starboardCannonPositions;
         [SerializeField] private Transform _prowCannonHarpoonPosition;
@@ -460,7 +452,7 @@ namespace ProjetPirate.Boat
                 if (Input.GetKeyDown(KeyCode.F5))
                 {
                     this.CmdAddCannons(true, false);
-                    if ((player._data.Boat.CurrentCanonLeft < player._data.Boat.MaxCanonPerSide))
+                    if ((player._data.Boat.CurrentCanonLeft < _maxCannonsPerSide))
                     {
                         player._data.Boat.CurrentCanonLeft++;
                     }
@@ -472,7 +464,7 @@ namespace ProjetPirate.Boat
                 }
                 if (Input.GetKeyDown(KeyCode.F6))
                 {
-                    if ((player._data.Boat.CurrentCanonRight < player._data.Boat.MaxCanonPerSide))
+                    if ((player._data.Boat.CurrentCanonRight < _maxCannonsPerSide))
                     {
                         player._data.Boat.CurrentCanonRight++;
                     }
@@ -921,11 +913,11 @@ namespace ProjetPirate.Boat
         public void CmdAddCannons(bool left, bool right)
         {
 
-            if ((player._data.Boat.CurrentCanonLeft < player._data.Boat.MaxCanonPerSide) && left == true)
+            if ((player._data.Boat.CurrentCanonLeft < _maxCannonsPerSide) && left == true)
             {
                 player._data.Boat.CurrentCanonLeft++;
             }
-            if ((player._data.Boat.CurrentCanonRight < player._data.Boat.MaxCanonPerSide) && right == true)
+            if ((player._data.Boat.CurrentCanonRight < _maxCannonsPerSide) && right == true)
             {
                 player._data.Boat.CurrentCanonRight++;
             }
@@ -935,11 +927,11 @@ namespace ProjetPirate.Boat
         [ClientRpc]
         public void RpcAddCannons(bool left, bool right)
         {
-            if ((player._data.Boat.CurrentCanonLeft < player._data.Boat.MaxCanonPerSide) && left == true)
+            if ((player._data.Boat.CurrentCanonLeft < _maxCannonsPerSide) && left == true)
             {
                 player._data.Boat.CurrentCanonLeft++;
             }
-            if ((player._data.Boat.CurrentCanonRight < player._data.Boat.MaxCanonPerSide) && right == true)
+            if ((player._data.Boat.CurrentCanonRight < _maxCannonsPerSide) && right == true)
             {
                 player._data.Boat.CurrentCanonRight++;
             }

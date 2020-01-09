@@ -38,6 +38,12 @@ public class Player : Controller
     [SerializeField]
     GameObject _boatPrefab = null;
 
+    [SerializeField]
+    GameObject _boatPrefab1 = null; //SEB 09
+
+    [SerializeField]
+    GameObject _boatPrefab2 = null; //SEB 09
+
     GameObject boatInstance;
 
     private Data_Player data;
@@ -217,11 +223,11 @@ public class Player : Controller
     //{
     //    this._data.Boat.Stats.DamageReceived = p_damageReceived;
     //}
-    [ClientRpc]
-    public void RpcSendMaxCanonPerSide(int p_maxCanonPerSide)
-    {
-        this._data.Boat.MaxCanonPerSide = p_maxCanonPerSide;
-    }
+    //[ClientRpc]
+    //public void RpcSendMaxCanonPerSide(int p_maxCanonPerSide)
+    //{
+    //    this._data.Boat.MaxCanonPerSide = p_maxCanonPerSide;
+    //}
     [ClientRpc]
     public void RpcSendCurrentCanonLeft(int p_currentCanonLeft)
     {
@@ -244,11 +250,11 @@ public class Player : Controller
     //{
     //    RpcSendDanageReceived(this._data.Boat.Stats.DamageReceived);
     //}
-    [Command]
-    public void CmdSendMaxCanonPerSide()
-    {
-        RpcSendMaxCanonPerSide(this._data.Boat.MaxCanonPerSide);
-    }
+    //[Command]
+    //public void CmdSendMaxCanonPerSide()
+    //{
+    //    RpcSendMaxCanonPerSide(this._data.Boat.MaxCanonPerSide);
+    //}
     [Command]
     public void CmdSendCurrentCanonLeft(int number)
     {
@@ -332,11 +338,36 @@ public class Player : Controller
     [Command]
     public void CmdSpawnBoat()
     {
-        //Debug.Log("IN SERVER SPAWN BOAT");
+        //SEB 09
+        //Get the boat list form the network manager
+        List<BoatController> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().boatList;
+        //SEB 09
+        for (int i = 0; i < tempList.Count; i++)
+        {
+            if (tempList[i].player == this)
+            {
+                tempList.Remove(tempList[i]);
+                Destroy(boatInstance);
+                break;
+            }
+        }
 
-        //Get spawn point from network manager
-        //SEB 08
-        boatInstance = Instantiate(_boatPrefab);
+
+        switch (_data.Ressource.BoatLevel)
+        {
+            case 1:
+                boatInstance = Instantiate(_boatPrefab);
+                break;
+            case 2:
+                boatInstance = Instantiate(_boatPrefab1);
+                break;
+            case 3:
+                boatInstance = Instantiate(_boatPrefab2);
+                break;
+            default:
+                boatInstance = Instantiate(_boatPrefab);
+                break;
+        }
 
         _data.Boat.LoadTransform(boatInstance);
         //FIN SEB 08
@@ -348,8 +379,6 @@ public class Player : Controller
         boatInstance.GetComponent<Character>().player = this;
         //Set new tag
         boatInstance.tag = "myBoat";
-        //Get the boat list form the network manager
-        List<BoatController> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().boatList;
 
         //Add the new boat instance to the list
         tempList.Add(boatInstance.GetComponent<BoatController>());
@@ -592,13 +621,12 @@ public class Player : Controller
     }
 
     [ClientRpc]
-    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed, Vector3 position, Vector4 rotation)
+    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation)
     {
         this.data.Ressource.Golds = gold;
         this.data.Boat.Stats.Life = life;
         this.data.Boat.CurrentCanonLeft = cannonLeft;
-        this.data.Boat.CurrentCanonRight = cannonRight;
-        this.data.Boat.MaxCanonPerSide = maxCannons;
+        this.data.Boat.CurrentCanonRight = cannonRight;    
         this.data.Boat.Stats.Speed = speed;
         //SEB 08
         myVector3 pos = new myVector3();
@@ -617,13 +645,12 @@ public class Player : Controller
 
     }
     [TargetRpc]
-    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed, Vector3 position, Vector4 rotation)
+    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation)
     {
         this.data.Ressource.Golds = gold;
         this.data.Boat.Stats.Life = life;
         this.data.Boat.CurrentCanonLeft = cannonLeft;
-        this.data.Boat.CurrentCanonRight = cannonRight;
-        this.data.Boat.MaxCanonPerSide = maxCannons;
+        this.data.Boat.CurrentCanonRight = cannonRight;      
         this.data.Boat.Stats.Speed = speed;
 
         //SEB 08
