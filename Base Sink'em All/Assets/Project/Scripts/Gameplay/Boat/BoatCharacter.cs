@@ -306,9 +306,13 @@ namespace ProjetPirate.Boat
             this.transform.position = vec;
 
             //SEB 0910
-            if (_prowCannonHarpoonPrefab != null && hasAuthority)
+            if (_prowCannonHarpoonPrefab != null )
             {
                 this._prowCannonHarpoon.gameObject.SetActive(player._data.Boat.AsHarpoon);
+            }
+
+            if (_prowCannonHarpoonPrefab != null && hasAuthority)
+            {
                 CmdSetHarpoon();
             }
             //END SEB 0910
@@ -960,6 +964,7 @@ namespace ProjetPirate.Boat
         public void CmdSetHarpoon()
         {
             this._prowCannonHarpoon.gameObject.SetActive(player._data.Boat.AsHarpoon);
+            RpcSetHarpoon();
         }
 
         [ClientRpc]

@@ -262,6 +262,7 @@ public class Player : Controller
     public void CmdSendHarpoon(bool state)
     {
         this.data.Boat.AsHarpoon = state;
+        RpcSendHarpoon(state);
     }
 
     [ClientRpc]
