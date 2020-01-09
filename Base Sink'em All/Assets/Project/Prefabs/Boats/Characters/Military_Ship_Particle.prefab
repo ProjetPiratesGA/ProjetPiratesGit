@@ -2019,7 +2019,7 @@ MonoBehaviour:
   m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TransformSyncMode: 3
+  m_TransformSyncMode: 1
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -2051,11 +2051,19 @@ MonoBehaviour:
   _plankDroppedByDeath: 0
   _moneyDroppedByDeath: 0
   _HeightFallingDeath: -10
+  _respawnUI: 0
+  _respawningAnimationIsPlaying: 0
   _boatMovementState: 0
   _boatRotationState: 0
   _accelerationSpeedForward: 15
   _decelerationSpeedForward: 1
+  _accelerationSpeedRotation: 1
+  _decelerationSpeedRotation: 1
   _joystickController: {fileID: 0}
+  _angleToDestination: 0
+  _isRotatingLarboard: 0
+  _isRotatingStarboard: 0
+  _isRotating: 0
   _larboardCannons:
   - {fileID: 114248038573941100}
   - {fileID: 114327857891822028}
@@ -2082,12 +2090,21 @@ MonoBehaviour:
   _structureState: 0
   _droppedPlank: {fileID: 0}
   _droppedChest: {fileID: 0}
-  _goldFX: {fileID: 0}
   Safe: 0
   _dock: {fileID: 0}
+  _canDock: 0
   _isDocking: 0
   _isDocked: 0
   _isLeavingDock: 0
+  _isPushedByIsland: 0
+  _leftPoints: []
+  _rightPoints: []
+  _waterTrails: []
+  _damageFX: {fileID: 0}
+  _damageFXColor: {fileID: 0}
+  _goldFX: {fileID: 0}
+  _smokeDeathFX: {fileID: 0}
+  _explosionFX: {fileID: 0}
 --- !u!114 &114826453969184352
 MonoBehaviour:
   m_ObjectHideFlags: 1

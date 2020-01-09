@@ -90,6 +90,8 @@ namespace ProjetPirate.IA
             _directionLocator = Instantiate(new GameObject()).transform;
             _directionLocator.SetParent(this.transform);
             _directionLocator.localPosition = Vector3.zero;
+
+            Debug.Log("On Start");
         }
 
         // Update is called once per frame

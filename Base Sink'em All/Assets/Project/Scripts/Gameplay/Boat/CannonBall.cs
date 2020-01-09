@@ -121,7 +121,7 @@ public class CannonBall : NetworkBehaviour
                 Destroy(this.gameObject);
             }
         }
-        if (collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>())
+        if (collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>() != null)
         {
             Debug.Log("Hit Shark");
             collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>().Damage(_damage, this.transform);

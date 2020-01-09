@@ -1114,6 +1114,16 @@ namespace ProjetPirate.Boat
         [Command]
         private void CmdFireLeft()
         {
+            /*
+            for (int i = 0; i < _larboardCannons.Count; i++)
+            {
+                //TEST SEB (Condition if seulement)
+                if (_larboardCannons[i].gameObject.activeSelf)
+                {
+                    _larboardCannons[i].FireCannon();
+                }
+            }
+            */
             RpcFireLeft();
         }
 
@@ -1145,6 +1155,16 @@ namespace ProjetPirate.Boat
         [Command]
         private void CmdFireRight()
         {
+            /*
+            for (int i = 0; i < _starboardCannons.Count; i++)
+            {
+                //TEST SEB (Condition if seulement)
+                if (_starboardCannons[i].gameObject.activeSelf)
+                {
+                    _starboardCannons[i].FireCannon();
+                }
+            }
+            */
             RpcFireRight();
         }
 

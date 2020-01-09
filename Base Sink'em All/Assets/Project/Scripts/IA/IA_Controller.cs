@@ -45,6 +45,8 @@ namespace ProjetPirate.IA
 
 
         protected Character _character;
+        protected Character_Shark _characterShark;
+
         [SerializeField] protected float _remainingTimeBeforeResettingHealth;
         protected float _timeToResetHealth = 30;
 
@@ -78,7 +80,11 @@ namespace ProjetPirate.IA
             _remainingTimeBeforeResettingHealth -= Time.deltaTime;
             if (_remainingTimeBeforeResettingHealth <= 0)
             {
-                _character.FullLife();
+                if (_character != null)
+                    _character.FullLife();
+                if (_characterShark != null)
+                    _characterShark.FullLife();
+
                 _remainingTimeBeforeResettingHealth = _timeToResetHealth;
                 Debug.Log("Reset");
             }

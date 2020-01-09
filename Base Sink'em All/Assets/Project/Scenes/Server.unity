@@ -577,9 +577,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1155500677}
-  - {fileID: 1465335416}
-  - {fileID: 1616999995}
-  - {fileID: 502261071}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -833,8 +830,8 @@ GameObject:
   - component: {fileID: 108050924}
   - component: {fileID: 108050926}
   - component: {fileID: 108050923}
-  - component: {fileID: 108050927}
   - component: {fileID: 108050922}
+  - component: {fileID: 108050927}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -902,6 +899,7 @@ MonoBehaviour:
   - {fileID: 1917337126408870, guid: 4bf7249cbca6e4041a132da0a1b8311f, type: 2}
   - {fileID: 1430476371408612, guid: 0e2bb0253a4428940a27dd0d288788e5, type: 2}
   - {fileID: 1496857070248168, guid: 41a0eb8ace2b0b24ab8deb7f3e922e20, type: 2}
+  - {fileID: 1614668745233244, guid: 206398198e898d547aae0b3b2f1fc9a3, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -1003,17 +1001,18 @@ MonoBehaviour:
     type: 2}
   patrolWander: {fileID: 1939418543956912, guid: 2c134d15421c1c74cba11d25165f3337,
     type: 2}
-  krakenHeadEnemy: {fileID: 0}
-  krakenTentaclesEnemy: []
-  posEnemyBoat: []
+  krakenEnemy: {fileID: 1614668745233244, guid: 206398198e898d547aae0b3b2f1fc9a3,
+    type: 2}
   spawnEnemyShark:
-  - posSpawnEnemyShark: {fileID: 1155500677}
-  - posSpawnEnemyShark: {fileID: 1465335416}
-  - posSpawnEnemyShark: {fileID: 1616999995}
-  - posSpawnEnemyShark: {fileID: 502261071}
+  - transformSpawnEnemyShark: {fileID: 1155500677}
+    minTimeSpawn: 2
+    maxTimeSpawn: 6
+  spawnEnemyBoatMilitary: []
+  spawnEnemyBoatMerchant: []
   spawnEnemyKraken:
-    posSpawnEnemyKrakenHead: {fileID: 0}
-    posSpawnEnemyKrakenTentacles: []
+  - transformSpawnEnemyKraken: {fileID: 1853783971}
+    minTimeSpawn: 2
+    maxTimeSpawn: 4
 --- !u!1 &111284760
 GameObject:
   m_ObjectHideFlags: 0
@@ -1529,9 +1528,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 208548778}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.563667, y: 20.91705, z: -2.201538}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1853783971}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3476,34 +3476,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 480824198}
   m_Mesh: {fileID: 4300256, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
---- !u!1 &502261070
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 502261071}
-  m_Layer: 0
-  m_Name: SpawnEnemyShark4
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &502261071
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 502261070}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 55.7, y: 0, z: 36.6}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 95601981}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &504138923
 GameObject:
   m_ObjectHideFlags: 0
@@ -3656,6 +3628,47 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 506505295}
   m_Mesh: {fileID: 4300298, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
+--- !u!1 &510446336
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 510446338}
+  - component: {fileID: 510446337}
+  m_Layer: 0
+  m_Name: SpawnEnemyMerchant
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &510446337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 510446336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7160175313066c14db5c7115cc55d814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &510446338
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 510446336}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -18.563667, y: 20.91705, z: -2.201538}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 662773175}
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &525517997
 GameObject:
   m_ObjectHideFlags: 0
@@ -4149,6 +4162,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 639312529}
   m_Mesh: {fileID: 4300276, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
+--- !u!1 &662773174
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 662773175}
+  m_Layer: 0
+  m_Name: SpawnEnemyMerchant1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &662773175
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 662773174}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 510446338}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &670993501
 GameObject:
   m_ObjectHideFlags: 0
@@ -8391,6 +8432,34 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1270847004}
   m_Mesh: {fileID: 4300272, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
+--- !u!1 &1272001781
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1272001782}
+  m_Layer: 0
+  m_Name: SpawnEnemyMilitary1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1272001782
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1272001781}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -208.3, y: 0, z: -9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2083087621}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1280620606
 GameObject:
   m_ObjectHideFlags: 0
@@ -9931,34 +10000,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1463299788}
   m_Mesh: {fileID: 4300230, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
---- !u!1 &1465335415
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1465335416}
-  m_Layer: 0
-  m_Name: SpawnEnemyShark2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1465335416
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1465335415}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -73.1, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 95601981}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1469565744
 GameObject:
   m_ObjectHideFlags: 0
@@ -10947,34 +10988,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1607826304}
   m_Mesh: {fileID: 4300118, guid: 473bba53f4db37e44927af3039b251f5, type: 3}
---- !u!1 &1616999994
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1616999995}
-  m_Layer: 0
-  m_Name: SpawnEnemyShark3
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1616999995
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1616999994}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17.1, y: 0, z: 52.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 95601981}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1620925202
 GameObject:
   m_ObjectHideFlags: 0
@@ -12244,6 +12257,34 @@ Transform:
   - {fileID: 417665504}
   m_Father: {fileID: 0}
   m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1853783970
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1853783971}
+  m_Layer: 0
+  m_Name: SpawnEnemyKrakens1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1853783971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1853783970}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -60, y: -2.05, z: -19.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 208548779}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1865741012
 GameObject:
@@ -14242,7 +14283,7 @@ GameObject:
   - component: {fileID: 2083087621}
   - component: {fileID: 2083087622}
   m_Layer: 0
-  m_Name: SpawnEnemyBoats
+  m_Name: SpawnEnemyMilitary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14257,7 +14298,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -18.563667, y: 20.91705, z: -2.201538}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1272001782}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

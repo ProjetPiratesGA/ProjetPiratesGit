@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ProjetPirate.IA
 {
-    public class Shark_Character : Character
+    public class Shark_Character : Character_Shark
     {
         private float Fow = 3f;
         //public Vector3 TargetPosition = Vector3.zero;
@@ -143,12 +143,18 @@ namespace ProjetPirate.IA
 
             if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>() != null)
             {
-                if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().gameObject.tag == "myBoat")
+                if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().gameObject.tag == "myBoat" 
+                    || collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().gameObject.tag == "Player")
                 {
                     Debug.LogError("Hit boat with Shark");
 
                     collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().Damage(20, this.transform);
-                 
+
+                    //IA Boat can attack shark
+                    /*
+                    if (collision.gameObject.GetComponent<ProjetPirate.IA.Ship_Controller>() != null)
+                        collision.gameObject.GetComponent<ProjetPirate.IA.Ship_Controller>().AlertFromShoot(this.gameObject);
+                        */
                 }
             }
             

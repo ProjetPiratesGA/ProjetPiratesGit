@@ -25,18 +25,18 @@ namespace ProjetPirate.IA
         // Dans le characters avec les memes conditions
         // puis retirer les conditions du Controller
 
-        public Shark_Character Character
+        public Shark_Character CharacterShark
         {
-            get { return (Shark_Character)_character; }
+            get { return (Shark_Character)_characterShark; }
         }
 
         void Start()
         {
-            _character = this.GetComponent<Shark_Character>();
-            Character.SetUpShark(this);
+            _characterShark = this.GetComponent<Shark_Character>();
+            CharacterShark.SetUpShark(this);
             if (isClient)
             {
-                this.gameObject.GetComponent<ProjetPirate.IA.Patrol_Wander>().enabled = false;
+                //this.gameObject.GetComponent<ProjetPirate.IA.Patrol_Wander>().enabled = false;
             }
             //Target = Player_Singleton.instance.Player;
             //TargetTransform = Player_Singleton.instance.Player.transform;
@@ -68,11 +68,11 @@ namespace ProjetPirate.IA
                 {
                     GoToDestination(this.GetComponent<Patrol_Checkpoint>().Patrol());
                 }
-                _character.GetComponent<Shark_Character>()._inBattle = false;
+                _characterShark.GetComponent<Shark_Character>()._inBattle = false;
             }
             else
             {
-                _character.GetComponent<Shark_Character>()._inBattle = true;
+                _characterShark.GetComponent<Shark_Character>()._inBattle = true;
                 if (Vector3.Distance(transform.position, _target.transform.position) < MaxDistance && Vector3.Distance(transform.position, _target.transform.position) > MinDistance || GetComponent<Shark_Character>()._isApplyed == true)
                 {
                     if (Vector3.Angle(transform.position, transform.forward) != Vector3.Angle(transform.position, _target.transform.position))
@@ -127,18 +127,18 @@ namespace ProjetPirate.IA
         public void GoToDestination(Vector3 _destination)
         {
             // Make the DirectionLocator faces the destination
-            _character.DirectionLocator.LookAt(_destination);
-            Vector3 rotation = _character.DirectionLocator.eulerAngles;
+            _characterShark.DirectionLocator.LookAt(_destination);
+            Vector3 rotation = _characterShark.DirectionLocator.eulerAngles;
             rotation.x = Mathf.Abs(rotation.x);
             rotation.y = Mathf.Abs(rotation.y);
             rotation.z = Mathf.Abs(rotation.z);
-            _character.DirectionLocator.eulerAngles = rotation;
+            _characterShark.DirectionLocator.eulerAngles = rotation;
 
             //Check the distance to the destination
-            if (Vector3.Distance(this.transform.position, _destination) > _character.MaxMovingSpeed * Time.deltaTime)
+            if (Vector3.Distance(this.transform.position, _destination) > _characterShark.MaxMovingSpeed * Time.deltaTime)
             {
                 //If the destination is too far, move forward
-                _character.MoveForward();
+                _characterShark.MoveForward();
             }
             else
             {
@@ -147,20 +147,20 @@ namespace ProjetPirate.IA
             }
 
             //Check in which direction is the destination
-            if (Mathf.Abs(_character.DirectionLocator.eulerAngles.y - _character.transform.eulerAngles.y) <= _character.MaxAngularSpeed * Time.deltaTime)
+            if (Mathf.Abs(_characterShark.DirectionLocator.eulerAngles.y - _characterShark.transform.eulerAngles.y) <= _characterShark.MaxAngularSpeed * Time.deltaTime)
             {
                 //If the direction is close enough, take the exact rotation to face the destination
-                this.transform.eulerAngles = _character.DirectionLocator.eulerAngles;
+                this.transform.eulerAngles = _characterShark.DirectionLocator.eulerAngles;
             }
-            else if ((_character.DirectionLocator.eulerAngles.y - _character.transform.eulerAngles.y < 0 & _character.DirectionLocator.eulerAngles.y - _character.transform.eulerAngles.y > -180) | _character.DirectionLocator.eulerAngles.y - _character.transform.eulerAngles.y > 180)
+            else if ((_characterShark.DirectionLocator.eulerAngles.y - _characterShark.transform.eulerAngles.y < 0 & _characterShark.DirectionLocator.eulerAngles.y - _characterShark.transform.eulerAngles.y > -180) | _characterShark.DirectionLocator.eulerAngles.y - _characterShark.transform.eulerAngles.y > 180)
             {
                 //If the destination si to the left, turn left.
-                _character.TurnLarboard();
+                _characterShark.TurnLarboard();
             }
             else
             {
                 //If the destination si to the right, turn right.
-                _character.TurnStarboard();
+                _characterShark.TurnStarboard();
             }
         }
 
