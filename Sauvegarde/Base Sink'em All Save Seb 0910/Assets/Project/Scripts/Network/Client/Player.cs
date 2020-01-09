@@ -189,6 +189,7 @@ public class Player : Controller
                     this._data.Ressource.BoatLevel += 1;
                     this.CmdSendBoatLevel(this._data.Ressource.BoatLevel);
                     this.CmdSpawnBoat();
+                    //this.CmdReSetParent();
                 }
             }
 
@@ -207,8 +208,22 @@ public class Player : Controller
             data_quest.ID = 6;
         }
     }
+    //SEB 0910
+    [Command]
+    public void CmdReSetParent()
+    {
 
+        //RpcReSetParent();
+    }
 
+    [ClientRpc]
+    public void RpcReSetParent(GameObject instance)
+    {
+        boatInstance = instance;
+        boatInstance.gameObject.transform.SetParent(this.transform);
+    }
+
+    //END SEB 0910
     ///DEBUG SEB 0401
     [Command]
     public void CmdUpdateDataGold(int gold)
@@ -427,9 +442,9 @@ public class Player : Controller
         NetworkServer.SpawnWithClientAuthority(boatInstance, this.connectionToClient);
 
         //SetDataBoat(boatInstance.GetComponent<BoatCharacter>());
-
+        this.RpcReSetParent(boatInstance);//SEB 0910
         //Set reference to the player from client side
-        RpcSetPlayerReference(boatInstance);
+        this.RpcSetPlayerReference(boatInstance);
     }
 
     /// <summary>
