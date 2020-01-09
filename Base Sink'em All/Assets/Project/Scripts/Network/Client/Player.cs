@@ -256,6 +256,21 @@ public class Player : Controller
         this._data.Boat.Stats.Life = p_life;
         RpcSendLife(p_life);
     }
+
+    // SEB 0910 
+    [Command]
+    public void CmdSendHarpoon(bool state)
+    {
+        this.data.Boat.AsHarpoon = state;
+    }
+
+    [ClientRpc]
+    public void RpcSendHarpoon(bool state)
+    {
+        this.data.Boat.AsHarpoon = state;
+    }
+    // END SEB 0910 
+
     //[Command]
     //public void CmdSendDamageReceived()
     //{
@@ -412,10 +427,29 @@ public class Player : Controller
         NetworkServer.SpawnWithClientAuthority(boatInstance, this.connectionToClient);
 
         //SetDataBoat(boatInstance.GetComponent<BoatCharacter>());
-
+        this.RpcReSetParent(boatInstance);//SEB 0910
         //Set reference to the player from client side
-        RpcSetPlayerReference(boatInstance);
+        this.RpcSetPlayerReference(boatInstance);
     }
+
+    //SEB 0910
+    [Command]
+    public void CmdReSetParent()
+    {
+
+        //RpcReSetParent();
+    }
+
+    [ClientRpc]
+    public void RpcReSetParent(GameObject instance)
+    {
+        boatInstance = instance;
+        boatInstance.gameObject.transform.SetParent(this.transform);
+    }
+
+    //END SEB 0910
+
+
 
     /// <summary>
     /// Set reference to the player for new spawned boat (client side)
@@ -646,7 +680,7 @@ public class Player : Controller
     }
 
     [ClientRpc]
-    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation, int level)
+    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation, int level, bool harpoon)
     {
         this.data.Ressource.Golds = gold;
         this.data.Ressource.BoatLevel = level;
@@ -654,6 +688,7 @@ public class Player : Controller
         this.data.Boat.CurrentCanonLeft = cannonLeft;
         this.data.Boat.CurrentCanonRight = cannonRight;    
         this.data.Boat.Stats.Speed = speed;
+        this.data.Boat.AsHarpoon = harpoon;// SEB 0910
         //SEB 08
         myVector3 pos = new myVector3();
         pos.x = position.x;
@@ -671,7 +706,7 @@ public class Player : Controller
 
     }
     [TargetRpc]
-    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation, int level)
+    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation, int level, bool harpoon)
     {
         this.data.Ressource.Golds = gold;
         this.data.Ressource.BoatLevel = level;
@@ -679,6 +714,7 @@ public class Player : Controller
         this.data.Boat.CurrentCanonLeft = cannonLeft;
         this.data.Boat.CurrentCanonRight = cannonRight;      
         this.data.Boat.Stats.Speed = speed;
+        this.data.Boat.AsHarpoon = harpoon;// SEB 0910
 
         //SEB 08
         myVector3 pos = new myVector3();

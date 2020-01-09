@@ -305,6 +305,14 @@ namespace ProjetPirate.Boat
             vec.y = 0;
             this.transform.position = vec;
 
+            //SEB 0910
+            if (_prowCannonHarpoonPrefab != null && hasAuthority)
+            {
+                this._prowCannonHarpoon.gameObject.SetActive(player._data.Boat.AsHarpoon);
+                CmdSetHarpoon();
+            }
+            //END SEB 0910
+
         }
 
 
@@ -473,6 +481,16 @@ namespace ProjetPirate.Boat
 
                     this.CmdUpdateActiveCanons();
                 }
+                //SEB 0910
+                if (Input.GetKeyDown(KeyCode.F7))
+                {
+
+                    player._data.Boat.AsHarpoon = true;
+                    player.CmdSendHarpoon(player._data.Boat.AsHarpoon);
+                    this._prowCannonHarpoon.gameObject.SetActive(player._data.Boat.AsHarpoon);
+                    CmdSetHarpoon();
+                }
+                //END SEB 0910
             }
             // END TEST
         }
@@ -937,6 +955,19 @@ namespace ProjetPirate.Boat
             }
         }
 
+        //SEB 0910
+        [Command]
+        public void CmdSetHarpoon()
+        {
+            this._prowCannonHarpoon.gameObject.SetActive(player._data.Boat.AsHarpoon);
+        }
+
+        [ClientRpc]
+        public void RpcSetHarpoon()
+        {
+            this._prowCannonHarpoon.gameObject.SetActive(player._data.Boat.AsHarpoon);
+        }
+        //END SEB 0910
 
         public void SetActiveCannons()
         {

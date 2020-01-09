@@ -22,6 +22,9 @@ namespace ProjetPirate.Data
 
         private int currentCanonLeft = 1;
         private int currentCanonRight = 1;
+        private bool asHarpoon = false; //SEB 0901
+
+        public bool AsHarpoon { get { return asHarpoon; } set { asHarpoon = value; } } //SEB 0901
 
         public int CurrentCanonLeft { get { return currentCanonLeft; } set { currentCanonLeft = value; } }
         public int CurrentCanonRight { get { return currentCanonRight; } set { currentCanonRight = value; } }

@@ -61,7 +61,7 @@ namespace ProjetPirate.Physic
             ProjetPirate.Gameplay.Sea._attractObjects.Add(this);
         }
 
-        void OnDestry()
+        void OnDestroy()
         {
             ProjetPirate.Gameplay.Sea._attractObjects.Remove(this);
         }
