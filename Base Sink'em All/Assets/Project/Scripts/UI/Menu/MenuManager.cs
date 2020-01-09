@@ -71,8 +71,7 @@ namespace ProjetPirate.UI.Menu
             _buttonReturnMainMenu.SetActive(false);
             _option.SetActive(false);
 
-            _menuPrincipal.SetActive(true);
-            _animLogoGA.SetActive(false);
+            _animLogoGA.SetActive(true);
 
         }
 
@@ -251,6 +250,12 @@ namespace ProjetPirate.UI.Menu
                 _LogIn.SetActive(false);
                 _choix.SetActive(true);
             }
+        }
+
+        public void FinishIntroLogoGa()
+        {
+            _menuPrincipal.SetActive(true);
+            _animLogoGA.SetActive(false);
         }
     }
 }

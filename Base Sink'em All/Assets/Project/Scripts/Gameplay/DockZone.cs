@@ -10,7 +10,7 @@ public class DockZone : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        this.gameObject.layer = 2;
     }
 
     // Update is called once per frame

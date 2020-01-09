@@ -159,7 +159,7 @@ namespace ProjetPirate.Boat
         [SerializeField] private List<Cannon> _larboardCannons;
         [SerializeField] private List<Cannon> _starboardCannons;
         [SerializeField] public CannonHarpoon _prowCannonHarpoon;
-        [SerializeField] int _maxCannonsPerSide = 2;
+        [SerializeField] public int _maxCannonsPerSide = 2;
 
         [SerializeField] private List<Transform> _larboardCannonPositions;
         [SerializeField] private List<Transform> _starboardCannonPositions;
@@ -200,9 +200,9 @@ namespace ProjetPirate.Boat
         private int _nextDockingCheckpointId;
         public bool _canDock = false;
 
-        [SerializeField] bool _isDocking = false;
+        [SerializeField] public bool _isDocking = false;
         [SerializeField] public bool _isDocked = false;
-        [SerializeField] bool _isLeavingDock = false;
+        [SerializeField] public bool _isLeavingDock = false;
         private float _dockingAngularSpeed = 90;
 
         [SerializeField] bool _isPushedByIsland = false;
@@ -862,7 +862,7 @@ namespace ProjetPirate.Boat
                 //Debug.Log(i);
                 if (_leftPoints[i].InvisibleWallIsOn())
                 {
-                    Debug.Log("Touch it");
+                    //Debug.Log("Touch it");
                     TurnStarboard();
                     _isPushedByIsland = true;
                     return true;

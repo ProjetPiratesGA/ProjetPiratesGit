@@ -167,7 +167,7 @@ namespace Project.Network
                 tmpRot.y = _playerList[i]._data.Boat.Transform.Rotation.y;
 
                 _playerList[i].TargetSetStartData(conn, _playerList[i]._data.Boat.Stats.Life, _playerList[i]._data.Ressource.Golds, _playerList[i]._data.Boat.CurrentCanonLeft
-                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.Stats.Speed, tempPos, tmpRot);
+                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.Stats.Speed, tempPos, tmpRot, _playerList[i]._data.Ressource.BoatLevel);
                 //FIN SEB 08
             }
             for (int i = 0; i < _boatList.Count; i++)
@@ -531,7 +531,7 @@ namespace Project.Network
 
 
                             _playerList[i].RpcSetStartData(_playerList[i]._data.Boat.Stats.Life, _playerList[i]._data.Ressource.Golds, _playerList[i]._data.Boat.CurrentCanonLeft
-                                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.Stats.Speed, tempPos, tmpRot);
+                                , _playerList[i]._data.Boat.CurrentCanonRight, _playerList[i]._data.Boat.Stats.Speed, tempPos, tmpRot, _playerList[i]._data.Ressource.BoatLevel);
                             //FIN SEB 08
 
                             _playerList[i].isDataReady = true;

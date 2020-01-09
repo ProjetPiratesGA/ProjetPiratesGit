@@ -26,7 +26,7 @@ public class MusicMenu : MonoBehaviour {
 
         if(_source.isPlaying)
         {
-            Debug.Log("Son play");
+           // Debug.Log("Son play");
         }
     }
 }

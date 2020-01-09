@@ -181,6 +181,17 @@ public class Player : Controller
                 _debugLogDisplayTimer = 0;
                 CmdSendDebug(_data.Ressource.Golds);
             }
+
+            if(Input.GetKeyDown(KeyCode.F11))
+            {
+                if(this._data.Ressource.BoatLevel < 3)
+                {
+                    this._data.Ressource.BoatLevel += 1;
+                    this.CmdSendBoatLevel(this._data.Ressource.BoatLevel);
+                    this.CmdSpawnBoat();
+                }
+            }
+
         }
         ///FIN DEBUG
         CheckQuest();
@@ -255,6 +266,20 @@ public class Player : Controller
     //{
     //    RpcSendMaxCanonPerSide(this._data.Boat.MaxCanonPerSide);
     //}
+    [ClientRpc]
+    public void RpcSendBoatLevel(int level)
+    {
+        this._data.Ressource.BoatLevel = level;
+    }
+
+
+    [Command]
+    public void CmdSendBoatLevel(int level)
+    {
+        this._data.Ressource.BoatLevel = level;
+    }
+
+
     [Command]
     public void CmdSendCurrentCanonLeft(int number)
     {
@@ -593,7 +618,7 @@ public class Player : Controller
 
     public virtual void LosePlank(int pLostPlank)
     {
-        data.Ressource.WoodBoard += pLostPlank;
+        data.Ressource.WoodBoard -= pLostPlank;
         if (data.Ressource.WoodBoard < 0)
         {
             data.Ressource.WoodBoard = 0;
@@ -602,7 +627,7 @@ public class Player : Controller
 
     public virtual void LoseMoney(int pLostMoney)
     {
-        data.Ressource.Golds += pLostMoney;
+        data.Ressource.Golds -= pLostMoney;
         if (data.Ressource.Golds < 0)
         {
             data.Ressource.Golds = 0;
@@ -621,9 +646,10 @@ public class Player : Controller
     }
 
     [ClientRpc]
-    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation)
+    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation, int level)
     {
         this.data.Ressource.Golds = gold;
+        this.data.Ressource.BoatLevel = level;
         this.data.Boat.Stats.Life = life;
         this.data.Boat.CurrentCanonLeft = cannonLeft;
         this.data.Boat.CurrentCanonRight = cannonRight;    
@@ -645,9 +671,10 @@ public class Player : Controller
 
     }
     [TargetRpc]
-    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation)
+    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation, int level)
     {
         this.data.Ressource.Golds = gold;
+        this.data.Ressource.BoatLevel = level;
         this.data.Boat.Stats.Life = life;
         this.data.Boat.CurrentCanonLeft = cannonLeft;
         this.data.Boat.CurrentCanonRight = cannonRight;      

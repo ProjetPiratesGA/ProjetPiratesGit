@@ -1,9 +1,0 @@
-- En mode build du client le joystick ne fonctionne pas (vas en bas a gauche dés qu'on clique dessus), fonctionne par contre sur l'éditeur.
-
-- Probléme lors du spawn d'un nouveau joueur , les canons des autres clients perdent leur hierachie et ne suivent donc pas les clients deja spawn 
-  (voir dans la fonction onnServerAddPlayer du ServerNetworkManager.cs , la boucle for à la fin le rafraichissement est censé ce faire ici)
-  Cela pose du coup des soucis pour le tir
-
-- Le player spawn en 0,0,0 au lieu de spawn sur les points prédéfinis
-
-- Le player et le bateau ne sont pas détruits lors de la déconnection d'un client 
