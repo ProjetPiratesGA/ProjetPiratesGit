@@ -14,14 +14,12 @@ namespace ProjetPirate.AmbientSound
         // Use this for initialization
         void Start()
         {
-
             PlaySoundAmbient();
         }
 
         // Update is called once per frame
         void Update()
         {
-
         }
 
         void PlaySoundAmbient()

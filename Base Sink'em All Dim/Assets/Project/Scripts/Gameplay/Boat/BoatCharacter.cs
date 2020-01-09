@@ -669,7 +669,6 @@ namespace ProjetPirate.Boat
             if(player == null)
             {
                 Debug.Log("PLAYER NULL");
-                Debug.Break();
             }
             else
                 Debug.Log("PLAYER OK");
@@ -677,7 +676,6 @@ namespace ProjetPirate.Boat
             if (player._data == null)
             {
                 Debug.Log("DATA NULL");
-                Debug.Break();
             }
             else
                 Debug.Log("DATA OK");
@@ -685,7 +683,6 @@ namespace ProjetPirate.Boat
             if (player._data.Boat == null)
             {
                 Debug.Log("DATA_BOAT NULL");
-                Debug.Break();
             }
             else
                 Debug.Log("DATA_BOAT OK");

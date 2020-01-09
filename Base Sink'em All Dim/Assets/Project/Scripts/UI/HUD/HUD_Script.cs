@@ -217,7 +217,7 @@ namespace ProjetPirate.UI.HUD
 
                     if (hit.collider.gameObject.tag == "Player")
                     {
-                        Debug.LogError("J'ai cliqué sur un joueur");
+                        //Debug.LogError("J'ai cliqué sur un joueur");
                         interractCanBeDraw = true;
                         ActivateInterractionPlayer();
                         
@@ -230,7 +230,7 @@ namespace ProjetPirate.UI.HUD
                     }
                     else if (hit.collider.gameObject.tag != "Player" && !EventSystem.current.IsPointerOverGameObject() && hit.collider.gameObject.tag != "Enemy")
                     {
-                        Debug.LogError("On sort de l interaction player");
+                        //Debug.LogError("On sort de l interaction player");
                         interractOtherPlayerCanBeDraw = false;
                         interractCanBeDraw = false;
                         ActivateInterractionOtherPlayer();
@@ -297,17 +297,14 @@ namespace ProjetPirate.UI.HUD
                 if (boatChar == null)
                 {
                     Debug.LogError("Boatchar is null");
-                    Debug.Break();
                 }
                 //if (boatChar.getCurrentLife() == null)
                 //{
                 //    Debug.LogError("Boatchar is null");
-                //    Debug.Break();
                 //}
                 //if (boatChar.getMaxLife() == null)
                 //{
                 //    Debug.LogError("Boatchar is null");
-                //    Debug.Break();
                 //}
                 if (boatChar.getCurrentLife() >= 0 && boatChar.getCurrentLife() <= boatChar.getMaxLife())
                 {
@@ -315,7 +312,6 @@ namespace ProjetPirate.UI.HUD
                     //Debug.LogError("before : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
                     lifeBar.GetComponent<RectTransform>().sizeDelta = new Vector2((maxLifeBarSize / boatChar.getMaxLife()) * boatChar.getCurrentLife(), lifeBar.GetComponent<RectTransform>().sizeDelta.y);
                     //Debug.LogError("after : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
-                    //Debug.Break();
                 }
             }
             else

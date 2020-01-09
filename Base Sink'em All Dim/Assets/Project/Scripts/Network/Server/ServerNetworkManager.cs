@@ -164,6 +164,12 @@ namespace Project.Network
             {     
                 _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetUpdateActiveCannons(conn);
             }
+
+            for (int i = 0; i < _ChestList.Count; i++)
+            {
+                _ChestList[i].gameObject.GetComponent<Chest>().TargetSpawnChest(conn, _ChestList[i].gameObject, _ChestList[i].gameObject.transform.position, _ChestList[i].containedMoney, _ChestList[i].containedPlank);
+            }
+
             _playerList.Add(playerInstance);
 
             _playerList[_playerList.Count - 1].InitPlayer();

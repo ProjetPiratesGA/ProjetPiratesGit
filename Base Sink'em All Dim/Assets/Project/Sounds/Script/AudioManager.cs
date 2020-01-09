@@ -92,7 +92,7 @@ public class AudioManager : MonoBehaviour
         if (_clipFromString[pAudioClipName] != null)
         {
             pSource.clip = _clipFromString[pAudioClipName];
-
+            
             pSource.PlayOneShot(pSource.clip);
             pSource.PlayScheduled(AudioSettings.dspTime + pSource.clip.length);
         }

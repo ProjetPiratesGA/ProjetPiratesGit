@@ -122,7 +122,7 @@ public class Player : Controller
         {
             if (SceneManager.GetActiveScene().name == "Game")
             {
-               // Debug.LogError("IN SPAWN BOAT");
+               // Debug.Log("IN SPAWN BOAT");
                 _asBoatSpawned = true;
                 CmdSpawnBoat();
                 //TEST SEB
@@ -257,7 +257,7 @@ public class Player : Controller
     [Command]
     public void CmdSendDebug(int goldValue)
     {
-        //Debug.LogError("Gold : " + goldValue);
+        //Debug.Log("Gold : " + goldValue);
     }
 
     [TargetRpc]
@@ -324,7 +324,7 @@ public class Player : Controller
     [Command]
     public void CmdSpawnBoat()
     {
-        //Debug.LogError("IN SERVER SPAWN BOAT");
+        //Debug.Log("IN SERVER SPAWN BOAT");
 
         //Get spawn point from network manager
         Transform spawnTransform = NetworkManager.singleton.GetStartPosition();
@@ -363,13 +363,11 @@ public class Player : Controller
     {
         if (obj.GetComponentInChildren<BoatController>() == null)
         {
-            Debug.LogError("BOAT CONTROLLER NUll");
-            Debug.Break();
+            Debug.Log("BOAT CONTROLLER NUll");
         }
         if (obj.GetComponentInChildren<Character>() == null)
         {
-            Debug.LogError("CHARACTER NUll");
-            Debug.Break();
+            Debug.Log("CHARACTER NUll");
         }
 
         obj.GetComponentInChildren<BoatController>().player = this.GetComponent<Player>();
@@ -379,7 +377,6 @@ public class Player : Controller
         if (obj.GetComponentInChildren<Character>().player == null)
         {
             Debug.LogWarning("PLAYER SET NULL");
-            Debug.Break();
         }
         else
             Debug.Log("PLAYER SET OK");
@@ -393,7 +390,6 @@ public class Player : Controller
         if (obj.GetComponent<Character>().player == null)
         {
             Debug.LogWarning("PLAYER SET NULL");
-            Debug.Break();
         }
         //SetDataBoat(obj.GetComponent<BoatCharacter>());
 
@@ -604,7 +600,7 @@ public class Player : Controller
     [Command]
     public void CmdDestroyChest(GameObject _chest)
     {
-        Debug.LogError("Destroy Cmd Player chest");
+        Debug.Log("Destroy Cmd Player chest");
         List<Chest> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().ChestList;
 
         tempList.Remove(_chest.GetComponent<Chest>());
@@ -614,16 +610,31 @@ public class Player : Controller
     [Command]
     private void CmdSpawnChest(int pContainedMoney, int pContainedPlank)
     {
-        Chest chest = Instantiate(boatInstance.GetComponent<BoatCharacter>().DroppedChest).GetComponent<Chest>();
+        GameObject chest = Instantiate(boatInstance.GetComponent<BoatCharacter>().DroppedChest);
         chest.transform.position = boatInstance.transform.position + new Vector3(0, 0.712f, 0);
-        chest.containedMoney = pContainedMoney;
-        chest.containedPlank = pContainedPlank;
+        chest.GetComponent<Chest>().containedMoney = pContainedMoney;
+        chest.GetComponent<Chest>().containedPlank = pContainedPlank;
 
         List<Chest> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().ChestList;
 
-        tempList.Add(chest);
+        tempList.Add(chest.GetComponent<Chest>());
 
         NetworkServer.Spawn(chest.gameObject);
+
+        RpcSpawnChest(chest.gameObject, pContainedMoney, pContainedPlank);
+    }
+
+    [ClientRpc]
+    private void RpcSpawnChest(GameObject chest, int _pContainedMoney, int _pContainedPlank)
+    {
+        if (boatInstance == null)
+        {
+            boatInstance = this.GetComponentInChildren<BoatCharacter>().gameObject;
+        }
+
+        chest.transform.position = boatInstance.transform.position + new Vector3(0, 0.712f, 0);
+        chest.GetComponent<Chest>().containedMoney = _pContainedMoney;
+        chest.GetComponent<Chest>().containedPlank = _pContainedPlank;
     }
 
     public override void Disappear()
