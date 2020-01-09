@@ -5565,7 +5565,7 @@ MonoBehaviour:
   _goldDropped: 0
   _xpEarned: 0
   _directionLocator: {fileID: 0}
-  _shipType: 0
+  _shipType: 4
   _plankDroppedByDeath: 1
   _moneyDroppedByDeath: 0
   _HeightFallingDeath: -10
@@ -5597,7 +5597,7 @@ MonoBehaviour:
   - {fileID: 114798015511450588}
   - {fileID: 114747112351778484}
   _prowCannonHarpoon: {fileID: 114771748000106282}
-  _maxCannonsPerSide: 6
+  _maxCannonsPerSide: 2
   _larboardCannonPositions: []
   _starboardCannonPositions: []
   _prowCannonHarpoonPosition: {fileID: 0}
@@ -5613,7 +5613,7 @@ MonoBehaviour:
   _structureState: 0
   _droppedPlank: {fileID: 1494260278651724, guid: dea7ae8bb1288c546a076e94838a9f2c,
     type: 2}
-  _droppedChest: {fileID: 1243500154298346, guid: 64d3c91bf2836304895af1dd8ce3b713,
+  _droppedChest: {fileID: 1121749217331808, guid: 64d3c91bf2836304895af1dd8ce3b713,
     type: 2}
   Safe: 0
   _dock: {fileID: 0}
