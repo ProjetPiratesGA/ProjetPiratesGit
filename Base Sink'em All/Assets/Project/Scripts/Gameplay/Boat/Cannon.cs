@@ -27,6 +27,7 @@ public class Cannon : MonoBehaviour
     private float _distShoot = 10f;
 
     [SerializeField] private ParticleSystem _smokeFX;
+    [SerializeField] private ParticleSystem _splashFX;
 
     public ProjetPirate.Data.Data_Canon Data
     {
@@ -59,6 +60,10 @@ public class Cannon : MonoBehaviour
         if (_smokeFX != null)
         {
             _smokeFX.Stop();
+        }
+        if (_splashFX != null)
+        {
+            _splashFX.Stop();
         }
     }
 
@@ -105,6 +110,16 @@ public class Cannon : MonoBehaviour
         }
     }
 
+    public void PlaySplashFX(Vector3 pPos)
+    {
+        if (_splashFX != null)
+        {
+            _splashFX.transform.position = pPos;
+            _splashFX.Play();
+        }
+        
+    }
+
     public void FireCannon()
     {
         if (_prefabCannonBall != null)
@@ -120,6 +135,7 @@ public class Cannon : MonoBehaviour
             newCannonBall.GetComponent<CannonBall>().setTargetPosition(targetPosition);
 
             newCannonBall.GetComponent<CannonBall>()._owner = _owner;
+            newCannonBall.GetComponent<CannonBall>()._shooter = this;
 
             _listCannonBall.Add(newCannonBall);
 
