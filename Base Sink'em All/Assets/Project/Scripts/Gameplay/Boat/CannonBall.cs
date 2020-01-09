@@ -23,6 +23,8 @@ public class CannonBall : NetworkBehaviour
     private float _TimeToDelete = 2f;
     private float _timerforDelete = 0;
     public ProjetPirate.Boat.BoatCharacter _owner;
+    public Cannon _shooter;
+    private bool _hasSplashed;
 
     void Start()
     {
@@ -56,6 +58,12 @@ public class CannonBall : NetworkBehaviour
         }
 
         this.ComputePosition();
+        if (this.transform.position.y <= 0 & !_hasSplashed)
+        {
+            Debug.Log("Splash");
+            _shooter.PlaySplashFX(this.transform.position);
+            _hasSplashed = true;
+        }
     }
 
     private void ComputePosition()
@@ -106,36 +114,68 @@ public class CannonBall : NetworkBehaviour
     {
         //Debug.Log("Hit someone");
 
+        //if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>() != null)
+        //{
+        //    if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>() != _owner)
+        //    {
+        //        Debug.Log("Hit boat");
+
+        //        collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().Damage(_damage, this.transform);
+        //        //this.CmdDamage(collision.gameObject);
+        //        /*if (collision.gameObject.GetComponent<projetpirate.ia.ship_controller>() != null)
+        //        {
+        //            collision.gameobject.getcomponent<projetpirate.ia.ship_controller>().alertfromshoot(_owner.gameobject);
+        //        }*/
+        //        Destroy(this.gameObject);
+        //    }
+        //}
+        //if (collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>() != null)
+        //{
+        //    Debug.Log("Hit Shark");
+        //    collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>().Damage(_damage, this.transform);
+        //    Destroy(this.gameObject);
+        //}
+        ///* else if (collision.gameobject.tag == "enemy" & collision.gameobject != _owner)
+        // {
+        //     if (collision.gameobject.getcomponent<projetpirate.ia.shark_character>() != null)
+        //     {
+        //         _owner.controller.getcomponent<player>().gainxp(collision.gameobject.getcomponent<projetpirate.ia.shark_character>().damage(_damage));
+        //         collision.gameobject.getcomponent<projetpirate.ia.shark_controller>().alertfromshoot(_owner.gameobject);
+        //     }
+        //     destroy(this.gameobject);
+        // }*/
+
         if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>() != null)
         {
             if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>() != _owner)
             {
-                Debug.Log("Hit boat");
-
                 collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().Damage(_damage, this.transform);
-                //this.CmdDamage(collision.gameObject);
-                /*if (collision.gameObject.GetComponent<projetpirate.ia.ship_controller>() != null)
+                
+                if (collision.gameObject.GetComponent<ProjetPirate.IA.Ship_Controller>() != null)
                 {
-                    collision.gameobject.getcomponent<projetpirate.ia.ship_controller>().alertfromshoot(_owner.gameobject);
-                }*/
+                    collision.gameObject.GetComponent<ProjetPirate.IA.Ship_Controller>().AlertFromShoot(_owner.gameObject);
+                }
                 Destroy(this.gameObject);
             }
         }
-        if (collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>() != null)
+        else if (collision.gameObject.tag == "Enemy" & collision.gameObject != _owner)
         {
-            Debug.Log("Hit Shark");
-            collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>().Damage(_damage, this.transform);
+            if (collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>() != null)
+            {
+                /*_owner.Controller.GetComponent<Player>().GainXP*/
+                collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Character>().Damage(_damage);
+                collision.gameObject.GetComponent<ProjetPirate.IA.Shark_Controller>().AlertFromShoot(_owner.gameObject);
+            }
+            else if (collision.gameObject.GetComponent<Kraken_Head>() != null)
+            {
+                collision.gameObject.GetComponent<Kraken_Head>().ReceiveDamage(_damage);
+            }
+            //else if (collision.gameObject.GetComponent<Kraken_Tentacle>() != null)
+            //{
+            //    collision.gameObject.GetComponent<Kraken_Tentacle>().ReceiveDamage(_damage);
+            //}
             Destroy(this.gameObject);
         }
-        /* else if (collision.gameobject.tag == "enemy" & collision.gameobject != _owner)
-         {
-             if (collision.gameobject.getcomponent<projetpirate.ia.shark_character>() != null)
-             {
-                 _owner.controller.getcomponent<player>().gainxp(collision.gameobject.getcomponent<projetpirate.ia.shark_character>().damage(_damage));
-                 collision.gameobject.getcomponent<projetpirate.ia.shark_controller>().alertfromshoot(_owner.gameobject);
-             }
-             destroy(this.gameobject);
-         }*/
     }
 
     [Command]
