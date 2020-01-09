@@ -157,6 +157,7 @@
     <Compile Include="Assets\Project\Scripts\UI\RespawnUI.cs" />
     <Compile Include="Assets\Project\Sounds\Script\AudioManager.cs" />
     <Compile Include="Assets\Project\Sounds\Script\MusicAmbienceManager.cs" />
+    <Compile Include="Assets\Project\Sounds\Script\MusicMenu.cs" />
     <None Include="Assets\Resources\Datas\Objects\_README.txt" />
     <None Include="Assets\Project\Materials\Map\README.txt" />
     <None Include="Assets\Resources\Datas\Dialogues\7.txt" />

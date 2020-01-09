@@ -42,7 +42,6 @@ public class AudioManager : MonoBehaviour
     {
         if (_clipFromString[pAudioClipName] != null)
         {
-            Debug.Log("Sound " + pAudioClipName);
             pSource.clip = _clipFromString[pAudioClipName];
 
             pSource.PlayOneShot(pSource.clip);
@@ -83,7 +82,6 @@ public class AudioManager : MonoBehaviour
             }
         }
 
-        Debug.Log("Sound " + pAudioClipName);
         pSource.clip = _clipFromString[pAudioClipName];
 
         pSource.PlayOneShot(pSource.clip);
@@ -93,7 +91,6 @@ public class AudioManager : MonoBehaviour
     {
         if (_clipFromString[pAudioClipName] != null)
         {
-            Debug.Log("Sound " + pAudioClipName);
             pSource.clip = _clipFromString[pAudioClipName];
 
             pSource.PlayOneShot(pSource.clip);
@@ -103,7 +100,6 @@ public class AudioManager : MonoBehaviour
 
     static public void Stop(AudioSource pSource)
     {
-        Debug.Log("Stop Sound ");
         pSource.Stop();
     }
 }

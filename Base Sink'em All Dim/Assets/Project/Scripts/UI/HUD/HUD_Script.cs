@@ -10,6 +10,8 @@ namespace ProjetPirate.UI.HUD
 {
     public class HUD_Script : MonoBehaviour
     {
+        public AudioSource _source;
+
         [Header("TEXT")]
         public Text _goldValueText;
         public Text _XpValueText;
@@ -179,6 +181,7 @@ namespace ProjetPirate.UI.HUD
             {
                 this.GetComponent<GraphicRaycaster>().enabled = false;
                 _menuInGameCanvas.SetActive(true);
+                AudioManager.Play(_source, "Open_Menu");
 
             }
             else
