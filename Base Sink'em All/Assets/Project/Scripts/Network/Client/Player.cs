@@ -38,6 +38,12 @@ public class Player : Controller
     [SerializeField]
     GameObject _boatPrefab = null;
 
+    [SerializeField]
+    GameObject _boatPrefab1 = null; //SEB 09
+
+    [SerializeField]
+    GameObject _boatPrefab2 = null; //SEB 09
+
     GameObject boatInstance;
 
     private Data_Player data;
@@ -130,7 +136,7 @@ public class Player : Controller
         {
             if (SceneManager.GetActiveScene().name == "Game")
             {
-               // Debug.LogError("IN SPAWN BOAT");
+               // Debug.Log("IN SPAWN BOAT");
                 _asBoatSpawned = true;
                 CmdSpawnBoat();
                 //TEST SEB
@@ -175,6 +181,17 @@ public class Player : Controller
                 _debugLogDisplayTimer = 0;
                 CmdSendDebug(_data.Ressource.Golds);
             }
+
+            if(Input.GetKeyDown(KeyCode.F11))
+            {
+                if(this._data.Ressource.BoatLevel < 3)
+                {
+                    this._data.Ressource.BoatLevel += 1;
+                    this.CmdSendBoatLevel(this._data.Ressource.BoatLevel);
+                    this.CmdSpawnBoat();
+                }
+            }
+
         }
         ///FIN DEBUG
         CheckQuest();
@@ -217,11 +234,11 @@ public class Player : Controller
     //{
     //    this._data.Boat.Stats.DamageReceived = p_damageReceived;
     //}
-    [ClientRpc]
-    public void RpcSendMaxCanonPerSide(int p_maxCanonPerSide)
-    {
-        this._data.Boat.MaxCanonPerSide = p_maxCanonPerSide;
-    }
+    //[ClientRpc]
+    //public void RpcSendMaxCanonPerSide(int p_maxCanonPerSide)
+    //{
+    //    this._data.Boat.MaxCanonPerSide = p_maxCanonPerSide;
+    //}
     [ClientRpc]
     public void RpcSendCurrentCanonLeft(int p_currentCanonLeft)
     {
@@ -239,16 +256,46 @@ public class Player : Controller
         this._data.Boat.Stats.Life = p_life;
         RpcSendLife(p_life);
     }
+
+    // SEB 0910 
+    [Command]
+    public void CmdSendHarpoon(bool state)
+    {
+        this.data.Boat.AsHarpoon = state;
+        RpcSendHarpoon(state);
+    }
+
+    [ClientRpc]
+    public void RpcSendHarpoon(bool state)
+    {
+        this.data.Boat.AsHarpoon = state;
+    }
+    // END SEB 0910 
+
     //[Command]
     //public void CmdSendDamageReceived()
     //{
     //    RpcSendDanageReceived(this._data.Boat.Stats.DamageReceived);
     //}
-    [Command]
-    public void CmdSendMaxCanonPerSide()
+    //[Command]
+    //public void CmdSendMaxCanonPerSide()
+    //{
+    //    RpcSendMaxCanonPerSide(this._data.Boat.MaxCanonPerSide);
+    //}
+    [ClientRpc]
+    public void RpcSendBoatLevel(int level)
     {
-        RpcSendMaxCanonPerSide(this._data.Boat.MaxCanonPerSide);
+        this._data.Ressource.BoatLevel = level;
     }
+
+
+    [Command]
+    public void CmdSendBoatLevel(int level)
+    {
+        this._data.Ressource.BoatLevel = level;
+    }
+
+
     [Command]
     public void CmdSendCurrentCanonLeft(int number)
     {
@@ -265,7 +312,7 @@ public class Player : Controller
     [Command]
     public void CmdSendDebug(int goldValue)
     {
-        //Debug.LogError("Gold : " + goldValue);
+        //Debug.Log("Gold : " + goldValue);
     }
 
     [TargetRpc]
@@ -332,11 +379,36 @@ public class Player : Controller
     [Command]
     public void CmdSpawnBoat()
     {
-        //Debug.LogError("IN SERVER SPAWN BOAT");
+        //SEB 09
+        //Get the boat list form the network manager
+        List<BoatController> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().boatList;
+        //SEB 09
+        for (int i = 0; i < tempList.Count; i++)
+        {
+            if (tempList[i].player == this)
+            {
+                tempList.Remove(tempList[i]);
+                Destroy(boatInstance);
+                break;
+            }
+        }
 
-        //Get spawn point from network manager
-        //SEB 08
-        boatInstance = Instantiate(_boatPrefab);
+
+        switch (_data.Ressource.BoatLevel)
+        {
+            case 1:
+                boatInstance = Instantiate(_boatPrefab);
+                break;
+            case 2:
+                boatInstance = Instantiate(_boatPrefab1);
+                break;
+            case 3:
+                boatInstance = Instantiate(_boatPrefab2);
+                break;
+            default:
+                boatInstance = Instantiate(_boatPrefab);
+                break;
+        }
 
         _data.Boat.LoadTransform(boatInstance);
         //FIN SEB 08
@@ -348,8 +420,6 @@ public class Player : Controller
         boatInstance.GetComponent<Character>().player = this;
         //Set new tag
         boatInstance.tag = "myBoat";
-        //Get the boat list form the network manager
-        List<BoatController> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().boatList;
 
         //Add the new boat instance to the list
         tempList.Add(boatInstance.GetComponent<BoatController>());
@@ -358,10 +428,29 @@ public class Player : Controller
         NetworkServer.SpawnWithClientAuthority(boatInstance, this.connectionToClient);
 
         //SetDataBoat(boatInstance.GetComponent<BoatCharacter>());
-
+        this.RpcReSetParent(boatInstance);//SEB 0910
         //Set reference to the player from client side
-        RpcSetPlayerReference(boatInstance);
+        this.RpcSetPlayerReference(boatInstance);
     }
+
+    //SEB 0910
+    [Command]
+    public void CmdReSetParent()
+    {
+
+        //RpcReSetParent();
+    }
+
+    [ClientRpc]
+    public void RpcReSetParent(GameObject instance)
+    {
+        boatInstance = instance;
+        boatInstance.gameObject.transform.SetParent(this.transform);
+    }
+
+    //END SEB 0910
+
+
 
     /// <summary>
     /// Set reference to the player for new spawned boat (client side)
@@ -374,12 +463,12 @@ public class Player : Controller
     {
         if (obj.GetComponentInChildren<BoatController>() == null)
         {
-            Debug.LogError("BOAT CONTROLLER NUll");
+            Debug.Log("BOAT CONTROLLER NUll");
             Debug.Break();
         }
         if (obj.GetComponentInChildren<Character>() == null)
         {
-            Debug.LogError("CHARACTER NUll");
+            Debug.Log("CHARACTER NUll");
             Debug.Break();
         }
 
@@ -564,7 +653,7 @@ public class Player : Controller
 
     public virtual void LosePlank(int pLostPlank)
     {
-        data.Ressource.WoodBoard += pLostPlank;
+        data.Ressource.WoodBoard -= pLostPlank;
         if (data.Ressource.WoodBoard < 0)
         {
             data.Ressource.WoodBoard = 0;
@@ -573,7 +662,7 @@ public class Player : Controller
 
     public virtual void LoseMoney(int pLostMoney)
     {
-        data.Ressource.Golds += pLostMoney;
+        data.Ressource.Golds -= pLostMoney;
         if (data.Ressource.Golds < 0)
         {
             data.Ressource.Golds = 0;
@@ -592,14 +681,15 @@ public class Player : Controller
     }
 
     [ClientRpc]
-    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed, Vector3 position, Vector4 rotation)
+    public void RpcSetStartData(int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation, int level, bool harpoon)
     {
         this.data.Ressource.Golds = gold;
+        this.data.Ressource.BoatLevel = level;
         this.data.Boat.Stats.Life = life;
         this.data.Boat.CurrentCanonLeft = cannonLeft;
-        this.data.Boat.CurrentCanonRight = cannonRight;
-        this.data.Boat.MaxCanonPerSide = maxCannons;
+        this.data.Boat.CurrentCanonRight = cannonRight;    
         this.data.Boat.Stats.Speed = speed;
+        this.data.Boat.AsHarpoon = harpoon;// SEB 0910
         //SEB 08
         myVector3 pos = new myVector3();
         pos.x = position.x;
@@ -617,14 +707,15 @@ public class Player : Controller
 
     }
     [TargetRpc]
-    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, int maxCannons, float speed, Vector3 position, Vector4 rotation)
+    public void TargetSetStartData(NetworkConnection target, int life, int gold, int cannonLeft, int cannonRight, float speed, Vector3 position, Vector4 rotation, int level, bool harpoon)
     {
         this.data.Ressource.Golds = gold;
+        this.data.Ressource.BoatLevel = level;
         this.data.Boat.Stats.Life = life;
         this.data.Boat.CurrentCanonLeft = cannonLeft;
-        this.data.Boat.CurrentCanonRight = cannonRight;
-        this.data.Boat.MaxCanonPerSide = maxCannons;
+        this.data.Boat.CurrentCanonRight = cannonRight;      
         this.data.Boat.Stats.Speed = speed;
+        this.data.Boat.AsHarpoon = harpoon;// SEB 0910
 
         //SEB 08
         myVector3 pos = new myVector3();
@@ -645,7 +736,7 @@ public class Player : Controller
     [Command]
     public void CmdDestroyChest(GameObject _chest)
     {
-        Debug.LogError("Destroy Cmd Player chest");
+        Debug.Log("Destroy Cmd Player chest");
         List<Chest> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().ChestList;
 
         tempList.Remove(_chest.GetComponent<Chest>());

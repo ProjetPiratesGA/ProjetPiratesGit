@@ -36,7 +36,7 @@ namespace ProjetPirate.Boat
             if (other.gameObject.tag == "Island")
             {
                 _invisibleWallIsOn = true;
-                Debug.Log("Island");
+               // Debug.Log("Island");
             }
             else if (other.gameObject.tag != "Detector" & other.gameObject.tag != "Player")
             {

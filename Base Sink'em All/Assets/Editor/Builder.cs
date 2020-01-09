@@ -11,7 +11,7 @@ public class Builder : MonoBehaviour {
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
         buildPlayerOptions.scenes = new[] { "Assets/Project/Scenes/Server.unity" };
         buildPlayerOptions.locationPathName = "Build/Serveur/Server.exe";
-        buildPlayerOptions.target = BuildTarget.StandaloneWindows;
+        buildPlayerOptions.target = BuildTarget.StandaloneWindows64;
         buildPlayerOptions.options = BuildOptions.None;
         BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
         BuildSummary summary = report.summary;
@@ -33,7 +33,7 @@ public class Builder : MonoBehaviour {
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
         buildPlayerOptions.scenes = new[] { "Assets/Project/Scenes/MenuReseau.unity", "Assets/Project/Scenes/LoadingScene.unity", "Assets/Project/Scenes/Game.unity" };
         buildPlayerOptions.locationPathName = "Build/Client/Client.exe";
-        buildPlayerOptions.target = BuildTarget.StandaloneWindows;
+        buildPlayerOptions.target = BuildTarget.StandaloneWindows64;
         buildPlayerOptions.options = BuildOptions.None;
 
         BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
@@ -59,7 +59,7 @@ public class Builder : MonoBehaviour {
         BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
         buildPlayerOptions.scenes = new[] { "Assets/Project/Scenes/MenuReseau.unity", "Assets/Project/Scenes/LoadingScene.unity", "Assets/Project/Scenes/Game.unity" };
         buildPlayerOptions.locationPathName = "Build/Client/Client.exe";
-        buildPlayerOptions.target = BuildTarget.StandaloneWindows;
+        buildPlayerOptions.target = BuildTarget.StandaloneWindows64;
         buildPlayerOptions.options = BuildOptions.None;
 
         BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
@@ -78,7 +78,7 @@ public class Builder : MonoBehaviour {
         BuildPlayerOptions buildPlayerOptions1 = new BuildPlayerOptions();
         buildPlayerOptions1.scenes = new[] { "Assets/Project/Scenes/Server.unity" };
         buildPlayerOptions1.locationPathName = "Build/Serveur/Server.exe";
-        buildPlayerOptions1.target = BuildTarget.StandaloneWindows;
+        buildPlayerOptions1.target = BuildTarget.StandaloneWindows64;
         buildPlayerOptions1.options = BuildOptions.None;
         BuildReport report1 = BuildPipeline.BuildPlayer(buildPlayerOptions1);
         BuildSummary summary1 = report1.summary;

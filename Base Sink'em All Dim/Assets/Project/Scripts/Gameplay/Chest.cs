@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ProjetPirate.Boat;
+using UnityEngine.Networking;
 
-public class Chest : MonoBehaviour {
+public class Chest : NetworkBehaviour {
 
     [SerializeField] private int _containedMoney = 0;
     private int _containedPlank = 0;
@@ -35,7 +36,15 @@ public class Chest : MonoBehaviour {
             destroyer.GetComponent<BoatController>().player.CmdDestroyChest(this.gameObject);
         }
 	}
-   
+
+    [TargetRpc]
+    public void TargetSpawnChest(NetworkConnection _conn, GameObject chest, Vector3 _pos, int _pContainedMoney, int _pContainedPlank)
+    {
+        chest.transform.position = _pos;
+        chest.GetComponent<Chest>().containedMoney = _pContainedMoney;
+        chest.GetComponent<Chest>().containedPlank = _pContainedPlank;
+    }
+
     void OnTriggerEnter(Collider other)
     {
 		if(other.gameObject.tag == "Player")

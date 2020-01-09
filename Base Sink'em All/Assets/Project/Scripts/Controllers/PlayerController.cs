@@ -47,7 +47,7 @@ namespace ProjetPirate.Controllers
         //    _player = GameObject.FindGameObjectWithTag("Player");
         //    if(_player == null)
         //    {
-        //        Debug.LogError("_player est null");
+        //        Debug.Log("_player est null");
         //    }
         //}
 
@@ -61,6 +61,16 @@ namespace ProjetPirate.Controllers
             ReloadTimeButton();
             //GetJoystickInput();
 
+            if(_boatCharacter._prowCannonHarpoon != null)
+            {
+                if (!_buttonShootUp.activeSelf)
+                    _buttonShootUp.SetActive(true);
+            }
+            else
+            {
+                if (_buttonShootUp.activeSelf)
+                    _buttonShootUp.SetActive(false);
+            }
         }
 
         /// <summary>

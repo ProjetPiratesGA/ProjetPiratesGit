@@ -159,16 +159,8 @@ namespace ProjetPirate.Boat
         [SerializeField] private List<Cannon> _larboardCannons;
         [SerializeField] private List<Cannon> _starboardCannons;
         [SerializeField] public CannonHarpoon _prowCannonHarpoon;
+        [SerializeField] public int _maxCannonsPerSide = 2;
 
-        /// <summary>
-        /// TEST SEB
-        /// </summary>
-        //int _maxCannonsPerSide = 2;
-        //int _startCannonsNumberLeft = 1;
-        //int _startCannonsNumberRight = 1;
-        //int _currentCannnonsNumberLeft = 1;
-        //int _currentCannnonsNumberRight = 1;
-        // END TEST SEB //
         [SerializeField] private List<Transform> _larboardCannonPositions;
         [SerializeField] private List<Transform> _starboardCannonPositions;
         [SerializeField] private Transform _prowCannonHarpoonPosition;
@@ -208,9 +200,9 @@ namespace ProjetPirate.Boat
         private int _nextDockingCheckpointId;
         public bool _canDock = false;
 
-        [SerializeField] bool _isDocking = false;
+        [SerializeField] public bool _isDocking = false;
         [SerializeField] public bool _isDocked = false;
-        [SerializeField] bool _isLeavingDock = false;
+        [SerializeField] public bool _isLeavingDock = false;
         private float _dockingAngularSpeed = 90;
 
         [SerializeField] bool _isPushedByIsland = false;
@@ -295,7 +287,7 @@ namespace ProjetPirate.Boat
             _joystickController = FindObjectOfType<JoystickController>();
             if (_joystickController == null)
             {
-                Debug.LogError("JoystickController Not Assigned");
+                Debug.Log("JoystickController Not Assigned");
             }
 
 
@@ -312,6 +304,18 @@ namespace ProjetPirate.Boat
             vec = this.transform.position;
             vec.y = 0;
             this.transform.position = vec;
+
+            //SEB 0910
+            if (_prowCannonHarpoonPrefab != null )
+            {
+                this._prowCannonHarpoon.gameObject.SetActive(player._data.Boat.AsHarpoon);
+            }
+
+            if (_prowCannonHarpoonPrefab != null && hasAuthority)
+            {
+                CmdSetHarpoon();
+            }
+            //END SEB 0910
 
         }
 
@@ -460,7 +464,7 @@ namespace ProjetPirate.Boat
                 if (Input.GetKeyDown(KeyCode.F5))
                 {
                     this.CmdAddCannons(true, false);
-                    if ((player._data.Boat.CurrentCanonLeft < player._data.Boat.MaxCanonPerSide))
+                    if ((player._data.Boat.CurrentCanonLeft < _maxCannonsPerSide))
                     {
                         player._data.Boat.CurrentCanonLeft++;
                     }
@@ -472,7 +476,7 @@ namespace ProjetPirate.Boat
                 }
                 if (Input.GetKeyDown(KeyCode.F6))
                 {
-                    if ((player._data.Boat.CurrentCanonRight < player._data.Boat.MaxCanonPerSide))
+                    if ((player._data.Boat.CurrentCanonRight < _maxCannonsPerSide))
                     {
                         player._data.Boat.CurrentCanonRight++;
                     }
@@ -481,6 +485,16 @@ namespace ProjetPirate.Boat
 
                     this.CmdUpdateActiveCanons();
                 }
+                //SEB 0910
+                if (Input.GetKeyDown(KeyCode.F7))
+                {
+
+                    player._data.Boat.AsHarpoon = true;
+                    player.CmdSendHarpoon(player._data.Boat.AsHarpoon);
+                    this._prowCannonHarpoon.gameObject.SetActive(player._data.Boat.AsHarpoon);
+                    CmdSetHarpoon();
+                }
+                //END SEB 0910
             }
             // END TEST
         }
@@ -558,6 +572,9 @@ namespace ProjetPirate.Boat
 
         public override void Death()
         {
+            AudioManager.Stop(this.gameObject.GetComponent<AudioSource>());
+            AudioManager.Play(this.gameObject.GetComponent<AudioSource>(), "DeathBoat");
+
             player._data.Boat.Stats.Life = _maxLifePoint;
             player.CmdSendLife(player._data.Boat.Stats.Life);
 
@@ -566,8 +583,7 @@ namespace ProjetPirate.Boat
             CmdAddPlank(this._plankDroppedByDeath, this.transform.position);
 
             this.GetComponent<BoxCollider>().enabled = false;
-            this.GetComponentInParent<Player>().Death();
-
+            player.Death();
 
             /*ProjetPirate.IA.Ship_Controller[] enemies = FindObjectsOfType<ProjetPirate.IA.Ship_Controller>();
             for (int i = 0; i < enemies.Length; i++)
@@ -629,7 +645,7 @@ namespace ProjetPirate.Boat
                 _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
                 _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
 
-                this.GetComponentInParent<Player>().Disappear();
+                this.player.Disappear();
                 this.GetComponent<BoxCollider>().enabled = true;
 
                 player._data.Boat.Stats.Speed = _maxMovingSpeed;
@@ -868,7 +884,7 @@ namespace ProjetPirate.Boat
                 //Debug.Log(i);
                 if (_leftPoints[i].InvisibleWallIsOn())
                 {
-                    Debug.Log("Touch it");
+                    //Debug.Log("Touch it");
                     TurnStarboard();
                     _isPushedByIsland = true;
                     return true;
@@ -919,11 +935,11 @@ namespace ProjetPirate.Boat
         public void CmdAddCannons(bool left, bool right)
         {
 
-            if ((player._data.Boat.CurrentCanonLeft < player._data.Boat.MaxCanonPerSide) && left == true)
+            if ((player._data.Boat.CurrentCanonLeft < _maxCannonsPerSide) && left == true)
             {
                 player._data.Boat.CurrentCanonLeft++;
             }
-            if ((player._data.Boat.CurrentCanonRight < player._data.Boat.MaxCanonPerSide) && right == true)
+            if ((player._data.Boat.CurrentCanonRight < _maxCannonsPerSide) && right == true)
             {
                 player._data.Boat.CurrentCanonRight++;
             }
@@ -933,16 +949,30 @@ namespace ProjetPirate.Boat
         [ClientRpc]
         public void RpcAddCannons(bool left, bool right)
         {
-            if ((player._data.Boat.CurrentCanonLeft < player._data.Boat.MaxCanonPerSide) && left == true)
+            if ((player._data.Boat.CurrentCanonLeft < _maxCannonsPerSide) && left == true)
             {
                 player._data.Boat.CurrentCanonLeft++;
             }
-            if ((player._data.Boat.CurrentCanonRight < player._data.Boat.MaxCanonPerSide) && right == true)
+            if ((player._data.Boat.CurrentCanonRight < _maxCannonsPerSide) && right == true)
             {
                 player._data.Boat.CurrentCanonRight++;
             }
         }
 
+        //SEB 0910
+        [Command]
+        public void CmdSetHarpoon()
+        {
+            this._prowCannonHarpoon.gameObject.SetActive(player._data.Boat.AsHarpoon);
+            RpcSetHarpoon();
+        }
+
+        [ClientRpc]
+        public void RpcSetHarpoon()
+        {
+            this._prowCannonHarpoon.gameObject.SetActive(player._data.Boat.AsHarpoon);
+        }
+        //END SEB 0910
 
         public void SetActiveCannons()
         {
@@ -1114,6 +1144,16 @@ namespace ProjetPirate.Boat
         [Command]
         private void CmdFireLeft()
         {
+            /*
+            for (int i = 0; i < _larboardCannons.Count; i++)
+            {
+                //TEST SEB (Condition if seulement)
+                if (_larboardCannons[i].gameObject.activeSelf)
+                {
+                    _larboardCannons[i].FireCannon();
+                }
+            }
+            */
             RpcFireLeft();
         }
 
@@ -1145,6 +1185,16 @@ namespace ProjetPirate.Boat
         [Command]
         private void CmdFireRight()
         {
+            /*
+            for (int i = 0; i < _starboardCannons.Count; i++)
+            {
+                //TEST SEB (Condition if seulement)
+                if (_starboardCannons[i].gameObject.activeSelf)
+                {
+                    _starboardCannons[i].FireCannon();
+                }
+            }
+            */
             RpcFireRight();
         }
 

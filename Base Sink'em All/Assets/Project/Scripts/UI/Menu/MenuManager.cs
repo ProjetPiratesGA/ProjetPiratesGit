@@ -10,6 +10,10 @@ namespace ProjetPirate.UI.Menu
 {
     public class MenuManager : MonoBehaviour
     {
+        [Header("State Menu")]
+        public GameObject _menuPrincipal;
+        public GameObject _animLogoGA;
+
         [Header("GroupButton")]
         public GameObject _mainMenu;
         public GameObject _LogIn;
@@ -66,6 +70,8 @@ namespace ProjetPirate.UI.Menu
             _sInscrire.SetActive(false);
             _buttonReturnMainMenu.SetActive(false);
             _option.SetActive(false);
+
+            _animLogoGA.SetActive(true);
 
         }
 
@@ -244,6 +250,12 @@ namespace ProjetPirate.UI.Menu
                 _LogIn.SetActive(false);
                 _choix.SetActive(true);
             }
+        }
+
+        public void FinishIntroLogoGa()
+        {
+            _menuPrincipal.SetActive(true);
+            _animLogoGA.SetActive(false);
         }
     }
 }

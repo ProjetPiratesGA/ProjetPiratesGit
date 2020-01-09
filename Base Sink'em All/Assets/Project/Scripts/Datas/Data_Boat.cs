@@ -20,11 +20,12 @@ namespace ProjetPirate.Data
             boat_ID = _clientID;
         }
 
-        private int maxCanonPerSide = 2;
         private int currentCanonLeft = 1;
         private int currentCanonRight = 1;
+        private bool asHarpoon = false; //SEB 0901
 
-        public int MaxCanonPerSide { get { return maxCanonPerSide; } set { maxCanonPerSide = value; } }
+        public bool AsHarpoon { get { return asHarpoon; } set { asHarpoon = value; } } //SEB 0901
+
         public int CurrentCanonLeft { get { return currentCanonLeft; } set { currentCanonLeft = value; } }
         public int CurrentCanonRight { get { return currentCanonRight; } set { currentCanonRight = value; } }
 
@@ -77,10 +78,11 @@ namespace ProjetPirate.Data
         {
             boat.transform.position = new Vector3(transform.Position.x, transform.Position.y, transform.Position.z);
             Quaternion tmpQuat = new Quaternion();
-
-            tmpQuat = boat.transform.rotation;
-            tmpQuat.y = transform.Position.y;
-            boat.transform.rotation = tmpQuat;
+            tmpQuat.x = transform.Rotation.x;
+            tmpQuat.y = transform.Rotation.y;
+            tmpQuat.z = transform.Rotation.z;
+            tmpQuat.w = transform.Rotation.w;
+            boat.transform.rotation = Quaternion.Euler(tmpQuat.x, tmpQuat.y, tmpQuat.z);
         }
 
         public void UpdateTransform(GameObject boat)
@@ -90,10 +92,11 @@ namespace ProjetPirate.Data
             _initPositionVector.z = boat.transform.position.z;
 
             myVector4 tmpRot = new myVector4();
-            tmpRot.x = boat.transform.rotation.x;
-            tmpRot.y = boat.transform.rotation.y;
-            tmpRot.z = boat.transform.rotation.z;
-            tmpRot.w = boat.transform.rotation.w;
+            tmpRot.x = boat.transform.rotation.eulerAngles.x;
+            tmpRot.y = boat.transform.rotation.eulerAngles.y;
+            tmpRot.z = boat.transform.rotation.eulerAngles.z;
+            //tmpRot.w = boat.transform.rotation.eulerAngles.w;
+            //Debug.Log("Update DATA Transform Y: " + tmpRot.y);
 
             transform.Rotation = tmpRot;
 

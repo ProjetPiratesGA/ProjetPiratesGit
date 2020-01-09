@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1540051385811258}
+  m_IsPrefabAsset: 1
+--- !u!1 &1540051385811258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4084870937077850}
+  - component: {fileID: 114836166516742344}
+  - component: {fileID: 114903528996170682}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4084870937077850
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1540051385811258}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -41.19596, y: 69.87094, z: -7.7136536}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114836166516742344
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1540051385811258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94e2d26766e4772419eccd3764c2c029, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clipsToLoad:
+  - key: Canon1
+    value: {fileID: 8300000, guid: 0e4c7130984436a438d411abdcc21749, type: 3}
+  - key: Canon2
+    value: {fileID: 8300000, guid: 8cf1fdf084edcbd47817d4c3dbef0b4c, type: 3}
+  - key: Canon3
+    value: {fileID: 8300000, guid: 78481ba9f7cfacf438f7ce645c12d8a4, type: 3}
+  - key: Canon4
+    value: {fileID: 8300000, guid: 771befcb98a3b7b4585ec7870b66617c, type: 3}
+  - key: ImpactBoat1
+    value: {fileID: 8300000, guid: 43db624bd7db1184d9937e6d91739c2f, type: 3}
+  - key: ImpactBoat2
+    value: {fileID: 8300000, guid: 12fdf510f53a947429c11e43de961528, type: 3}
+  - key: ImpactBoat3
+    value: {fileID: 8300000, guid: 8d95a64089c698b4c82720f1b9db34b3, type: 3}
+  - key: DeathBoat
+    value: {fileID: 8300000, guid: 5c8e376df3627b64196d2c01cef4c092, type: 3}
+  - key: OpenChest
+    value: {fileID: 8300000, guid: 795cfcabfbc71554f90caeeec0610515, type: 3}
+  - key: Ambiance_Music
+    value: {fileID: 8300000, guid: cd07aa9320c2b7946b86bf9872fde97f, type: 3}
+  - key: Ambiance_Ship
+    value: {fileID: 8300000, guid: f52116e98ad195944ba8ee344bcec875, type: 3}
+  - key: Ambiance_Ocean
+    value: {fileID: 8300000, guid: 713a84ab92e586d489fdf12414cff280, type: 3}
+  - key: Open_Menu
+    value: {fileID: 8300000, guid: 1bdc20ec8ba915c4291e7e6460a66ddc, type: 3}
+  - key: Menu_Music
+    value: {fileID: 8300000, guid: 77dea35dea7e8494184554b45da19e01, type: 3}
+--- !u!114 &114903528996170682
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1540051385811258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7160175313066c14db5c7115cc55d814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

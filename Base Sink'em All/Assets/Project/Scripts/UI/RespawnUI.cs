@@ -58,7 +58,9 @@ namespace ProjetPirate.UI
             {
                 hasHarpoon = 0;
             }
-            SetBoatValueBeforeDeath(_player.GetComponentInChildren<Boat.BoatCharacter>().larboardCannons.Count + _player.GetComponentInChildren<Boat.BoatCharacter>().starboardCannons.Count, hasHarpoon, _player.GetComponent<Player>().ShipLevel);
+
+            int countCanon = _player.GetComponent<Player>()._data.Boat.CurrentCanonLeft + _player.GetComponent<Player>()._data.Boat.CurrentCanonRight;
+            SetBoatValueBeforeDeath(countCanon, hasHarpoon, _player.GetComponent<Player>().ShipLevel);
 
 
             UpdateGoldPlayerValue();
@@ -77,7 +79,10 @@ namespace ProjetPirate.UI
             {
                 hasHarpoon = 0;
             }
-            SetBoatValueBeforeDeath(_player.GetComponentInChildren<Boat.BoatCharacter>().larboardCannons.Count + _player.GetComponentInChildren<Boat.BoatCharacter>().starboardCannons.Count, hasHarpoon, _player.GetComponent<Player>().ShipLevel);
+
+            int countCanon = _player.GetComponent<Player>()._data.Boat.CurrentCanonLeft + _player.GetComponent<Player>()._data.Boat.CurrentCanonRight;
+            SetBoatValueBeforeDeath(countCanon, hasHarpoon, _player.GetComponent<Player>().ShipLevel);
+
             UpdateGoldPlayerValue();
         }
 
@@ -112,12 +117,12 @@ namespace ProjetPirate.UI
             _numberCanonValue.text = currentNumberCanon.ToString();
             _numberCanonProueValue.text = currentCanonProue.ToString();
             _numberLvLValue.text = currentLvL.ToString();
-            _boatValourValue.text = currentBoatCost.ToString() + " Gold";
+            _boatValourValue.text = currentBoatCost.ToString();
         }
 
         public void AddCanon()
         {
-            if(currentNumberCanon < numberCanonBeforeDeath && (currentNumberCanon < ((maxCanon / maxLvL) * (currentLvL))))
+            if (currentNumberCanon < numberCanonBeforeDeath && (currentNumberCanon < ((maxCanon / maxLvL) * (currentLvL))))
             {
                 //on ajoute un canon
                 currentNumberCanon += 1;
@@ -128,7 +133,7 @@ namespace ProjetPirate.UI
 
         public void RemoveCanon()
         {
-            if(currentNumberCanon > minNumberCanon && (currentNumberCanon > ((maxCanon / maxLvL) * (currentLvL - 1))))
+            if (currentNumberCanon > minNumberCanon && (currentNumberCanon > ((maxCanon / maxLvL) * (currentLvL - 1))))
             {
                 //on retire un canon
                 currentNumberCanon -= 1;
@@ -139,7 +144,7 @@ namespace ProjetPirate.UI
 
         public void AddCanonProue()
         {
-            if(currentCanonProue < numberCanonProueBeforeDeath && currentLvL > minLvl)
+            if (currentCanonProue < numberCanonProueBeforeDeath && currentLvL > minLvl)
             {
                 //on ajoute un canon Proue
                 currentCanonProue += 1;
@@ -150,18 +155,18 @@ namespace ProjetPirate.UI
 
         public void RemoveCanonProue()
         {
-            if(currentCanonProue > minNumberCanonProue)
+            if (currentCanonProue > minNumberCanonProue)
             {
                 //on retire un canon Proue
                 currentCanonProue -= 1;
                 //On actualise Le Coût
                 CalculatingBoatValue();
             }
-        } 
-        
+        }
+
         public void AddLvL()
         {
-            if(currentLvL < boatLvLBeforeDeath)
+            if (currentLvL < boatLvLBeforeDeath)
             {
                 //on ajoute un LvL
                 currentLvL += 1;
@@ -190,28 +195,28 @@ namespace ProjetPirate.UI
 
         public void RemoveLvL()
         {
-            if(currentLvL > minLvl)
+            if (currentLvL > minLvl)
             {
                 //on retire un LvL
                 currentLvL -= 1;
-                
+
                 //On ajuste les plafond de valeurs (il ya un nbre max de canon par lvl)
-                if(currentLvL == 2)
+                if (currentLvL == 2)
                 {
-                    if(currentNumberCanon > ((maxCanon / maxLvL) * (currentLvL)))
+                    if (currentNumberCanon > ((maxCanon / maxLvL) * (currentLvL)))
                     {
                         currentNumberCanon = 8;
                     }
                 }
 
-                if(currentLvL == 1)
+                if (currentLvL == 1)
                 {
                     if (currentNumberCanon > ((maxCanon / maxLvL) * (currentLvL)))
                     {
                         currentNumberCanon = 4;
                     }
 
-                    if(currentCanonProue == 1)
+                    if (currentCanonProue == 1)
                     {
                         currentCanonProue = 0;
                     }
@@ -228,13 +233,12 @@ namespace ProjetPirate.UI
             if (currentBoatCost < _player.GetComponent<Player>()._data.Ressource.Golds)
             {
                 _player.GetComponentInChildren<Boat.BoatCharacter>()._respawningAnimationIsPlaying = true;
+
+                _player.GetComponent<Player>().LoseMoney(currentBoatCost);
+                //On désactive l'interface
+                this.gameObject.SetActive(false);
+                _player.GetComponentInChildren<Boat.BoatCharacter>()._respawnUI = false;
             }
-
-
-            //On désactive l'interface
-            this.gameObject.SetActive(false);
-            _player.GetComponentInChildren<Boat.BoatCharacter>()._respawnUI = false;
-
         }
 
         void UpdateGoldPlayerValue()

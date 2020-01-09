@@ -115,6 +115,7 @@ public class CannonBall : NetworkBehaviour
                 }
 
                 collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().Damage(_damage, this.transform);
+                CmdDamage(collision.gameObject);
                 //this.CmdDamage(collision.gameObject);
                 /*if (collision.gameObject.GetComponent<projetpirate.ia.ship_controller>() != null)
                 {
