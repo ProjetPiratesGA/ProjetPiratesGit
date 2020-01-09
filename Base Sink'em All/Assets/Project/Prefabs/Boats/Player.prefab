@@ -60,7 +60,7 @@ MonoBehaviour:
   _xpLostByDeath: 10
   _goldRatiolostByDeath: 0.1
   _respawnPoint: {fileID: 0}
-  _boatPrefab: {fileID: 1780387581725610, guid: ec4c044de85fa2842bfc25c8bd70d710,
+  _boatPrefab: {fileID: 1378524276955390, guid: a48539be6d6c804448de85fd167e2129,
     type: 2}
   _username: 
   _isEnteringGame: 0

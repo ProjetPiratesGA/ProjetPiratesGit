@@ -1,0 +1,201 @@
+fileFormatVersion: 2
+guid: 1f0c61ccc6517ee44b4583df36c30ff1
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: chest
+    100002: chest_bas
+    100004: chest_haut
+    100006: //RootNode
+    100008: group
+    100010: Lock
+    100012: lock_bas
+    100014: lock_haut
+    100016: pasted__pCylinder132
+    100018: pasted__pCylinder133
+    100020: pasted__pCylinder134
+    100022: pasted__pCylinder135
+    100024: pasted__pCylinder136
+    100026: pasted__pCylinder137
+    100028: pasted__pCylinder138
+    100030: pasted__pCylinder139
+    100032: pasted__pCylinder55
+    100034: pasted__pCylinder9
+    100036: pasted__pPlane1
+    400000: chest
+    400002: chest_bas
+    400004: chest_haut
+    400006: //RootNode
+    400008: group
+    400010: Lock
+    400012: lock_bas
+    400014: lock_haut
+    400016: pasted__pCylinder132
+    400018: pasted__pCylinder133
+    400020: pasted__pCylinder134
+    400022: pasted__pCylinder135
+    400024: pasted__pCylinder136
+    400026: pasted__pCylinder137
+    400028: pasted__pCylinder138
+    400030: pasted__pCylinder139
+    400032: pasted__pCylinder55
+    400034: pasted__pCylinder9
+    400036: pasted__pPlane1
+    2100000: blinn2
+    2100002: lambert2
+    2100004: pasted__blinn2
+    2300000: chest_bas
+    2300002: chest_haut
+    2300004: lock_bas
+    2300006: lock_haut
+    2300008: pasted__pCylinder132
+    2300010: pasted__pCylinder133
+    2300012: pasted__pCylinder134
+    2300014: pasted__pCylinder135
+    2300016: pasted__pCylinder136
+    2300018: pasted__pCylinder137
+    2300020: pasted__pCylinder138
+    2300022: pasted__pCylinder139
+    2300024: pasted__pCylinder55
+    2300026: pasted__pCylinder9
+    2300028: pasted__pPlane1
+    3300000: chest_bas
+    3300002: chest_haut
+    3300004: lock_bas
+    3300006: lock_haut
+    3300008: pasted__pCylinder132
+    3300010: pasted__pCylinder133
+    3300012: pasted__pCylinder134
+    3300014: pasted__pCylinder135
+    3300016: pasted__pCylinder136
+    3300018: pasted__pCylinder137
+    3300020: pasted__pCylinder138
+    3300022: pasted__pCylinder139
+    3300024: pasted__pCylinder55
+    3300026: pasted__pCylinder9
+    3300028: pasted__pPlane1
+    4300000: chest_haut
+    4300002: chest_bas
+    4300004: lock_haut
+    4300006: lock_bas
+    4300008: pasted__pPlane1
+    4300010: pasted__pCylinder9
+    4300012: pasted__pCylinder55
+    4300014: pasted__pCylinder132
+    4300016: pasted__pCylinder133
+    4300018: pasted__pCylinder134
+    4300020: pasted__pCylinder135
+    4300022: pasted__pCylinder136
+    4300024: pasted__pCylinder137
+    4300026: pasted__pCylinder138
+    4300028: pasted__pCylinder139
+    7400000: Take 001
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: blinn2
+    second: {fileID: 2100000, guid: f079f93e2597ecb49bd9d044579c6f79, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert2
+    second: {fileID: 2100000, guid: a181274301eba6d45960d90e466476a2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__blinn2
+    second: {fileID: 2100000, guid: 9081896300171674ebc816886c1dce22, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: militarychest_uvcolo
+    second: {fileID: 2800000, guid: 309b2bc0b21d4cb40b2b424843c0b000, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: piececoffreuv
+    second: {fileID: 2800000, guid: 34504e17db1dd0d4aa70175564e52781, type: 3}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
