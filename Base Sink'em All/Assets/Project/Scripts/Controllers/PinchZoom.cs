@@ -41,7 +41,7 @@ namespace ProjetPirate.Controllers
             // Si il ya deux input sur l'écran
             if (Input.touchCount == 2)
             {
-                Debug.LogError(zoomCanBeDone);
+                Debug.Log(zoomCanBeDone);
                 // on récupère les deux input
                 Touch touchZero = Input.GetTouch(0);
                 Touch touchOne = Input.GetTouch(1);

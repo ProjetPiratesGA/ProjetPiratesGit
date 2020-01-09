@@ -39,7 +39,7 @@ public class Cannon : MonoBehaviour
     {
         if (_spawnCannon == null)
         {
-            //Debug.LogError("_spawnCannon est null");
+            //Debug.Log("_spawnCannon est null");
 
         }
 
@@ -101,11 +101,14 @@ public class Cannon : MonoBehaviour
             {
                 _smokeFX.Play();
             }
+
+            AudioManager.PlayRandom(this.gameObject.GetComponent<AudioSource>(), "Canon1", "Canon2", "Canon3", "Canon4");
+
             //Debug.Log("_listCannonBall.Count : " + _listCannonBall.Count);
         }
         else
         {
-            //Debug.LogError("_cannonBall est null");
+            //Debug.Log("_cannonBall est null");
 
         }
     }
@@ -143,13 +146,16 @@ public class Cannon : MonoBehaviour
             {
                 _smokeFX.Play();
             }
+
+            AudioManager.PlayRandom(this.gameObject.GetComponent<AudioSource>(), "Canon1", "Canon2", "Canon3", "Canon4");
+
             //NetworkServer.SpawnWithClientAuthority(newCannonBall, _owner.gameObject.GetComponent<BoatController>().player.connectionToClient);
             this.FireCannon(newCannonBall);
             //Debug.Log("_listCannonBall.Count : " + _listCannonBall.Count);
         }
         else
         {
-            //Debug.LogError("_cannonBall est null");
+            //Debug.Log("_cannonBall est null");
 
         }
     }

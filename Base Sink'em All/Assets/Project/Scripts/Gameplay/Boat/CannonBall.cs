@@ -149,8 +149,14 @@ public class CannonBall : NetworkBehaviour
         {
             if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>() != _owner)
             {
+                if (collision.gameObject.GetComponent<AudioSource>() != null)
+                {
+                    AudioManager.PlayRandom(collision.gameObject.GetComponent<AudioSource>(), "ImpactBoat1", "ImpactBoat2", "ImpactBoat3");
+                }
+
                 collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().Damage(_damage, this.transform);
-                
+                CmdDamage(collision.gameObject);
+
                 if (collision.gameObject.GetComponent<ProjetPirate.IA.Ship_Controller>() != null)
                 {
                     collision.gameObject.GetComponent<ProjetPirate.IA.Ship_Controller>().AlertFromShoot(_owner.gameObject);

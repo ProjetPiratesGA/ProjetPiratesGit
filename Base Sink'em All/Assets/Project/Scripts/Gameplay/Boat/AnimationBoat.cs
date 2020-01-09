@@ -27,11 +27,11 @@ namespace ProjetPirate.Boat
             }
             else
             {
-                Debug.LogError("AnimationBoat --> Start / there is no BoatCharacter in parent");
+                Debug.Log("AnimationBoat --> Start / there is no BoatCharacter in parent");
             }
             if (_transformParent == null)
             {
-                Debug.LogError("AnimationBoat --> Start / transformParent est null");
+                Debug.Log("AnimationBoat --> Start / transformParent est null");
             }
 
             _transformMesh = this.GetComponent<Transform>();

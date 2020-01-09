@@ -60,12 +60,12 @@ namespace ProjetPirate.Boat
             _playerController = FindObjectOfType<ProjetPirate.Controllers.PlayerController>();
             if(_playerController == null)
             {
-                Debug.LogError(this.name + " --> InitLocalBoat / _playerController est null");
+                Debug.Log(this.name + " --> InitLocalBoat / _playerController est null");
             }
             _boatCharacter = this.GetComponent<BoatCharacter>();
             if(_boatCharacter == null)
             {
-                Debug.LogError(this.name + " --> InitLocalBoat / _boatCharacter est null");
+                Debug.Log(this.name + " --> InitLocalBoat / _boatCharacter est null");
             }
 
             _playerController.SetBoatCharacterReference(_boatCharacter);
@@ -85,7 +85,7 @@ namespace ProjetPirate.Boat
 
             if (_player == null)
             {
-                Debug.LogError("Player Null in boat controller");
+                Debug.Log("Player Null in boat controller");
             }
         }
 

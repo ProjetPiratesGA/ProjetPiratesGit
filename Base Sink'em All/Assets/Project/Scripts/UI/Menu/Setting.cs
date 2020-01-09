@@ -124,7 +124,7 @@ namespace ProjetPirate.UI.Menu
 
         public void SetVolumeMusic(float _volume)
         {
-            Debug.LogError("Volume valour = " + _volume);
+            Debug.Log("Volume valour = " + _volume);
             _volumeMusic = _volume;
             _MusicMixer.SetFloat("VolumeMusic", _volume);
         }
@@ -132,7 +132,7 @@ namespace ProjetPirate.UI.Menu
 
         public void SetVolumeFX(float _volume)
         {
-            Debug.LogError("Volume FX valour = " + _volume);
+            Debug.Log("Volume FX valour = " + _volume);
             _volumeFX = _volume;
             _FXMixer.SetFloat("VolumeFX", _volume);
         }

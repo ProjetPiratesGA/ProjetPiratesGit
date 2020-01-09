@@ -295,7 +295,7 @@ namespace ProjetPirate.Boat
             _joystickController = FindObjectOfType<JoystickController>();
             if (_joystickController == null)
             {
-                Debug.LogError("JoystickController Not Assigned");
+                Debug.Log("JoystickController Not Assigned");
             }
 
 
@@ -558,6 +558,9 @@ namespace ProjetPirate.Boat
 
         public override void Death()
         {
+            AudioManager.Stop(this.gameObject.GetComponent<AudioSource>());
+            AudioManager.Play(this.gameObject.GetComponent<AudioSource>(), "DeathBoat");
+
             player._data.Boat.Stats.Life = _maxLifePoint;
             player.CmdSendLife(player._data.Boat.Stats.Life);
 
@@ -566,8 +569,7 @@ namespace ProjetPirate.Boat
             CmdAddPlank(this._plankDroppedByDeath, this.transform.position);
 
             this.GetComponent<BoxCollider>().enabled = false;
-            this.GetComponentInParent<Player>().Death();
-
+            player.Death();
 
             /*ProjetPirate.IA.Ship_Controller[] enemies = FindObjectsOfType<ProjetPirate.IA.Ship_Controller>();
             for (int i = 0; i < enemies.Length; i++)
@@ -629,7 +631,7 @@ namespace ProjetPirate.Boat
                 _deathAnimationCurrentRotationTime = -_deathAnimationRotationDelay / _deathAnimationRotationTime;
                 _deathAnimationCurrentMovementTime = -_deathAnimationMovementDelay / _deathAnimationMovementTime;
 
-                this.GetComponentInParent<Player>().Disappear();
+                this.player.Disappear();
                 this.GetComponent<BoxCollider>().enabled = true;
 
                 player._data.Boat.Stats.Speed = _maxMovingSpeed;

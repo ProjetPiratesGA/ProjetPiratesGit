@@ -51,7 +51,7 @@ namespace ProjetPirate.UI.HUD
 
         void UpdateXpOtherPlayer()
         {
-            if (_XpValueText != null)
+            if (_XpValueText != null && _player.GetComponent<Player>() != null)
             {
                 if (_player != null)
                 {
@@ -73,25 +73,25 @@ namespace ProjetPirate.UI.HUD
                 BoatCharacter boatChar = _player.GetComponentInChildren<BoatCharacter>();
                 if (boatChar == null)
                 {
-                    Debug.LogError("Boatchar is null");
+                    Debug.Log("Boatchar is null");
                     Debug.Break();
                 }
                 //if (boatChar.getCurrentLife() == null)
                 //{
-                //    Debug.LogError("Boatchar is null");
+                //    Debug.Log("Boatchar is null");
                 //    Debug.Break();
                 //}
                 //if (boatChar.getMaxLife() == null)
                 //{
-                //    Debug.LogError("Boatchar is null");
+                //    Debug.Log("Boatchar is null");
                 //    Debug.Break();
                 //}
                 if (boatChar.getCurrentLife() >= 0 && boatChar.getCurrentLife() <= boatChar.getMaxLife())
                 {
-                    //Debug.LogError("Life : " + boatChar.getCurrentLife());
-                    //Debug.LogError("before : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
+                    //Debug.Log("Life : " + boatChar.getCurrentLife());
+                    //Debug.Log("before : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
                     lifeBar.GetComponent<RectTransform>().sizeDelta = new Vector2((maxLifeBarSize / boatChar.getMaxLife()) * boatChar.getCurrentLife(), lifeBar.GetComponent<RectTransform>().sizeDelta.y);
-                    //Debug.LogError("after : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
+                    //Debug.Log("after : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
                     //Debug.Break();
                 }
             }

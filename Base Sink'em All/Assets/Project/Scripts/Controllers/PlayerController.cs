@@ -47,7 +47,7 @@ namespace ProjetPirate.Controllers
         //    _player = GameObject.FindGameObjectWithTag("Player");
         //    if(_player == null)
         //    {
-        //        Debug.LogError("_player est null");
+        //        Debug.Log("_player est null");
         //    }
         //}
 

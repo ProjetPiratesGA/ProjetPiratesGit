@@ -174,6 +174,12 @@ namespace Project.Network
             {     
                 _boatList[i].gameObject.GetComponent<BoatCharacter>().TargetUpdateActiveCannons(conn);
             }
+
+            for (int i = 0; i < _ChestList.Count; i++)
+            {
+                _ChestList[i].gameObject.GetComponent<Chest>().TargetSpawnChest(conn, _ChestList[i].gameObject, _ChestList[i].gameObject.transform.position, _ChestList[i].containedMoney, _ChestList[i].containedPlank);
+            }
+
             _playerList.Add(playerInstance);
 
             _playerList[_playerList.Count - 1].InitPlayer();
@@ -205,13 +211,13 @@ namespace Project.Network
 
         public override void OnServerDisconnect(NetworkConnection conn)
         {
-            Debug.LogError("Player Disconnect");
+            Debug.Log("Player Disconnect");
 
             for (int i = 0; i < playerList.Count; i++)
             {
                 if (playerList[i].connectionToClient == conn)
                 {
-                    Debug.LogError("Connection Player Correspond to Player Disconnect");
+                    Debug.Log("Connection Player Correspond to Player Disconnect");
 
                     for (int j = 0; j < data.ClientRegistered.Count; j++)
                     {
@@ -449,12 +455,12 @@ namespace Project.Network
                 }
                 else
                 {
-                    Debug.LogError("data Registered NULL");
+                    Debug.Log("data Registered NULL");
                 }
             }
             else
             {
-                Debug.LogError("Data NULL");
+                Debug.Log("Data NULL");
             }
             return false;
         }
@@ -586,20 +592,20 @@ namespace Project.Network
         {
             SetDataServer();
 
-            //Debug.LogError("Save Server !");
+            //Debug.Log("Save Server !");
 
             for (int i = 0; i < data.ClientRegistered.Count; i++)
             {
                 if (data.ClientRegistered[i].Player != null)
                 {
-                    // Debug.LogError("Player data : " + data.ClientRegistered[i].Username + " , Gold : " + data.ClientRegistered[i].Player.dRessource.Golds);
+                    // Debug.Log("Player data : " + data.ClientRegistered[i].Username + " , Gold : " + data.ClientRegistered[i].Player.dRessource.Golds);
                     //if(data.ClientRegistered[i].Player.Boat != null )
                     //{
-                    //    Debug.LogError("Boat CLeft : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft + " , Boat CRight : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft);
+                    //    Debug.Log("Boat CLeft : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft + " , Boat CRight : " + data.ClientRegistered[i].Player.Boat.CurrentCanonLeft);
                     //}
                     //else
                     //{
-                    //    Debug.LogError("NO BOAT DATA !!");
+                    //    Debug.Log("NO BOAT DATA !!");
                     //}
                 }
             }
@@ -617,7 +623,7 @@ namespace Project.Network
                         if (_playerList[i].isDataReady)
                         {
                             data.ClientRegistered[j].Player = _playerList[i]._data;
-                            //Debug.LogError("Player data : " + _playerList[i]._username + " , Gold : " + _playerList[i]._data.Ressource.Golds);
+                            //Debug.Log("Player data : " + _playerList[i]._username + " , Gold : " + _playerList[i]._data.Ressource.Golds);
                         }
                     }
                 }

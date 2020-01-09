@@ -130,7 +130,7 @@ public class Player : Controller
         {
             if (SceneManager.GetActiveScene().name == "Game")
             {
-               // Debug.LogError("IN SPAWN BOAT");
+               // Debug.Log("IN SPAWN BOAT");
                 _asBoatSpawned = true;
                 CmdSpawnBoat();
                 //TEST SEB
@@ -265,7 +265,7 @@ public class Player : Controller
     [Command]
     public void CmdSendDebug(int goldValue)
     {
-        //Debug.LogError("Gold : " + goldValue);
+        //Debug.Log("Gold : " + goldValue);
     }
 
     [TargetRpc]
@@ -332,7 +332,7 @@ public class Player : Controller
     [Command]
     public void CmdSpawnBoat()
     {
-        //Debug.LogError("IN SERVER SPAWN BOAT");
+        //Debug.Log("IN SERVER SPAWN BOAT");
 
         //Get spawn point from network manager
         //SEB 08
@@ -374,12 +374,12 @@ public class Player : Controller
     {
         if (obj.GetComponentInChildren<BoatController>() == null)
         {
-            Debug.LogError("BOAT CONTROLLER NUll");
+            Debug.Log("BOAT CONTROLLER NUll");
             Debug.Break();
         }
         if (obj.GetComponentInChildren<Character>() == null)
         {
-            Debug.LogError("CHARACTER NUll");
+            Debug.Log("CHARACTER NUll");
             Debug.Break();
         }
 
@@ -645,7 +645,7 @@ public class Player : Controller
     [Command]
     public void CmdDestroyChest(GameObject _chest)
     {
-        Debug.LogError("Destroy Cmd Player chest");
+        Debug.Log("Destroy Cmd Player chest");
         List<Chest> tempList = NetworkManager.singleton.gameObject.GetComponent<ServerNetworkManager>().ChestList;
 
         tempList.Remove(_chest.GetComponent<Chest>());

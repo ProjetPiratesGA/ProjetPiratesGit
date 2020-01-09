@@ -185,6 +185,8 @@ namespace ProjetPirate.IA
             {
                 CurrentLifePoint = MaxLifePoint;
             }
+
+            AudioManager.Play(this.gameObject.GetComponent<AudioSource>(), "Repair");
         }
     }
 }

@@ -212,7 +212,7 @@ namespace ProjetPirate.Network
         {
             for (int i = 0; i < spawnEnemyShark.Count; i++)
             {
-                //Debug.LogError(spawnEnemyShark[i].timeToSpawn + " | " + i);
+                //Debug.Log(spawnEnemyShark[i].timeToSpawn + " | " + i);
                 if (spawnEnemyShark[i].spawnIsUsed == false && spawnEnemyShark[i].timeSinceLastSpawn >= spawnEnemyShark[i].timeToSpawn)
                 {
                     int randomSpawn = Random.Range(0, 4);
@@ -235,7 +235,7 @@ namespace ProjetPirate.Network
                         enemySpawn.gameObject.GetComponent<ProjetPirate.IA.Patrol_Wander>()._center = enemyPatrol.transform.Find("Center");
                         enemySpawn.gameObject.GetComponent<ProjetPirate.IA.Patrol_Wander>()._destination = enemyPatrol.transform.Find("Objectif");
 
-                        Debug.LogError("Try to Set Detector");
+                        Debug.Log("Try to Set Detector");
                         enemyPatrolWander.GetComponent<ProjetPirate.IA.Detector>()._enemies[0] = enemySpawn.GetComponent<ProjetPirate.IA.Shark_Controller>();
 
 
@@ -248,7 +248,7 @@ namespace ProjetPirate.Network
                 }
                 else
                 {
-                    //Debug.LogError("This Spawn is Used : " + i);
+                    //Debug.Log("This Spawn is Used : " + i);
                 }
             }
         }
@@ -334,7 +334,7 @@ namespace ProjetPirate.Network
                 enemySpawnShark.gameObject.GetComponent<ProjetPirate.IA.Patrol_Wander>()._center = enemyPatrol.transform.Find("Center");
                 enemySpawnShark.gameObject.GetComponent<ProjetPirate.IA.Patrol_Wander>()._destination = enemyPatrol.transform.Find("Objectif");
 
-                // Debug.LogError("Try to Set Detector");
+                // Debug.Log("Try to Set Detector");
                 enemyPatrolWander.GetComponent<ProjetPirate.IA.Detector>()._enemies[0] = enemySpawnShark.GetComponent<ProjetPirate.IA.Shark_Controller>();
 
                 //NetworkServer.Spawn(enemyPatrol);

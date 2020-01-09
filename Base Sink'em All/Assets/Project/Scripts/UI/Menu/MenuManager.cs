@@ -71,8 +71,8 @@ namespace ProjetPirate.UI.Menu
             _buttonReturnMainMenu.SetActive(false);
             _option.SetActive(false);
 
-            _menuPrincipal.SetActive(false);
-            _animLogoGA.SetActive(true);
+            _menuPrincipal.SetActive(true);
+            _animLogoGA.SetActive(false);
 
         }
 

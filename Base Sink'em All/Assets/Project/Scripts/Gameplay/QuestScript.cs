@@ -136,7 +136,7 @@ namespace ProjetPirate.Gameplay
                         iObjectif = 20000;
                     break;
                 default:
-                    Debug.LogError("TypeQuestInvalid");
+                    Debug.Log("TypeQuestInvalid");
                     break;
             }
 
@@ -162,7 +162,7 @@ namespace ProjetPirate.Gameplay
                     strDialogue = "Vole " + iObjectif + " pieces d'or.";
                     break;
                 default:
-                    Debug.LogError("TypeQuestInvalid");
+                    Debug.Log("TypeQuestInvalid");
                     break;
             }
 
@@ -197,7 +197,7 @@ namespace ProjetPirate.Gameplay
                     vReward.y = iObjectif;
                     break;
                 default:
-                    Debug.LogError("TypeQuestInvalid");
+                    Debug.Log("TypeQuestInvalid");
                     break;
             }
 
@@ -208,7 +208,7 @@ namespace ProjetPirate.Gameplay
 
         public void QuestIsAccepted()
         {
-            Debug.LogError("Quest Is Accepted (we re in the Quest Script");
+            Debug.Log("Quest Is Accepted (we re in the Quest Script");
             isQuestAvailable = false;
 
         }

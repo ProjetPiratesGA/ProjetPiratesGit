@@ -52,16 +52,20 @@ namespace ProjetPirate.UI
 
         private void OnEnable()
         {
-            //On Récupère les value grace aux accesseur du boat Player
-            int hasHarpoon = 1;
-            if (_player.GetComponentInChildren<Boat.BoatCharacter>()._prowCannonHarpoon == null)
+            if (_player != null)
             {
-                hasHarpoon = 0;
+                //On Récupère les value grace aux accesseur du boat Player
+                int hasHarpoon = 1;
+            
+                if (_player.GetComponentInChildren<Boat.BoatCharacter>()._prowCannonHarpoon == null)
+                {
+                    hasHarpoon = 0;
+                }
+                SetBoatValueBeforeDeath(_player.GetComponentInChildren<Boat.BoatCharacter>().larboardCannons.Count + _player.GetComponentInChildren<Boat.BoatCharacter>().starboardCannons.Count, hasHarpoon, _player.GetComponent<Player>().ShipLevel);
+
+
+                UpdateGoldPlayerValue();
             }
-            SetBoatValueBeforeDeath(_player.GetComponentInChildren<Boat.BoatCharacter>().larboardCannons.Count + _player.GetComponentInChildren<Boat.BoatCharacter>().starboardCannons.Count, hasHarpoon, _player.GetComponent<Player>().ShipLevel);
-
-
-            UpdateGoldPlayerValue();
         }
         // Update is called once per frame
         void Update()

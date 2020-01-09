@@ -19,7 +19,7 @@ public class CannonHarpoon : MonoBehaviour {
 
         if (_spawnCannonHarpoon == null)
         {
-            Debug.LogError("_spawnCannonHarpoon est null");
+            Debug.Log("_spawnCannonHarpoon est null");
         }
         _listCannonHarpoonArrows = new List<GameObject>();
     }
@@ -45,7 +45,7 @@ public class CannonHarpoon : MonoBehaviour {
         }
         else
         {
-           Debug.LogError("_cannonHarpoonArrow est null");
+           Debug.Log("_cannonHarpoonArrow est null");
         }
     }
 }

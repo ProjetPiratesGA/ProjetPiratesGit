@@ -172,7 +172,7 @@ namespace ProjetPirate.UI
 
         public void AcceptQuest()
         {
-            Debug.LogError("Quest Accept");
+            Debug.Log("Quest Accept");
             //Fonction Pour Accepter la quest
             _player.GetComponentInChildren<BoatCharacter>()._dock.gameObject.GetComponent<QuestScript>().GetComponent<QuestScript>().QuestIsAccepted();
             _player.GetComponentInParent<Player>().data_quest = quest;
@@ -228,7 +228,7 @@ namespace ProjetPirate.UI
 
         public void QuitCanvasIle()
         {
-            Debug.LogError("QuitCanvas");
+            Debug.Log("QuitCanvas");
             _questUI.SetActive(true);
             _marchandUI.SetActive(false);
             this.gameObject.SetActive(false);
@@ -390,7 +390,7 @@ namespace ProjetPirate.UI
         {
             if(currentGold > costUpgradeLvLGold && currentXp > costUpgradeLvLXp)
             {
-                Debug.LogError("On peut améliorer le beateau");
+                Debug.Log("On peut améliorer le beateau");
                 canUpgradeCheck = true;
                 _messageInfoCanUpgrade.SetActive(true);
                 this.GetComponent<GraphicRaycaster>().enabled = false;

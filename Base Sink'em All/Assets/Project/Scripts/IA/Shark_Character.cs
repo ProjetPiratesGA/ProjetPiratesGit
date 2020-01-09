@@ -146,7 +146,7 @@ namespace ProjetPirate.IA
                 if (collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().gameObject.tag == "myBoat" 
                     || collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().gameObject.tag == "Player")
                 {
-                    Debug.LogError("Hit boat with Shark");
+                    Debug.Log("Hit boat with Shark");
 
                     collision.gameObject.GetComponent<ProjetPirate.Boat.BoatCharacter>().Damage(20, this.transform);
 

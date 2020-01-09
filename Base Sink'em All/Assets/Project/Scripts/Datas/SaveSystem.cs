@@ -49,7 +49,7 @@ namespace ProjetPirate.Data
             ///Si le fichier existe bien alors
             if (File.Exists(path))
             {
-                Debug.LogError("Load player returning data boat " + path);
+                Debug.Log("Load player returning data boat " + path);
 
                 //On déclare un BinaryFormatter qui va servir a deserialiser nos donnée
                 BinaryFormatter formatter = new BinaryFormatter();
@@ -69,7 +69,7 @@ namespace ProjetPirate.Data
             ///si le fichier n'existe pas on retourne NULL
             else
             {
-                Debug.LogError("Save file not found in" + path);
+                Debug.Log("Save file not found in" + path);
                 return null;
             }
         }
@@ -301,7 +301,7 @@ namespace ProjetPirate.Data
             ///si le fichier n'existe pas on retourne NULL
             else
             {
-                Debug.LogError("Save file not found in" + path);
+            //    Debug.Log("Save file not found in" + path);
                 return new Data_server();
             }
         }
