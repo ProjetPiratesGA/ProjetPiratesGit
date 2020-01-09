@@ -112,7 +112,7 @@ namespace ProjetPirate.UI
             _numberCanonValue.text = currentNumberCanon.ToString();
             _numberCanonProueValue.text = currentCanonProue.ToString();
             _numberLvLValue.text = currentLvL.ToString();
-            _boatValourValue.text = currentBoatCost.ToString() + " Gold";
+            _boatValourValue.text = currentBoatCost.ToString();
         }
 
         public void AddCanon()
