@@ -62,6 +62,10 @@ MonoBehaviour:
   _respawnPoint: {fileID: 0}
   _boatPrefab: {fileID: 1378524276955390, guid: a48539be6d6c804448de85fd167e2129,
     type: 2}
+  _boatPrefab1: {fileID: 1278311422846668, guid: 2f9c77ca0f58605498aa25d7569e768c,
+    type: 2}
+  _boatPrefab2: {fileID: 1833199363253614, guid: e5f538438ad63f3439de8d6632e78d67,
+    type: 2}
   _username: 
   _isEnteringGame: 0
   _isConnected: 0

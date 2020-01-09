@@ -5597,6 +5597,7 @@ MonoBehaviour:
   - {fileID: 114798015511450588}
   - {fileID: 114747112351778484}
   _prowCannonHarpoon: {fileID: 114771748000106282}
+  _maxCannonsPerSide: 6
   _larboardCannonPositions: []
   _starboardCannonPositions: []
   _prowCannonHarpoonPosition: {fileID: 0}
