@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{B304F0DE-869E-7842-43CA-06BEB96A751C}</ProjectGuid>
+    <ProjectGuid>{73662D98-500F-C26C-2062-401C5C3A98D4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -53,6 +53,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CloudsToy\FPS Basics\FPS Scripts\FPSFlyerMouse.cs" />
+     <Compile Include="Assets\CloudsToy\FPS Basics\FPS Scripts\FPSFlyerMousePhysics.cs" />
+     <Compile Include="Assets\CloudsToy\FPS Basics\FPS Scripts\FPSWalker.cs" />
+     <Compile Include="Assets\CloudsToy\FPS Basics\FPS Scripts\FPSWalkerEnhanced.cs" />
+     <Compile Include="Assets\CloudsToy\Scripts\Example\CreateCloudsToy.cs" />
+     <Compile Include="Assets\CloudsToy\Scripts\Utils\AutoRotate.cs" />
+     <Compile Include="Assets\CloudsToy\Scripts\Utils\ChangeWalker.cs" />
+     <Compile Include="Assets\CloudsToy\Scripts\Utils\CopyTransformv2.cs" />
+     <Compile Include="Assets\CloudsToy\Scripts\Utils\CursorManager.cs" />
+     <Compile Include="Assets\CloudsToy\Scripts\Utils\EscapeKeyDetector.cs" />
+     <Compile Include="Assets\CloudsToy\Scripts\Utils\MenuLoadLevel.cs" />
+     <Compile Include="Assets\CloudsToy\Scripts\Utils\MouseLook.cs" />
+     <Compile Include="Assets\CloudsToy\Scripts\Utils\TimedObjectDestructorv2.cs" />
+     <Compile Include="Assets\GE Common Assets\GE Toggle Full Screen\Scripts\GE_ToggleFullScreenUI.cs" />
+     <Compile Include="Assets\GE Common Assets\Scripts\GE_UIResponder.cs" />
      <Compile Include="Assets\Project\Scripts\Controllers\Billboad.cs" />
      <Compile Include="Assets\Project\Scripts\Controllers\BoatController.cs" />
      <Compile Include="Assets\Project\Scripts\Controllers\CanvasDontDestroy.cs" />
@@ -157,6 +172,8 @@
      <None Include="Assets\Project\Shaders\Enemies\README.txt" />
      <None Include="Assets\Project\Scenes\README.txt" />
      <None Include="Assets\Project\Musics\README.txt" />
+     <None Include="Assets\CloudsToy\Shaders\CloudBright.shader" />
+     <None Include="Assets\Fantasy Skybox FREE\Readme.txt" />
      <None Include="Assets\Resources\Datas\Dialogues\8.txt" />
      <None Include="Assets\Project\Textures\Boats\README.txt" />
      <None Include="Assets\Project\Scripts\UI\README.txt" />
@@ -169,7 +186,9 @@
      <None Include="Assets\Project\Scripts\Gameplay\README.txt" />
      <None Include="Assets\Project\Materials\README.txt" />
      <None Include="Assets\Resources\Datas\Pnj\README.txt" />
+     <None Include="Assets\CloudsToy\Shaders\CloudBrightLit.shader" />
      <None Include="Assets\Project\Sprites\UI\README.txt" />
+     <None Include="Assets\CloudsToy\Shaders\Shadow\CloudShadowMultiply.shader" />
      <None Include="Assets\Resources\Datas\Objects\Canon.txt" />
      <None Include="Assets\Project\Animations\Items\README.txt" />
      <None Include="Assets\Resources\Datas\Pnj\Jengo the Snake.txt" />
@@ -186,11 +205,13 @@
      <None Include="Assets\Resources\Datas\Dialogues\15.txt" />
      <None Include="Assets\Resources\Datas\Pnj\Adalyn North.txt" />
      <None Include="Assets\Resources\Datas\Questes\3.txt" />
+     <None Include="Assets\CloudsToy\Shaders\CloudRealisticLit.shader" />
      <None Include="Assets\Resources\Datas\Dialogues\10.txt" />
      <None Include="Assets\Resources\Datas\Objects\Gold.txt" />
      <None Include="Assets\Project\Scripts\Managers\README.txt" />
      <None Include="Assets\Resources\Datas\Questes\1.txt" />
      <None Include="Assets\Resources\Datas\Objects\Boat.txt" />
+     <None Include="Assets\CloudsToy\ChangeLog Free.txt" />
      <None Include="Assets\Project\Prefabs\Enemies\README.txt" />
      <None Include="Assets\Project\Animations\README.txt" />
      <None Include="Assets\Project\Scripts\Singletons\README.txt" />
@@ -229,8 +250,10 @@
      <None Include="Assets\Project\Animations\UI\README.txt" />
      <None Include="Assets\Resources\Datas\Dialogues\2.txt" />
      <None Include="Assets\Project\Animations\Map\README.txt" />
+     <None Include="Assets\GE Common Assets\Readme.txt" />
      <None Include="Assets\Project\Scripts\Controllers\README.txt" />
      <None Include="Assets\Project\Sounds\README.txt" />
+     <None Include="Assets\CloudsToy\Shaders\CloudRealistic.shader" />
      <None Include="Assets\Resources\Datas\Docks\0.txt" />
      <None Include="Assets\Resources\Datas\Dialogues\9.txt" />
      <None Include="Assets\Project\Textures\README.txt" />
@@ -248,40 +271,40 @@
      <None Include="Assets\Resources\Datas\Dialogues\3.txt" />
      <None Include="Assets\Project\Sprites\README.txt" />
  <Reference Include="Unity.RenderPipelines.Core.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Core.Runtime">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.StandardEvents">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Lightweight.Runtime">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Runtime.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Lightweight.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.PackageManagerUI.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Postprocessing.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Postprocessing.Runtime">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="Unity.ShaderGraph.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Core.IncludePaths">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.IncludePaths.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.RenderPipelines.Core.IncludePaths.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>F:/Developpement/2018.2.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -483,6 +506,9 @@
  </Reference>
  <Reference Include="UnityEngine.StandardEvents">
  <HintPath>C:/Users/Benzahra/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.13/UnityEngine.StandardEvents.dll</HintPath>
+ </Reference>
+ <Reference Include="Cloudstoy">
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Assets/CloudsToy/DLL/Cloudstoy.dll</HintPath>
  </Reference>
  <Reference Include="mscorlib">
  <HintPath>F:/Developpement/2018.2.0f2/Editor/Data/MonoBleedingEdge/lib/mono/unity/mscorlib.dll</HintPath>

@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base Sink'em All Yanis", "Assembly-CSharp.csproj", "{73662D98-500F-C26C-2062-401C5C3A98D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Base Sink'em All Yanis", "Assembly-CSharp-Editor.csproj", "{E166D219-CF4C-F526-B770-61D2E6FEA322}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{73662D98-500F-C26C-2062-401C5C3A98D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73662D98-500F-C26C-2062-401C5C3A98D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73662D98-500F-C26C-2062-401C5C3A98D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73662D98-500F-C26C-2062-401C5C3A98D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E166D219-CF4C-F526-B770-61D2E6FEA322}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E166D219-CF4C-F526-B770-61D2E6FEA322}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E166D219-CF4C-F526-B770-61D2E6FEA322}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E166D219-CF4C-F526-B770-61D2E6FEA322}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal

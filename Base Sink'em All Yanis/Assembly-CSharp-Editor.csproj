@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{72E40567-7087-842E-31BB-0A13F9446023}</ProjectGuid>
+    <ProjectGuid>{E166D219-CF4C-F526-B770-61D2E6FEA322}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -53,42 +53,44 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CloudsToy\Editor\CloudsToyEditor.cs" />
+     <Compile Include="Assets\CloudsToy\Editor\CloudsToyWindow.cs" />
      <Compile Include="Assets\Editor\Builder.cs" />
  <Reference Include="Unity.RenderPipelines.Core.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Core.Runtime">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.StandardEvents">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Lightweight.Runtime">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Runtime.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Lightweight.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.RenderPipelines.Lightweight.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.PackageManagerUI.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Postprocessing.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.Postprocessing.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Postprocessing.Runtime">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
  </Reference>
  <Reference Include="Unity.ShaderGraph.Editor">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.ShaderGraph.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="Unity.RenderPipelines.Core.IncludePaths">
- <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Others/yanis/Nouveau dossier/Base Sink'em All/Library/ScriptAssemblies/Unity.RenderPipelines.Core.IncludePaths.dll</HintPath>
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Library/ScriptAssemblies/Unity.RenderPipelines.Core.IncludePaths.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.AIModule">
  <HintPath>F:/Developpement/2018.2.0f2/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -351,6 +353,9 @@
  <Reference Include="UnityEngine.StandardEvents">
  <HintPath>C:/Users/Benzahra/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.13/UnityEngine.StandardEvents.dll</HintPath>
  </Reference>
+ <Reference Include="Cloudstoy">
+ <HintPath>F:/UnityProject/PirateGIt/ProjetPiratesGit/Base Sink'em All Yanis/Assets/CloudsToy/DLL/Cloudstoy.dll</HintPath>
+ </Reference>
  <Reference Include="mscorlib">
  <HintPath>F:/Developpement/2018.2.0f2/Editor/Data/MonoBleedingEdge/lib/mono/2.0-api/mscorlib.dll</HintPath>
  </Reference>
@@ -381,7 +386,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{B304F0DE-869E-7842-43CA-06BEB96A751C}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+      <Project>{73662D98-500F-C26C-2062-401C5C3A98D4}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
