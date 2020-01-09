@@ -51,7 +51,7 @@ public class Chest : NetworkBehaviour
         {
             if (other.gameObject.GetComponent<BoatCharacter>()._isDying == false)
             {
-                //Debug.LogError("Collid chest");
+                //Debug.Log("Collid chest");
                 AudioManager.Play(this.gameObject.GetComponent<AudioSource>(), "OpenChest");
 
                 other.GetComponent<BoatCharacter>().player.GetComponent<Player>().GainMoney(_containedMoney);

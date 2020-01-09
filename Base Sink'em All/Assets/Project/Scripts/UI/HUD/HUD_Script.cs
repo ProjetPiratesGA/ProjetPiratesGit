@@ -139,7 +139,7 @@ namespace ProjetPirate.UI.HUD
             CheckIfPlayerDocked();
 
             if (_player == null)
-                Debug.LogError("Player NULL");
+                Debug.Log("Player NULL");
             if (_player.GetComponentInChildren<BoatCharacter>() != null)
             {
                 UpdateLifeBar();
@@ -249,7 +249,7 @@ namespace ProjetPirate.UI.HUD
 
         public void ReturnMenu()
         {
-            //Debug.LogError("Return Menu");
+            //Debug.Log("Return Menu");
             //Mettre le retour au menu avec la sortie du serveur
             // SceneManager.LoadScene(1);
         }
@@ -267,7 +267,7 @@ namespace ProjetPirate.UI.HUD
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    Debug.LogError("Je clique sur : " + hit.collider.gameObject);
+                    Debug.Log("Je clique sur : " + hit.collider.gameObject);
                     //On check si on est sur le player
 
                     if (hit.collider.gameObject.tag == "Player")
@@ -275,7 +275,7 @@ namespace ProjetPirate.UI.HUD
                         if (hit.collider.gameObject.GetComponentInParent<Player>().isLocalPlayer)
                         {
 
-                            Debug.LogError("J'ai cliqué sur un joueur");
+                            Debug.Log("J'ai cliqué sur un joueur");
                             interractCanBeDraw = true;
                             ActivateInterractionPlayer();
 
@@ -289,7 +289,7 @@ namespace ProjetPirate.UI.HUD
                     }
                     else if (!EventSystem.current.IsPointerOverGameObject() && hit.collider.gameObject.tag != "Player")
                     {
-                        Debug.LogError("On sort de l interaction player");
+                        Debug.Log("On sort de l interaction player");
                         interractOtherPlayerCanBeDraw = false;
                         interractCanBeDraw = false;
                         ActivateInterractionOtherPlayer();
@@ -298,7 +298,7 @@ namespace ProjetPirate.UI.HUD
                 }
                 else
                 {
-                    Debug.LogError("On ne touche rien");
+                    Debug.Log("On ne touche rien");
                 }
             }
 #elif UNITY_ANDROID
@@ -310,7 +310,7 @@ namespace ProjetPirate.UI.HUD
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    Debug.LogError(hit.collider.gameObject);
+                    Debug.Log(hit.collider.gameObject);
                     //On check si on est sur le player
 
                      if (hit.collider.gameObject.tag == "Player")
@@ -318,7 +318,7 @@ namespace ProjetPirate.UI.HUD
                         if (hit.collider.gameObject.GetComponentInParent<Player>().isLocalPlayer)
                         {
 
-                            Debug.LogError("J'ai cliqué sur un joueur");
+                            Debug.Log("J'ai cliqué sur un joueur");
                             interractCanBeDraw = true;
                             ActivateInterractionPlayer();
 
@@ -332,7 +332,7 @@ namespace ProjetPirate.UI.HUD
                     }
                     else if (!EventSystem.current.IsPointerOverGameObject() && hit.collider.gameObject.tag != "Player")
                     {
-                        Debug.LogError("On sort de l interaction player");
+                        Debug.Log("On sort de l interaction player");
                         interractOtherPlayerCanBeDraw = false;
                         interractCanBeDraw = false;
                         ActivateInterractionOtherPlayer();
@@ -341,7 +341,7 @@ namespace ProjetPirate.UI.HUD
                 }
                 else
                 {
-                    Debug.LogError("On ne touche rien");
+                    Debug.Log("On ne touche rien");
                 }
             }
 #endif
@@ -355,25 +355,25 @@ namespace ProjetPirate.UI.HUD
                 BoatCharacter boatChar = _player.GetComponentInChildren<BoatCharacter>();
                 if (boatChar == null)
                 {
-                    Debug.LogError("Boatchar is null");
+                    Debug.Log("Boatchar is null");
                     Debug.Break();
                 }
                 //if (boatChar.getCurrentLife() == null)
                 //{
-                //    Debug.LogError("Boatchar is null");
+                //    Debug.Log("Boatchar is null");
                 //    Debug.Break();
                 //}
                 //if (boatChar.getMaxLife() == null)
                 //{
-                //    Debug.LogError("Boatchar is null");
+                //    Debug.Log("Boatchar is null");
                 //    Debug.Break();
                 //}
                 if (boatChar.getCurrentLife() >= 0 && boatChar.getCurrentLife() <= boatChar.getMaxLife())
                 {
-                    //Debug.LogError("Life : " + boatChar.getCurrentLife());
-                    //Debug.LogError("before : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
+                    //Debug.Log("Life : " + boatChar.getCurrentLife());
+                    //Debug.Log("before : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
                     lifeBar.GetComponent<RectTransform>().sizeDelta = new Vector2((maxLifeBarSize / boatChar.getMaxLife()) * boatChar.getCurrentLife(), lifeBar.GetComponent<RectTransform>().sizeDelta.y);
-                    //Debug.LogError("after : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
+                    //Debug.Log("after : " + lifeBar.GetComponent<RectTransform>().sizeDelta);
                     //Debug.Break();
                 }
             }
@@ -419,7 +419,7 @@ namespace ProjetPirate.UI.HUD
             }
             else
             {
-                //Debug.LogError("Vous Avez cliqué sur un autre joueur");
+                //Debug.Log("Vous Avez cliqué sur un autre joueur");
 
                 _interractionOtherPlayer.SetActive(true);
                 _interractionOtherPlayer.GetComponent<InterractionJoueur>().SetPlayerToKnow(_otherPlayer);
@@ -434,7 +434,7 @@ namespace ProjetPirate.UI.HUD
         public void YesQuitGroup()
         {
             //Mettre la fonction pour quitter le groupe
-            Debug.LogError("You said you want to quit the group");
+            Debug.Log("You said you want to quit the group");
         }
 
         public void NoQuitGroup()
