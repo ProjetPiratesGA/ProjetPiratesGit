@@ -1,0 +1,202 @@
+fileFormatVersion: 2
+guid: db45b3d5feeb638439c26ceac01c5e77
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: bas
+    100002: //RootNode
+    100004: coffrefinal
+    100006: epee
+    100008: group
+    100010: haut
+    100012: pasted__epee
+    100014: pasted__lame
+    100016: pasted__lame 1
+    100018: pasted__lame1
+    100020: pasted__manche
+    100022: pasted__pCylinder1
+    100024: pasted__pCylinder56
+    100026: pasted__pCylinder57
+    100028: pasted__pCylinder58
+    100030: pasted__pCylinder59
+    100032: pasted__pCylinder60
+    100034: pasted__pCylinder61
+    100036: pasted__pCylinder62
+    100038: pasted__pCylinder9
+    100040: pasted__pPlane1
+    100042: pasted__prtectionmain
+    100044: transform1
+    100046: transform2
+    100048: transform3
+    100050: transform4
+    100052: transform5
+    400000: bas
+    400002: //RootNode
+    400004: coffrefinal
+    400006: epee
+    400008: group
+    400010: haut
+    400012: pasted__epee
+    400014: pasted__lame
+    400016: pasted__lame 1
+    400018: pasted__lame1
+    400020: pasted__manche
+    400022: pasted__pCylinder1
+    400024: pasted__pCylinder56
+    400026: pasted__pCylinder57
+    400028: pasted__pCylinder58
+    400030: pasted__pCylinder59
+    400032: pasted__pCylinder60
+    400034: pasted__pCylinder61
+    400036: pasted__pCylinder62
+    400038: pasted__pCylinder9
+    400040: pasted__pPlane1
+    400042: pasted__prtectionmain
+    400044: transform1
+    400046: transform2
+    400048: transform3
+    400050: transform4
+    400052: transform5
+    2100000: blinn1
+    2100002: pasted__blinn2
+    2300000: bas
+    2300002: pasted__lame1
+    2300004: pasted__pCylinder1
+    2300006: pasted__pCylinder56
+    2300008: pasted__pCylinder57
+    2300010: pasted__pCylinder58
+    2300012: pasted__pCylinder59
+    2300014: pasted__pCylinder60
+    2300016: pasted__pCylinder61
+    2300018: pasted__pCylinder62
+    2300020: pasted__pCylinder9
+    2300022: pasted__pPlane1
+    3300000: bas
+    3300002: pasted__lame1
+    3300004: pasted__pCylinder1
+    3300006: pasted__pCylinder56
+    3300008: pasted__pCylinder57
+    3300010: pasted__pCylinder58
+    3300012: pasted__pCylinder59
+    3300014: pasted__pCylinder60
+    3300016: pasted__pCylinder61
+    3300018: pasted__pCylinder62
+    3300020: pasted__pCylinder9
+    3300022: pasted__pPlane1
+    4300000: bas
+    4300002: pasted__lame1
+    4300004: pasted__pPlane1
+    4300006: pasted__pCylinder1
+    4300008: pasted__pCylinder9
+    4300010: pasted__pCylinder56
+    4300012: pasted__pCylinder57
+    4300014: pasted__pCylinder58
+    4300016: pasted__pCylinder59
+    4300018: pasted__pCylinder60
+    4300020: pasted__pCylinder61
+    4300022: pasted__pCylinder62
+    7400000: Take 001
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: blinn1
+    second: {fileID: 2100000, guid: be167101af8ffbd44b428f24201e74d5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__blinn2
+    second: {fileID: 2100000, guid: 53599589b04a7c24ba16a3da7bdd330a, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: colocoffrenv3
+    second: {fileID: 2800000, guid: b0e5fb5d4910de24a8917922143dd552, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: piececoffreuv
+    second: {fileID: 2800000, guid: 2a0b392884d15dd439efe2b33c62f60b, type: 3}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

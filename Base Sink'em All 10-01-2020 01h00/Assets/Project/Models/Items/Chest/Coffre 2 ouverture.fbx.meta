@@ -1,0 +1,177 @@
+fileFormatVersion: 2
+guid: 4b8e109c7405d7c4f843b8c7e00e0cd7
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: bas
+    100002: //RootNode
+    100004: drapeau1
+    100006: flag
+    100008: flag1
+    100010: group
+    100012: haut
+    100014: pasted__pCylinder1
+    100016: pasted__pCylinder55
+    100018: pasted__pCylinder82
+    100020: pasted__pCylinder83
+    100022: pasted__pCylinder84
+    100024: pasted__pCylinder85
+    100026: pasted__pPlane1
+    100028: polySurface2
+    100030: transform1
+    100032: transform2
+    100034: transform3
+    400000: bas
+    400002: //RootNode
+    400004: drapeau1
+    400006: flag
+    400008: flag1
+    400010: group
+    400012: haut
+    400014: pasted__pCylinder1
+    400016: pasted__pCylinder55
+    400018: pasted__pCylinder82
+    400020: pasted__pCylinder83
+    400022: pasted__pCylinder84
+    400024: pasted__pCylinder85
+    400026: pasted__pPlane1
+    400028: polySurface2
+    400030: transform1
+    400032: transform2
+    400034: transform3
+    2100000: blinn1
+    2100002: pasted__blinn2
+    2300000: bas
+    2300002: pasted__pCylinder1
+    2300004: pasted__pCylinder55
+    2300006: pasted__pCylinder82
+    2300008: pasted__pCylinder83
+    2300010: pasted__pCylinder84
+    2300012: pasted__pCylinder85
+    2300014: pasted__pPlane1
+    2300016: polySurface2
+    3300000: bas
+    3300002: pasted__pCylinder1
+    3300004: pasted__pCylinder55
+    3300006: pasted__pCylinder82
+    3300008: pasted__pCylinder83
+    3300010: pasted__pCylinder84
+    3300012: pasted__pCylinder85
+    3300014: pasted__pPlane1
+    3300016: polySurface2
+    4300000: bas
+    4300002: polySurface2
+    4300004: drapeau1
+    4300006: pasted__pPlane1
+    4300008: pasted__pCylinder1
+    4300010: pasted__pCylinder55
+    4300012: pasted__pCylinder82
+    4300014: pasted__pCylinder83
+    4300016: pasted__pCylinder84
+    4300018: pasted__pCylinder85
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: drapeau1
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: blinn1
+    second: {fileID: 2100000, guid: 9455b34cb996197408a2429eb3bea04e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pasted__blinn2
+    second: {fileID: 2100000, guid: ae964097a1828234387c53df2f24a044, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: couleurcoffrenv2j
+    second: {fileID: 2800000, guid: 0cf546dc74cede44285ffb9e2e50b280, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: piececoffreuv
+    second: {fileID: 2800000, guid: 90ea54329a17b6c4e8f8c4c0808f66de, type: 3}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
